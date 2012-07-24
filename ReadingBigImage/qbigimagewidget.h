@@ -1,11 +1,18 @@
 #ifndef QBIGIMAGEWIDGET_H
 #define QBIGIMAGEWIDGET_H
 
-#include <QWidget>
-
-#include <boost/shared_ptr.hpp>
 #include "../src/DataType.h"
 #include "../src/HierarchicalInterface.h"
+
+/* qt module */
+#include <QWidget>
+class QPaintEvent;
+class QResizeEvent;
+class QMouseEvent;
+class QWheelEvent;
+
+/* library module */
+#include <boost/shared_ptr.hpp>
 #include <vector>
 
 class QBigImageWidget : public QWidget
@@ -22,6 +29,7 @@ protected:
 	virtual void mousePressEvent(QMouseEvent *event);
 	virtual void mouseReleaseEvent(QMouseEvent *event);
 	virtual void mouseMoveEvent(QMouseEvent *event);
+	virtual void wheelEvent(QWheelEvent *event);
 
 private:
 	void get_show_size() {
@@ -30,11 +38,26 @@ private:
 	}
 
 	void set_current_image_level(int level) {
-		if(big_image) {
+		static int last_level = -1;
+
+		level = (level > (int)big_image->get_max_image_level()) ? big_image->get_max_image_level() : level;
+		level = (level < 0) ? 0 : level;
+
+		/* if exist the image and set different level */
+		if(big_image && last_level != level) {
+			last_level = level;
+			double start_row_ratio = start_row / img_current_rows;
+			double start_col_ration = start_col / img_current_cols;
+
+			/* set current level */
 			img_current_level = level;
 			big_image->set_current_level(img_current_level);
 			img_current_rows = big_image->get_current_level_image_rows();
 			img_current_cols = big_image->get_current_level_image_cols();
+
+			start_row = img_current_rows*start_row_ratio;
+			start_col = img_current_cols*start_col_ration;
+			normalize_start_pos();
 		}
 	}
 
@@ -43,13 +66,15 @@ private:
 		static int last_start_col = -1;
 		static int last_img_rows = -1;
 		static int last_img_cols = -1;
+		static int last_current_level = -1;
 
 		/* if any one of the data is not equal to the last data, then get the actual image data */
 		if(last_start_row != start_row || last_start_col != start_col 
-			|| last_img_rows != img_rows || last_img_cols != img_cols) {
+			|| last_img_rows != img_rows || last_img_cols != img_cols || last_current_level != img_current_level) {
 
 			last_start_row = start_row; last_start_col = start_col;
 			last_img_rows = img_rows; last_img_cols = img_cols;
+			last_current_level = img_current_level;
 
 			/* get the new image data */
 			return big_image->get_pixels_by_level(img_current_level, start_row, start_col, img_rows, img_cols, img_data);
@@ -57,6 +82,17 @@ private:
 
 		/* here, everything is equal to the formal one, so the last image data is just the exact one */
 		return true;
+	}
+
+	void normalize_start_pos() {
+		start_row = (start_row < 0) ? 0 : start_row;
+		start_col = (start_col < 0) ? 0 : start_col;
+
+		if(start_row + img_rows > img_current_rows) start_row = img_current_rows - img_rows;
+		if(start_col + img_cols > img_current_cols) start_col = img_current_cols - img_cols;
+
+		start_row = (start_row < 0) ? 0 : start_row;
+		start_col = (start_col < 0) ? 0 : start_col;
 	}
 
 private:

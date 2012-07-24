@@ -1,11 +1,13 @@
 #include "qbigimagewidget.h"
 
+/* qt module */
 #include <Qtgui/QPaintEvent>
 #include <Qtgui/QPixmap>
 #include <QtGui/QImage>
 #include <Qtgui/QPainter>
 #include <Qtgui/QToolTip>
 #include <Qtgui/QMouseEvent>
+#include <Qtgui/QWheelEvent>
 
 /* out of core module */
 #include "../src/HierarchicalImage.hpp"
@@ -15,6 +17,8 @@ QBigImageWidget::QBigImageWidget(QWidget *parent)
 {
 	margin = 10;
 	img_rows = img_cols = start_row = start_col = 0;
+	img_current_level = 0;
+	img_current_rows = img_current_cols = 1;
 	get_show_size();
 }
 
@@ -29,6 +33,8 @@ bool QBigImageWidget::load_big_image(QString file_name)
 
 	img_rows = show_rows; 
 	img_cols = show_cols;
+
+	/* default is the maximum level (thus the smallest size) */
 	set_current_image_level(big_image->get_max_image_level());
 
 	if(!get_image_data()) return false;
@@ -95,11 +101,7 @@ void QBigImageWidget::mouseMoveEvent(QMouseEvent *event)
 		start_row += deltaRows;
 		start_col += deltaCols;
 
-		start_row = (start_row < 0) ? 0 : start_row;
-		start_col = (start_col < 0) ? 0 : start_col;
-
-		if(start_row + img_rows > img_current_rows) start_row = img_current_rows - img_rows;
-		if(start_col + img_cols > img_current_cols) start_col = img_current_cols - img_cols;
+		normalize_start_pos();
 
 		/* save current position */
 		last_point = event->pos();
@@ -108,4 +110,24 @@ void QBigImageWidget::mouseMoveEvent(QMouseEvent *event)
 		this->repaint();
 	}
 }
+
+void QBigImageWidget::wheelEvent(QWheelEvent *event)
+{
+	/* if no image data, just ignore the event for the parent to handle this */
+	if(img_data.size() <= 0) {
+		event->ignore();
+		return;
+	}
+
+	int num_step = event->delta() / 120;
+	cout << num_step << endl;
+	cout << "current level " << img_current_level << endl;
+	set_current_image_level(img_current_level - num_step);
+ 	cout << "current level " << img_current_level << endl;
+	if(!get_image_data())	return; 
+	this->repaint();
+
+	event->accept();
+}
+
 
