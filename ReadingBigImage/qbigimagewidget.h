@@ -45,7 +45,6 @@ private:
 
 		/* if exist the image and set different level */
 		if(big_image && last_level != level) {
-			last_level = level;
 			double start_row_ratio = start_row / img_current_rows;
 			double start_col_ration = start_col / img_current_cols;
 
@@ -58,6 +57,9 @@ private:
 			start_row = img_current_rows*start_row_ratio;
 			start_col = img_current_cols*start_col_ration;
 			normalize_start_pos();
+
+			/* keep the last level value */
+			last_level = level;
 		}
 	}
 
@@ -72,12 +74,13 @@ private:
 		if(last_start_row != start_row || last_start_col != start_col 
 			|| last_img_rows != img_rows || last_img_cols != img_cols || last_current_level != img_current_level) {
 
+			/* get the new image data */
+			if(!big_image->get_pixels_by_level(img_current_level, start_row, start_col, img_rows, img_cols, img_data)) 
+				return false;
+
 			last_start_row = start_row; last_start_col = start_col;
 			last_img_rows = img_rows; last_img_cols = img_cols;
 			last_current_level = img_current_level;
-
-			/* get the new image data */
-			return big_image->get_pixels_by_level(img_current_level, start_row, start_col, img_rows, img_cols, img_data);
 		}
 
 		/* here, everything is equal to the formal one, so the last image data is just the exact one */

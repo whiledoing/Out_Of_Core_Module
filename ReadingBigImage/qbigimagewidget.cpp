@@ -19,7 +19,6 @@ QBigImageWidget::QBigImageWidget(QWidget *parent)
 	img_rows = img_cols = start_row = start_col = 0;
 	img_current_level = 0;
 	img_current_rows = img_current_cols = 1;
-	get_show_size();
 }
 
 bool QBigImageWidget::load_big_image(QString file_name)
@@ -57,18 +56,12 @@ void QBigImageWidget::resizeEvent(QResizeEvent *event)
 {
 	get_show_size();
 
-	static int last_show_rows = show_rows;
-	static int last_show_cols = show_cols;
+	if(img_data.size() <= 0) return;
 
-	if(last_show_rows != show_rows || last_show_cols != show_cols) {
-		last_show_rows = show_rows;
-		last_show_cols = show_cols;
+    img_rows = show_rows;
+    img_cols = show_cols;
 
-		img_rows = show_rows;
-		img_cols = show_cols;
-
-		if(!get_image_data()) return;
-	}
+    if(!get_image_data()) return;
 }
 
 void QBigImageWidget::mousePressEvent(QMouseEvent *event)
@@ -103,11 +96,16 @@ void QBigImageWidget::mouseMoveEvent(QMouseEvent *event)
 
 		normalize_start_pos();
 
+		if(!get_image_data()) {
+			b_mouse_pressed = false;
+            setCursor(QCursor(Qt::ArrowCursor));
+			return;
+		}
+
+		this->repaint();
+
 		/* save current position */
 		last_point = event->pos();
-
-		if(!get_image_data()) return;
-		this->repaint();
 	}
 }
 
@@ -119,15 +117,25 @@ void QBigImageWidget::wheelEvent(QWheelEvent *event)
 		return;
 	}
 
-	int num_step = event->delta() / 120;
-	cout << num_step << endl;
-	cout << "current level " << img_current_level << endl;
-	set_current_image_level(img_current_level - num_step);
- 	cout << "current level " << img_current_level << endl;
-	if(!get_image_data())	return; 
-	this->repaint();
-
+	/* tells we take care of this event */
 	event->accept();
+
+	/* since the current image size has been changed, we should rearrange the img_row and cols to make the
+	 * image size fit to the screen size */
+	get_show_size();
+	img_rows = show_rows; 
+	img_cols = show_cols;
+
+	/* set the level with opposite direction of the wheel direction */
+	/* if wheel down, thus scale small the image, then the level should increases */
+	int num_step = event->delta() / 120;
+	set_current_image_level(img_current_level - num_step);
+
+	/* now everything is ready, just get the new data */
+	if(!get_image_data())	return; 
+
+	/* redraw the image*/
+	this->repaint();
 }
 
 
