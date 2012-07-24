@@ -455,12 +455,12 @@ bool HierarchicalImage<T, memory_usage>::get_pixels_by_level(int level, int &sta
 
 	set_current_level(level);
 
-	if(start_row >= img_current_level_size.rows) {
+	if(start_row >= img_current_level_size.rows || start_row < 0) {
 		cerr << "HierarchicalImage::get_pixels_by_level function para error : invalid start_rows" << endl;
 		return false;
 	}
 
-	if(start_col >= img_current_level_size.cols) {
+	if(start_col >= img_current_level_size.cols || start_col < 0) {
 		cerr << "HierarchicalImage::get_pixels_by_level function para error : invalid start_cols" << endl;
 		return false;
 	}
