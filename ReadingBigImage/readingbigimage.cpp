@@ -1,4 +1,5 @@
 #include "readingbigimage.h"
+#include "qbigimagewidget.h"
 
 #include <Qtgui/QMessageBox>
 #include <Qtgui/QFileDialog>
@@ -7,7 +8,8 @@
 #include <Qtgui/QPixmap>
 #include <Qtgui/QPainter>
 
-#include "qbigimagewidget.h"
+#include <iostream>
+using namespace std;
 
 ReadingBigImage::ReadingBigImage(QWidget *parent, Qt::WFlags flags)
 	: QMainWindow(parent, flags)
@@ -16,6 +18,7 @@ ReadingBigImage::ReadingBigImage(QWidget *parent, Qt::WFlags flags)
 
 	m_central_widget = new QBigImageWidget(this);
 	setCentralWidget(m_central_widget);
+	setStatusBar(NULL);
 
 	connect(ui.m_action_open_file, SIGNAL(triggered()), this, SLOT(on_open_file_name()));
 }
@@ -54,6 +57,11 @@ void ReadingBigImage::mouseReleaseEvent(QMouseEvent * event)
 }
 
 void ReadingBigImage::paintEvent(QPaintEvent * event)
+{
+
+}
+
+void ReadingBigImage::resizeEvent(QResizeEvent * event)
 {
 
 }

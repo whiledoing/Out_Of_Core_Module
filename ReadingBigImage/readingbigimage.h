@@ -25,7 +25,7 @@ protected:
 	virtual void	mousePressEvent ( QMouseEvent * event );
 	virtual void	mouseReleaseEvent ( QMouseEvent * event );
 	virtual void	paintEvent ( QPaintEvent * event );
-
+	void resizeEvent ( QResizeEvent * event );
 private:
 	Ui::ReadingBigImageClass ui;
 	QBigImageWidget *m_central_widget;
