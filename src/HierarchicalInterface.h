@@ -74,6 +74,16 @@ public:
 	{
 		return m_max_level;
 	}
+		
+	/*
+	 *	@brief : get the current level image rows after calling the set_current_level function
+	 */
+	virtual size_t get_current_level_image_rows() const = 0;
+
+	/*
+	 *	@brief : get the current level image cols after calling the set_current_level function
+	 */
+	virtual size_t get_current_level_image_cols() const = 0;
 
 protected:
 	size_t get_least_order_number(size_t number) {

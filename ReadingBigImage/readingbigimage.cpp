@@ -28,14 +28,13 @@ ReadingBigImage::~ReadingBigImage()
 void ReadingBigImage::on_open_file_name()
 {
 	QString file_name = QFileDialog::getOpenFileName(this, "Open Bigimage File", ".", "*.bigimage");
-	if(file_name.isEmpty()){
-		QMessageBox::warning(this, "Warning", "File name is not valid"); 
-		return;
-	}
 
-	if(!m_central_widget->load_big_image(file_name)) {
-		QMessageBox::warning(this, "Warning", "Big Image Load Failure"); 
-		return;
+	/* if get the reasonable file name */
+	if(!file_name.isEmpty()){
+		if(!m_central_widget->load_big_image(file_name)) {
+			QMessageBox::warning(this, "ReadingBigImage", QString(file_name) + " is not a support big image type"); 
+			return;
+		}
 	}
 }
 

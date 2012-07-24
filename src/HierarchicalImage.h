@@ -32,6 +32,8 @@ public:
 	virtual bool get_pixels_by_level(int level, int &start_row, int &start_col, int &rows, int &cols, std::vector<T> &vec);
 	virtual bool set_pixel_by_level(int level, int min_row, int max_row, int min_col, int max_col, T* ptr);
 	virtual void set_current_level(size_t level);
+	virtual size_t get_current_level_image_rows() const; 
+	virtual size_t get_current_level_image_cols() const;
 
 /* specific method */
 	/*
@@ -43,16 +45,6 @@ public:
 	 *	@brief : set the file cache number of lru when loading image datas
 	 */
 	inline void set_file_cache_number(int64 _file_cache_number); 
-
-	/*
-	 *	@brief : get the current level image rows after calling the set_current_level function
-	 */
-	inline size_t get_current_level_image_rows() const; 
-
-	/*
-	 *	@brief : get the current level image cols after calling the set_current_level function
-	 */
-	inline size_t get_current_level_image_cols() const;
 
 	/*
 	 *	@brief : set the image data path from the big image file name
@@ -99,12 +91,12 @@ inline void HierarchicalImage<T, memory_usage>::set_file_cache_number(int64 _fil
 }
 
 template<typename T, size_t memory_usage>
-inline size_t HierarchicalImage<T, memory_usage>::get_current_level_image_rows() const {
+size_t HierarchicalImage<T, memory_usage>::get_current_level_image_rows() const {
 	return img_current_level_size.rows;
 }
 
 template<typename T, size_t memory_usage>
-inline size_t HierarchicalImage<T, memory_usage>::get_current_level_image_cols() const {
+size_t HierarchicalImage<T, memory_usage>::get_current_level_image_cols() const {
 	return img_current_level_size.cols;
 }
 

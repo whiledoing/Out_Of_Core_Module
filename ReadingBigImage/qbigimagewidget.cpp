@@ -29,7 +29,7 @@ bool QBigImageWidget::load_big_image(QString file_name)
 		return false;
 	}
 
-	HierarchicalImage<Vec3b, 32> *p_big_image = reinterpret_cast<HierarchicalImage<Vec3b, 32>* >(big_image.get());
+	HierarchicalInterface<Vec3b> *p_big_image = big_image.get();
 
 	/* get the highest level image data */
 	p_big_image->set_current_level(p_big_image->get_max_image_level());
@@ -41,8 +41,11 @@ bool QBigImageWidget::load_big_image(QString file_name)
 	if(!p_big_image->get_pixels_by_level(p_big_image->get_max_image_level(), start_row, start_col, img_rows, img_cols, img_data))
 		return false;
 
-	repaint();
+	this->resize(img_rows + 2*margin, img_cols + 2*margin);
 
+	this->repaint();
+
+	setCursor(QCursor(Qt::OpenHandCursor));
 	return true;
 }
 
@@ -50,8 +53,6 @@ void QBigImageWidget::paintEvent(QPaintEvent * event)
 {
 	if(img_data.size() <= 0)	return;
 	QImage img((uchar*)(&img_data[0]), img_cols, img_rows, QImage::Format_RGB888);
-
-	m_parent->resize(img_rows + 2*margin, img_cols + 2*margin);
 
 	QPainter painter(this);
 	painter.drawImage(margin, margin, img);
