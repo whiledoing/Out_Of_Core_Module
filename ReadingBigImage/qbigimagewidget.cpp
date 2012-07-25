@@ -16,22 +16,21 @@ QBigImageWidget::QBigImageWidget(QWidget *parent)
 	: m_parent(parent), QWidget(parent)
 {
 	margin = 10;
-	img_rows = img_cols = start_row = start_col = 0;
-	img_current_level = 0;
-	img_current_rows = img_current_cols = 1;
+	init_para();
 }
 
 bool QBigImageWidget::load_big_image(QString file_name)
 {
 	try {
 		big_image = HierarchicalImage<Vec3b, 32>::load_image(file_name.toStdString().c_str());
-	} catch (const std::bad_alloc &err){
-		cerr << err.what() << endl;
-		return false;
-	}
 
-	img_rows = show_rows; 
-	img_cols = show_cols;
+		/* if big_image is null, so just load_image failure */
+		if(!big_image) return false;
+
+	} catch (const std::bad_alloc &err){
+		init_para();
+		throw err;
+	}
 
 	/* default is the maximum level (thus the smallest size) */
 	set_current_image_level(big_image->get_max_image_level());
@@ -58,8 +57,9 @@ void QBigImageWidget::resizeEvent(QResizeEvent *event)
 
 	if(img_data.size() <= 0) return;
 
-    img_rows = show_rows;
-    img_cols = show_cols;
+	/* tells the img_rows and img_cols has been changed */
+	img_rows = show_rows;
+	img_cols = show_cols;
 
     if(!get_image_data()) return;
 }
@@ -91,10 +91,9 @@ void QBigImageWidget::mouseMoveEvent(QMouseEvent *event)
 		int deltaRows = last_point.y() - event->pos().y();
 		int deltaCols = last_point.x() - event->pos().x();
 
+		/* change the start position according to the mouse movement */
 		start_row += deltaRows;
 		start_col += deltaCols;
-
-		normalize_start_pos();
 
 		if(!get_image_data()) {
 			b_mouse_pressed = false;
@@ -119,12 +118,6 @@ void QBigImageWidget::wheelEvent(QWheelEvent *event)
 
 	/* tells we take care of this event */
 	event->accept();
-
-	/* since the current image size has been changed, we should rearrange the img_row and cols to make the
-	 * image size fit to the screen size */
-	get_show_size();
-	img_rows = show_rows; 
-	img_cols = show_cols;
 
 	/* set the level with opposite direction of the wheel direction */
 	/* if wheel down, thus scale small the image, then the level should increases */
