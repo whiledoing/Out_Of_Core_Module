@@ -16,6 +16,7 @@ class QWheelEvent;
 /* library module */
 #include <boost/shared_ptr.hpp>
 #include <vector>
+#include <iostream>
 
 class QBigImageWidget : public QWidget
 {
@@ -91,15 +92,24 @@ private:
 			/* first get the new validating para */
 			normalize_para();
 
-			/* get the new image data */
-			if(!big_image->get_pixels_by_level(img_current_level, start_row, start_col, img_rows, img_cols, img_data)) {
-				init_para();
-				if(QMessageBox::Abort == QMessageBox::critical(this, "ReadingBigImage", 
-					QString::fromLocal8Bit("¶ÁÈ¡Í¼ÏñÊý¾ÝÊ§°Ü"), QMessageBox::Ok | QMessageBox::Abort, QMessageBox::Ok)) {
-					m_parent->close();
-				}
+			try {
 
-				return false;
+				/* get the new image data */
+				if(!big_image->get_pixels_by_level(img_current_level, start_row, start_col, img_rows, img_cols, img_data)) {
+					init_para();
+					if(QMessageBox::Abort == QMessageBox::critical(this, "ReadingBigImage", 
+						QString::fromLocal8Bit("¶ÁÈ¡Í¼ÏñÊý¾ÝÊ§°Ü"), QMessageBox::Ok | QMessageBox::Abort, QMessageBox::Ok)) {
+						m_parent->close();
+					}
+
+					return false;
+				}
+			} catch (std::exception  &err) {
+				std::cerr << err.what() << std::endl;
+				m_parent->close();
+			} catch (...) {
+				std::cerr << "get pixels error" << std::endl;
+				m_parent->close();
 			}
 
 			/* keep the para info */

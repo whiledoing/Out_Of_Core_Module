@@ -31,6 +31,7 @@
 using boost::lexical_cast;
 using namespace std;
 
+#define PRINT(x) cout << #x << " : " << x << endl
 
 template<typename T, size_t memory_usage>
 HierarchicalImage<T, memory_usage>::HierarchicalImage(size_t rows, size_t cols, size_t mini_rows, size_t mini_cols,
@@ -485,10 +486,25 @@ bool HierarchicalImage<T, memory_usage>::get_pixels_by_level(int level, int &sta
 
 	ZOrderIndex::IndexType start_index = index_method->get_index(start_row, start_col);
 	ZOrderIndex::IndexType end_index = index_method->get_index(start_row + rows - 1, start_col + cols - 1);
-	std::vector<bool> mask_vec(end_index - start_index + 1);
 
-	/* save the zorder indexing method image data */
-	std::vector<Vec3b> hierar_data(end_index - start_index + 1);
+    /* save the zorder indexing method image data */
+    std::vector<bool> mask_vec;
+    std::vector<Vec3b> hierar_data;
+	try {
+		mask_vec.resize(end_index - start_index + 1);
+		hierar_data.resize(end_index - start_index + 1);
+	} catch (std::bad_alloc &err) {
+		cerr << err.what() << endl;
+		PRINT(start_row);
+		PRINT(start_col);
+		PRINT(rows);
+		PRINT(cols);
+		PRINT(start_index);
+		PRINT(end_index);
+		PRINT(end_index - start_index + 1);
+		cout << __FUNCTION__ << " : " << __LINE__ << endl;
+		throw err;
+	}
 
 	/* initialize the mask vec */
 	for(size_t i = start_row; i < start_row + rows; ++i) {
@@ -529,8 +545,16 @@ bool HierarchicalImage<T, memory_usage>::get_pixels_by_level(int level, int &sta
 		if(!read_from_index_range(front, tail, start_index, hierar_data))	return false;
 	}
 
-	/* now get back the zorder indexing hierar_data into row-major format vec */
-	vec.resize(rows*cols);
+	try {
+
+        /* now get back the zorder indexing hierar_data into row-major format vec */
+		vec.clear();
+		vec.resize(rows*cols);
+	} catch (std::bad_alloc &err) {
+		cerr << err.what() << endl;
+		cout << __FUNCTION__ << " : " << __LINE__ << endl;
+		throw err;
+	}
 	for(size_t i = 0; i < rows; ++i) {
 		IndexMethodInterface::IndexType row_result = index_method->get_row_result(i+start_row);
 		for(size_t j = 0; j < cols; ++j) {

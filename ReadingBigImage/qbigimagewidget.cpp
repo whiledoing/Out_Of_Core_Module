@@ -27,6 +27,8 @@ bool QBigImageWidget::load_big_image(QString file_name)
 		/* if big_image is null, so just load_image failure */
 		if(!big_image) return false;
 
+		///* set the cache size is 32 */
+		//reinterpret_cast<HierarchicalImage<Vec3b, 32>*>(big_image.get())->set_file_cache_number(32);
 	} catch (const std::bad_alloc &err){
 		init_para();
 		throw err;
