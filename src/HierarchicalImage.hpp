@@ -5,8 +5,6 @@
 #undef max
 
 #include "HierarchicalImage.h"
-
-#include "IndexMethod.hpp"
 #include "BlockwiseImage.hpp"
 
 #include <boost/lexical_cast.hpp>
@@ -395,21 +393,23 @@ void HierarchicalImage<T, memory_usage>::set_current_level(size_t level)
 	/* change the image level data path to the specific level*/
 	img_level_data_path = img_data_path + "/level_" + boost::lexical_cast<string>(level);
 }
-
 template<typename T, size_t memory_usage>
-bool HierarchicalImage<T, memory_usage>::read_from_index_range(size_t front, size_t tail, size_t start_index,
-	std::vector<T> &image_vector)
+bool HierarchicalImage<T, memory_usage>::read_from_index_range(size_t front, size_t tail, ZOrderIndex::IndexType start_index, 
+	const std::vector<DataIndexInfo> &index_info_vector, std::vector<T> &data_vector)
 {
 	BOOST_ASSERT(tail > front);
 
 	/* total number for reading */
 	size_t total = tail - front;
 
+	/* save the actually first zorder index (take account of the start_index) */
+	size_t zorder_index_front = index_info_vector[front].zorder_index + start_index;
+
 	/* the first image file number */
-	size_t start_file_number = ((front + start_index) >> file_node_shift_num);
+	size_t start_file_number = (zorder_index_front >> file_node_shift_num);
 
 	/* the seekg cell size in the file */
-	size_t start_seekg = (front + start_index) - (start_file_number << file_node_shift_num);
+	size_t start_seekg = zorder_index_front - (start_file_number << file_node_shift_num);
 
 	/* while the cell number has not been finished */
 	while(total > 0) {
@@ -428,7 +428,7 @@ bool HierarchicalImage<T, memory_usage>::read_from_index_range(size_t front, siz
 
 		/* write data into the front location */
 		for(size_t i = 0; i < read_number; ++i) {
-			image_vector[front++] = file_data[start_seekg + i];
+			data_vector[index_info_vector[front++].index] = file_data[start_seekg + i];
 		}
 
 		total -= read_number;
@@ -484,82 +484,48 @@ bool HierarchicalImage<T, memory_usage>::get_pixels_by_level(int level, int &sta
 	rows = make_less_four_multiply(rows);
 	cols = make_less_four_multiply(cols);
 
-	ZOrderIndex::IndexType start_index = index_method->get_index(start_row, start_col);
-	ZOrderIndex::IndexType end_index = index_method->get_index(start_row + rows - 1, start_col + cols - 1);
+    /* save the zorder indexing method information*/
+	std::vector<DataIndexInfo> index_info_vector(rows*cols);
 
-    /* save the zorder indexing method image data */
-    std::vector<bool> mask_vec;
-    std::vector<Vec3b> hierar_data;
-	try {
-		mask_vec.resize(end_index - start_index + 1);
-		hierar_data.resize(end_index - start_index + 1);
-	} catch (std::bad_alloc &err) {
-		cerr << err.what() << endl;
-		PRINT(start_row);
-		PRINT(start_col);
-		PRINT(rows);
-		PRINT(cols);
-		PRINT(start_index);
-		PRINT(end_index);
-		PRINT(end_index - start_index + 1);
-		cout << __FUNCTION__ << " : " << __LINE__ << endl;
-		throw err;
-	}
+	/* save the actual image data in row-major */
+    vec.resize(rows*cols);
 
-	/* initialize the mask vec */
-	for(size_t i = start_row; i < start_row + rows; ++i) {
-		for(size_t j = start_col; j < start_col + cols; ++j) {
-			mask_vec[index_method->get_index(i, j) - start_index] = true;
+	/* the start index of the image range, thus the zorder index of the top-left point */
+	ZOrderIndex::IndexType start_zorder_index = index_method->get_index(start_row, start_col);
+
+	/* initialize the data index information */ 
+	for(size_t i = 0; i < rows; ++i) {
+		ZOrderIndex::IndexType row_result = index_method->get_row_result(i + start_row);
+		size_t row_index = i*cols;	
+		for(size_t j = 0; j < cols; ++j) {
+			index_info_vector[row_index + j].index = row_index + j;
+			index_info_vector[row_index + j].zorder_index = 
+				index_method->get_index_by_row_result(row_result, j + start_col) - start_zorder_index; 
 		}
 	}
+
+	/* sort the index info vector by the zorder index value */
+	std::sort(index_info_vector.begin(), index_info_vector.end());
 
 	/* front and tail means a range of the successive zorder index in format [front, tail) */
-	std::vector<bool>::size_type front = 0, tail = 0, end = mask_vec.size();
-	size_t count = 0;
-	while(1)
-	{
-		//find first true index
-		while(front < end && !mask_vec[front]) {
-			++front;
-		}
-		if(front == end) break;
+	size_t front = 0, tail = 0;
+	const size_t end = rows*cols;  
 
-		//find first not true index
-		tail = front + 1;
-		while(tail < end && mask_vec[tail]) {
+	/* first make the front and tail the same, the expect_index means the expect zorder index when searching in successive way*/
+	front = tail = 0;
+	ZOrderIndex::IndexType expect_index = index_info_vector[front].zorder_index;
+	while(front < end) {
+		expect_index = index_info_vector[front].zorder_index;
+
+		while(tail < end && expect_index == index_info_vector[tail].zorder_index) {
 			++tail;
+			++expect_index;
 		}
 
-		if(tail == end) break;
+		/*now get the successive zorder index range [front, tail) */
+		if(!read_from_index_range(front, tail, start_zorder_index, index_info_vector, vec))	return false;
 
-		/* now get the index range [front, tail) */
-		if(!read_from_index_range(front, tail, start_index, hierar_data))	return false;
-
-		front = tail + 1;
-	}
-
-	if(front == end);	//do nothing
-
-	/* the last implicit range */
-	if(tail == end) {
-		if(!read_from_index_range(front, tail, start_index, hierar_data))	return false;
-	}
-
-	try {
-
-        /* now get back the zorder indexing hierar_data into row-major format vec */
-		vec.clear();
-		vec.resize(rows*cols);
-	} catch (std::bad_alloc &err) {
-		cerr << err.what() << endl;
-		cout << __FUNCTION__ << " : " << __LINE__ << endl;
-		throw err;
-	}
-	for(size_t i = 0; i < rows; ++i) {
-		IndexMethodInterface::IndexType row_result = index_method->get_row_result(i+start_row);
-		for(size_t j = 0; j < cols; ++j) {
-			vec[i*cols + j] = hierar_data[index_method->get_index_by_row_result(row_result, j+start_col) - start_index];
-		}
+		front = tail;
 	}
 
 	return true;
