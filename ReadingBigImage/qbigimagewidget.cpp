@@ -22,13 +22,13 @@ QBigImageWidget::QBigImageWidget(QWidget *parent)
 bool QBigImageWidget::load_big_image(QString file_name)
 {
 	try {
-		big_image = HierarchicalImage<Vec3b, 32>::load_image(file_name.toStdString().c_str());
+		big_image = HierarchicalImage<Vec3b, 256>::load_image(file_name.toStdString().c_str());
 
 		/* if big_image is null, so just load_image failure */
 		if(!big_image) return false;
 
-		///* set the cache size is 32 */
-		//reinterpret_cast<HierarchicalImage<Vec3b, 32>*>(big_image.get())->set_file_cache_number(32);
+		/* set the cache size is 32 */
+		reinterpret_cast<HierarchicalImage<Vec3b, 256>*>(big_image.get())->set_file_cache_number(64);
 	} catch (const std::bad_alloc &err){
 		init_para();
 		throw err;
@@ -77,8 +77,10 @@ void QBigImageWidget::mousePressEvent(QMouseEvent *event)
 
 void QBigImageWidget::mouseReleaseEvent(QMouseEvent *event)
 {
+	if(img_data.size() <= 0) return;
+
 	b_mouse_pressed = false;
-	setCursor(QCursor(Qt::ArrowCursor));
+	setCursor(QCursor(Qt::OpenHandCursor));
 }
 
 void QBigImageWidget::mouseMoveEvent(QMouseEvent *event)
@@ -89,6 +91,7 @@ void QBigImageWidget::mouseMoveEvent(QMouseEvent *event)
 	QToolTip::showText(event->globalPos(), QString("(%1,%2)").arg(event->pos().y()).arg(event->pos().x()), this);
 	*/
 
+	if(img_data.size() <= 0) return;
 	if(b_mouse_pressed) {
 		int deltaRows = last_point.y() - event->pos().y();
 		int deltaCols = last_point.x() - event->pos().x();

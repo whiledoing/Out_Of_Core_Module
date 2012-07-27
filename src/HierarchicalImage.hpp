@@ -523,7 +523,53 @@ bool HierarchicalImage<T, memory_usage>::get_pixels_by_level(int level, int &sta
 		}
 
 		/*now get the successive zorder index range [front, tail) */
-		if(!read_from_index_range(front, tail, start_zorder_index, index_info_vector, vec))	return false;
+		{
+			BOOST_ASSERT(tail > front);
+
+			/* total number for reading */
+			size_t total = tail - front;
+
+			/* save the actually first zorder index (take account of the start_zorder_index) */
+			size_t zorder_index_front = index_info_vector[front].zorder_index + start_zorder_index;
+
+			/* the first image file number */
+			size_t start_file_number = (zorder_index_front >> file_node_shift_num);
+
+			/* the seekg cell size in the file */
+			size_t start_seekg = zorder_index_front - (start_file_number << file_node_shift_num);
+
+			/* while the cell number has not been finished */
+			while(total > 0) {
+				/* image file name */
+				string img_file_name = img_level_data_path + '/' + boost::lexical_cast<string>(start_file_number);
+
+				/* the file_index means the index of the img_file_name in lru_image_files */
+				int file_index = lru_image_files.put_into_lru(img_file_name);
+
+				/* if not get the reasonable position, there must be some kind of error, so just return false */
+				if(file_index == lru_image_files.npos)	return false;
+
+				const vector<Vec3b> &file_data = lru_image_files.get_data(file_index);
+
+				size_t read_number = min<size_t>(tail - front, file_node_size - start_seekg);
+
+				/* write data into the front location */
+				for(size_t i = 0; i < read_number; ++i) {
+					vec[index_info_vector[front++].index] = file_data[start_seekg + i];
+				}
+
+				total -= read_number;
+				if(total <= 0)	break;
+
+				/* here means prepare for next loop */
+				/* make the seekg = 0, means in later loop the seekg will just begin from the */
+				/* start point of each file for reading */
+				start_seekg = 0;
+
+				/* the next file is just one number larger than formal image */
+				++start_file_number;
+			}
+		}
 
 		front = tail;
 	}

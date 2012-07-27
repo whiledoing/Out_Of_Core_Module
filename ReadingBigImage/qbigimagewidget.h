@@ -50,8 +50,6 @@ private:
 	 */
 	void set_current_image_level(int level) 
 	{
-		static int last_level = -100;
-
 		level = (level > (int)big_image->get_max_image_level()) ? big_image->get_max_image_level() : level;
 		level = (level < 0) ? 0 : level;
 
@@ -79,12 +77,6 @@ private:
 	 */
 	bool get_image_data() 
 	{
-		static int last_start_row = -100;
-		static int last_start_col = -100;
-		static int last_img_rows = -100;
-		static int last_img_cols = -100;
-		static int last_current_level = -100;
-
 		/* if any one of the data is not equal to the last data, then get the actual image data */
 		if(last_start_row != start_row || last_start_col != start_col 
 			|| last_img_rows != img_rows || last_img_cols != img_cols || last_current_level != img_current_level) {
@@ -105,8 +97,8 @@ private:
 					return false;
 				}
 			} catch (std::exception  &err) {
-				std::cerr << err.what() << std::endl;
-				m_parent->close();
+                 QMessageBox::critical(this, "ReadingBigImage", QString::fromLocal8Bit("ÄÚ´æ·ÖÅäÊ§°Ü"), QMessageBox::Ok);
+				 m_parent->close();
 			} catch (...) {
 				std::cerr << "get pixels error" << std::endl;
 				m_parent->close();
@@ -161,6 +153,15 @@ private:
 		img_current_rows = img_current_cols = 1;
 		img_data.clear();
 		big_image.reset();
+
+		last_start_row = -100;
+		last_start_col = -100;
+		last_img_rows = -100;
+		last_img_cols = -100;
+		last_current_level = -100;
+		last_level = -100;
+
+		b_mouse_pressed = false;
 	}
 
 private:
@@ -185,6 +186,14 @@ private:
 	/* the showing area size in the widget */
 	int show_rows;
 	int show_cols;
+
+	/* save the last time value */
+	int last_start_row;
+	int last_start_col;
+	int last_img_rows;
+	int last_img_cols;
+	int last_current_level;
+    int last_level;
 
 	/* the showing area margin, so the total size of the showing area is : (show_rows + 2*margin, show_cols + 2*margin)
 	 * the image is showing in the central of the showing area
