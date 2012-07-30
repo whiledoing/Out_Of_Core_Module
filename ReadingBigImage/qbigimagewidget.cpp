@@ -50,7 +50,11 @@ void QBigImageWidget::paintEvent(QPaintEvent * event)
 	if(img_data.size() <= 0)	return;
 
 	QPainter painter(this);
-	painter.drawImage(margin, margin, QImage((uchar*)(&img_data[0]), img_cols, img_rows, QImage::Format_RGB888));
+
+	if(b_mouse_pressed) 
+		painter.drawImage(margin, margin, QImage((uchar*)(&img_mousemove_data[0]), img_cols, img_rows, QImage::Format_RGB888));
+	else
+        painter.drawImage(margin, margin, QImage((uchar*)(&img_data[0]), img_cols, img_rows, QImage::Format_RGB888));
 }
 
 void QBigImageWidget::resizeEvent(QResizeEvent *event)
@@ -79,8 +83,19 @@ void QBigImageWidget::mouseReleaseEvent(QMouseEvent *event)
 {
 	if(img_data.size() <= 0) return;
 
-	b_mouse_pressed = false;
-	setCursor(QCursor(Qt::OpenHandCursor));
+	if(b_mouse_pressed) {
+		start_row += last_point.y() - event->pos().y();
+		start_col += last_point.x() - event->pos().x();
+
+		if(!get_image_data()) {
+			b_mouse_pressed = false;
+			setCursor(QCursor(Qt::ArrowCursor));
+			return;
+		}
+		b_mouse_pressed = false;
+		setCursor(QCursor(Qt::OpenHandCursor));
+		this->repaint();
+	}
 }
 
 void QBigImageWidget::mouseMoveEvent(QMouseEvent *event)
@@ -95,21 +110,42 @@ void QBigImageWidget::mouseMoveEvent(QMouseEvent *event)
 	if(b_mouse_pressed) {
 		int deltaRows = last_point.y() - event->pos().y();
 		int deltaCols = last_point.x() - event->pos().x();
+		
+		if(std::abs(deltaRows) < 10 && std::abs(deltaCols) < 10)	return;
+		
+		/* clear the data */
+		for(size_t i = 0; i < img_mousemove_data.size(); ++i) {
+			img_mousemove_data[i] = Vec3b();
+		}
 
-		/* change the start position according to the mouse movement */
-		start_row += deltaRows;
-		start_col += deltaCols;
+		int s_row, d_row, s_col, d_col;
+		if(deltaRows < 0) {
+			d_row = -deltaRows;
+			s_row = 0;
+		} else {
+			d_row = 0;
+			s_row = deltaRows;
+		}
+		
+		if(deltaCols < 0) {
+			d_col = -deltaCols;
+			s_col = 0;
+		} else {
+			d_col = 0;
+			s_col = deltaCols;
+		}
 
-		if(!get_image_data()) {
-			b_mouse_pressed = false;
-            setCursor(QCursor(Qt::ArrowCursor));
-			return;
+		int t_rows = img_rows - std::abs(deltaRows);
+		int t_cols = img_cols - std::abs(deltaCols);
+
+		/* copy the data that comes from img_data which has been read from the disk */
+		for(int i = 0; i < t_rows; ++i) {
+			for(int j = 0; j < t_cols; ++j) {
+				img_mousemove_data[(d_row+i)*img_cols + (d_col+j)] = img_data[(s_row+i)*img_cols + (s_col+j)];
+			}
 		}
 
 		this->repaint();
-
-		/* save current position */
-		last_point = event->pos();
 	}
 }
 

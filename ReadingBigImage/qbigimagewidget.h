@@ -85,7 +85,6 @@ private:
 			normalize_para();
 
 			try {
-
 				/* get the new image data */
 				if(!big_image->get_pixels_by_level(img_current_level, start_row, start_col, img_rows, img_cols, img_data)) {
 					init_para();
@@ -96,6 +95,10 @@ private:
 
 					return false;
 				}
+
+				/* changes the data size according to the new imag size */
+				img_mousemove_data.resize(img_data.size());
+
 			} catch (std::exception  &err) {
                  QMessageBox::critical(this, "ReadingBigImage", QString::fromLocal8Bit("ÄÚ´æ·ÖÅäÊ§°Ü"), QMessageBox::Ok);
 				 m_parent->close();
@@ -170,6 +173,9 @@ private:
 
 	/* saves the actual image data for painting */
 	std::vector<Vec3b> img_data;
+
+	/* saves the image data in mouse move event */
+	std::vector<Vec3b> img_mousemove_data;
 
 	/* the actual image size saving in the img_data */
 	int img_rows;
