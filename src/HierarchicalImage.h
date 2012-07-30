@@ -6,6 +6,7 @@
 #include "HierarchicalInterface.h"
 #include "BlockwiseImage.h"
 #include "Lru.hpp"
+#include "IndexMethod.hpp"
 
 #define BOOST_FILESYSTEM_VERSION 3
 #include <boost/filesystem.hpp>
@@ -52,11 +53,23 @@ public:
 	 */
 	inline void set_image_data_path(const char * file_name); 
 
+
+private:
+	struct DataIndexInfo{
+		int64 index;			//keeps the original index (in row-major order)
+		int64 zorder_index;	//keeps the zorder index according to the row-major index
+
+		friend inline bool operator< (const DataIndexInfo& lhs, const DataIndexInfo& rhs) {
+			return (lhs.zorder_index < rhs.zorder_index);
+		}
+	};
+
 protected:
 	bool write_image_head_file(const char *file_name);
 	bool load_image_head_file(const char *file_name);
 	bool write_image_inner_loop(size_t start_level, size_t merge_number, const bf::path &data_path, const int64 &file_number);
-	bool read_from_index_range(size_t front, size_t tail, size_t start_index, std::vector<T> &image_vector);
+	bool read_from_index_range(size_t front, size_t tail, ZOrderIndex::IndexType start_index, 
+		const std::vector<DataIndexInfo> &index_info_vector, std::vector<T> &data_vector);
 
 protected:
 	/* the number for writing image data files in concurrently */
