@@ -96,6 +96,8 @@ void QBigImageWidget::mouseMoveEvent(QMouseEvent *event)
 		int deltaRows = last_point.y() - event->pos().y();
 		int deltaCols = last_point.x() - event->pos().x();
 
+		if(deltaRows < 20 && deltaCols < 20) return;
+
 		/* change the start position according to the mouse movement */
 		start_row += deltaRows;
 		start_col += deltaCols;
