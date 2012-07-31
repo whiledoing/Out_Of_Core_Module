@@ -549,7 +549,7 @@ bool HierarchicalImage<T, memory_usage>::get_pixels_by_level(int level, int &sta
 				/* if not get the reasonable position, there must be some kind of error, so just return false */
 				if(file_index == lru_image_files.npos)	return false;
 
-				const vector<Vec3b> &file_data = lru_image_files.get_data(file_index);
+				const vector<Vec3b> &file_data = lru_image_files.get_const_data(file_index);
 
 				size_t read_number = min<size_t>(tail - front, file_node_size - start_seekg);
 
