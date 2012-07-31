@@ -33,6 +33,7 @@ public:
 	virtual bool get_pixels_by_level(int level, int &start_row, int &start_col, int &rows, int &cols, std::vector<T> &vec);
 	virtual bool set_pixel_by_level(int level, int start_row, int start_col, int rows, int cols, const std::vector<T> &vec);
 	virtual void set_current_level(int level);
+	virtual size_t get_current_level() const; 
 	virtual size_t get_current_level_image_rows() const; 
 	virtual size_t get_current_level_image_cols() const;
 

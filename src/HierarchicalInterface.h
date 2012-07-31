@@ -21,7 +21,6 @@ public:
 	*/
 	virtual bool get_pixels_by_level(int level, int &start_row, int &start_col,
 		int &rows, int &cols, std::vector<T> &vec) = 0;
-
 	virtual bool set_pixel_by_level(int level, int start_row, int start_col, int rows, int cols, const std::vector<T> &vec) = 0;
 
     /*
@@ -41,22 +40,15 @@ public:
      */
 	void set_minimal_resolution(int rows, int cols, int mini_rows, int mini_cols);
 
-public:
-
-	/*
+    /*
 	 *	@brief : set the image current level before any access to the hierarchical image data
 	 */
-	virtual void set_current_level(int level) 
-	{
-		BOOST_ASSERT(level >= 0);
-		current_level = level;
-	}
+	virtual void set_current_level(int level) = 0;
+	virtual size_t get_current_level() const = 0;
 
-	virtual size_t get_current_level() const 
-	{
-		return current_level;
-	}
+public:
 
+	/* some public utility function */
 	size_t get_minimal_image_rows() const 
 	{
 		return m_mini_rows;

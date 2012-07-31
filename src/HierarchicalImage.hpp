@@ -378,10 +378,12 @@ inline size_t make_less_four_multiply(size_t number) {
 template<typename T, size_t memory_usage>
 void HierarchicalImage<T, memory_usage>::set_current_level(int level)
 {
-	BOOST_ASSERT(level <= m_max_level);
+	BOOST_ASSERT(level >= 0 && level <= m_max_level);
 
+	/* if set the same level, do nothing */
 	if(current_level == level)	return;
-	HierarchicalInterface::set_current_level(level);
+
+	current_level = level;
 
 	/* current image size */
 	img_current_level_size.rows = std::ceil((double)(img_size.rows) / (1 << level));
@@ -392,6 +394,12 @@ void HierarchicalImage<T, memory_usage>::set_current_level(int level)
 
 	/* change the image level data path to the specific level*/
 	img_level_data_path = img_data_path + "/level_" + boost::lexical_cast<string>(level);
+}
+
+template<typename T, size_t memory_usage>
+size_t HierarchicalImage<T, memory_usage>::get_current_level() const 
+{
+	return current_level;
 }
 
 template<typename T, size_t memory_usage>
