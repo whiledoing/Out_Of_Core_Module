@@ -31,7 +31,7 @@ public:
 
 /* Derived from HierarchicalInterface */
 	virtual bool get_pixels_by_level(int level, int &start_row, int &start_col, int &rows, int &cols, std::vector<T> &vec);
-	virtual bool set_pixel_by_level(int level, int min_row, int max_row, int min_col, int max_col, T* ptr);
+	virtual bool set_pixel_by_level(int level, int start_row, int start_col, int rows, int cols, const std::vector<T> &vec);
 	virtual void set_current_level(size_t level);
 	virtual size_t get_current_level_image_rows() const; 
 	virtual size_t get_current_level_image_cols() const;
@@ -70,6 +70,7 @@ protected:
 	bool write_image_inner_loop(size_t start_level, size_t merge_number, const bf::path &data_path, const int64 &file_number);
 	bool read_from_index_range(size_t front, size_t tail, ZOrderIndex::IndexType start_index, 
 		const std::vector<DataIndexInfo> &index_info_vector, std::vector<T> &data_vector);
+	bool check_para_validation(int level, int start_row, int start_col, int rows, int cols);
 
 protected:
 	/* the number for writing image data files in concurrently */

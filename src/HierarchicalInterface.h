@@ -24,7 +24,7 @@ public:
 	virtual bool get_pixels_by_level(int level, int &start_row, int &start_col,
 		int &rows, int &cols, std::vector<T> &vec) = 0;
 
-	virtual bool set_pixel_by_level(int level, int min_row, int max_row, int min_col, int max_col, T* ptr) = 0;
+	virtual bool set_pixel_by_level(int level, int start_row, int start_col, int rows, int cols, const std::vector<T> &vec) = 0;
 
 	/*
      * @brief ： 设置最小分辨率

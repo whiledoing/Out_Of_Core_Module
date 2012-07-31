@@ -8,8 +8,10 @@
 #include <Qtgui/QToolTip>
 #include <Qtgui/QMouseEvent>
 #include <Qtgui/QWheelEvent>
+#include <Qtgui/QKeyEvent>
 
 /* out of core module */
+#include <boost/format.hpp>
 #include "../src/HierarchicalImage.hpp"
 
 QBigImageWidget::QBigImageWidget(QWidget *parent)
@@ -17,6 +19,7 @@ QBigImageWidget::QBigImageWidget(QWidget *parent)
 {
 	margin = 10;
 	init_para();
+	setFocusPolicy(Qt::StrongFocus);
 }
 
 bool QBigImageWidget::load_big_image(QString file_name)
@@ -96,7 +99,7 @@ void QBigImageWidget::mouseMoveEvent(QMouseEvent *event)
 		int deltaRows = last_point.y() - event->pos().y();
 		int deltaCols = last_point.x() - event->pos().x();
 
-		if(deltaRows < 20 && deltaCols < 20) return;
+		if(std::abs(deltaRows) < 20 && std::abs(deltaCols) < 20) return;
 
 		/* change the start position according to the mouse movement */
 		start_row += deltaRows;
@@ -138,4 +141,26 @@ void QBigImageWidget::wheelEvent(QWheelEvent *event)
 	this->repaint();
 }
 
+void QBigImageWidget::keyPressEvent(QKeyEvent *event)
+{
+	/* test code for the set_pixel_by_level function */
+	/*
+	if(img_data.size() <= 0) return;
+	switch (event->key()) {
+	case Qt::Key_W :
+		if(event->modifiers() & Qt::ControlModifier) {
+			int rows = 324;
+			int cols = 213;
+			int start_row = 101;
+			int start_col = 145;
+			std::vector<Vec3b> zero_data(rows*cols);
+			big_image->set_pixel_by_level(img_current_level, start_row, start_col, rows, cols, zero_data);
+			return;
+		}
+	default :
+		QWidget::keyPressEvent(event);
+	}
+	*/
 
+	return QWidget::keyPressEvent(event);
+}

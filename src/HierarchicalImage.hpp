@@ -446,8 +446,7 @@ bool HierarchicalImage<T, memory_usage>::read_from_index_range(size_t front, siz
 }
 
 template<typename T, size_t memory_usage>
-bool HierarchicalImage<T, memory_usage>::get_pixels_by_level(int level, int &start_row, int &start_col,
-	int &rows, int &cols, std::vector<T> &vec)
+bool HierarchicalImage<T, memory_usage>::check_para_validation(int level, int start_row, int start_col, int rows, int cols) 
 {
 	if(level > m_max_level || level < 0) {
 		cerr << "HierarchicalImage::get_pixels_by_level function para error : invalid level" << endl;
@@ -467,16 +466,23 @@ bool HierarchicalImage<T, memory_usage>::get_pixels_by_level(int level, int &sta
 	}
 
 	if(start_row + rows > img_current_level_size.rows) {
-		cerr << "HierarchicalImage::get_pixels_by_level function para warning "<< endl;
+		cerr << "HierarchicalImage::get_pixels_by_level function para error "<< endl;
 		cerr << "rows is too large, changed to the appropriate size" << endl; 
-		rows = img_current_level_size.rows - start_row;
+		return false;
 	}
 
 	if(start_col + cols > img_current_level_size.cols) {
-		cerr << "HierarchicalImage::get_pixels_by_level function para warning " << endl;
+		cerr << "HierarchicalImage::get_pixels_by_level function para err" << endl;
 		cout << "cols is too large, changed to the appropriate size" << endl; 
-		cols = img_current_level_size.cols - start_col;
+		return false;
 	}
+}
+
+template<typename T, size_t memory_usage>
+bool HierarchicalImage<T, memory_usage>::get_pixels_by_level(int level, int &start_row, int &start_col,
+	int &rows, int &cols, std::vector<T> &vec)
+{
+	if(!check_para_validation(level, start_row, start_col, rows, cols)) return false;
 
 	/* first recalculate the para */
 	start_row = make_less_four_multiply(start_row);
@@ -578,10 +584,103 @@ bool HierarchicalImage<T, memory_usage>::get_pixels_by_level(int level, int &sta
 }
 
 template<typename T, size_t memory_usage>
-bool HierarchicalImage<T, memory_usage>::set_pixel_by_level(int level, int min_row, int max_row, int min_col, int max_col, T* ptr)
-{
+bool HierarchicalImage<T, memory_usage>::set_pixel_by_level(int level, int start_row, int start_col, int rows, int cols, const std::vector<T> &vec)
+{	
+	if(!check_para_validation(level, start_row, start_col, rows, cols)) return false;
+
+	/* save the zorder indexing method information*/
+	std::vector<DataIndexInfo> index_info_vector(rows*cols);
+
+	/* the start index of the image range, thus the zorder index of the top-left point */
+	ZOrderIndex::IndexType start_zorder_index = index_method->get_index(start_row, start_col);
+
+	/* initialize the data index information */ 
+	for(size_t i = 0; i < rows; ++i) {
+		ZOrderIndex::IndexType row_result = index_method->get_row_result(i + start_row);
+		size_t row_index = i*cols;	
+		for(size_t j = 0; j < cols; ++j) {
+			index_info_vector[row_index + j].index = row_index + j;
+			index_info_vector[row_index + j].zorder_index = 
+				index_method->get_index_by_row_result(row_result, j + start_col) - start_zorder_index; 
+		}
+	}
+
+	/* sort the index info vector by the zorder index value */
+	std::sort(index_info_vector.begin(), index_info_vector.end());
+
+	/* front and tail means a range of the successive zorder index in format [front, tail) */
+	size_t front = 0, tail = 0;
+	const size_t end = rows*cols;  
+
+	/* first make the front and tail the same, the expect_index means the expect zorder index when searching in successive way*/
+	front = tail = 0;
+	ZOrderIndex::IndexType expect_index = index_info_vector[front].zorder_index;
+	while(front < end) {
+		expect_index = index_info_vector[front].zorder_index;
+
+		while(tail < end && expect_index == index_info_vector[tail].zorder_index) {
+			++tail;
+			++expect_index;
+		}
+
+		/*now get the successive zorder index range [front, tail) */
+		{
+			BOOST_ASSERT(tail > front);
+
+			/* total number for reading */
+			size_t total = tail - front;
+
+			/* save the actually first zorder index (take account of the start_zorder_index) */
+			size_t zorder_index_front = index_info_vector[front].zorder_index + start_zorder_index;
+
+			/* the first image file number */
+			size_t start_file_number = (zorder_index_front >> file_node_shift_num);
+
+			/* the seekg cell size in the file */
+			size_t start_seekg = zorder_index_front - (start_file_number << file_node_shift_num);
+
+			/* while the cell number has not been finished */
+			while(total > 0) {
+				/* image file name */
+				string img_file_name = img_level_data_path + '/' + boost::lexical_cast<string>(start_file_number);
+
+				/* the file_index means the index of the img_file_name in lru_image_files */
+				int file_index = lru_image_files.put_into_lru(img_file_name);
+
+				/* if not get the reasonable position, there must be some kind of error, so just return false */
+				if(file_index == lru_image_files.npos)	return false;
+
+				/* using get_data function will make the file_index cache be dirty, thus will be write back when the cache is swap out 
+				 * of the memory */
+				vector<Vec3b> &file_data = lru_image_files.get_data(file_index);
+
+				size_t read_number = min<size_t>(tail - front, file_node_size - start_seekg);
+
+				/* just read the data into the right place */
+				for(size_t i = 0; i < read_number; ++i) {
+					file_data[start_seekg + i] = vec[index_info_vector[front++].index];
+				}
+
+				total -= read_number;
+				if(total <= 0)	break;
+
+				/* here means prepare for next loop */
+				/* make the seekg = 0, means in later loop the seekg will just begin from the */
+				/* start point of each file for reading */
+				start_seekg = 0;
+
+				/* the next file is just one number larger than formal image */
+				++start_file_number;
+			}
+		}
+
+		front = tail;
+	}
+
 	return true;
 }
 
 #endif
+
+
 

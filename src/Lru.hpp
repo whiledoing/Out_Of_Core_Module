@@ -31,7 +31,7 @@ private:
 public:
 	void init(int _file_cell_numbers, int _file_cache_numbers)
 	{
-		BOOST_ASSERT(_file_cache_number > 0);
+		BOOST_ASSERT(_file_cache_numbers > 0);
 		file_cell_numbers = _file_cell_numbers;
 		file_cache_numbers = _file_cache_numbers;
 		current_used = 0;
@@ -40,6 +40,14 @@ public:
 
 	ImageFileLRU(int _file_cell_numbers = 0, int _file_cache_numbers = 16) {
 		init(_file_cell_numbers, _file_cache_numbers);
+	}
+
+	~ImageFileLRU() {
+		/* write back the dirty image */
+		for(size_t i = 0; i < lru_data.size(); ++i) {
+			if(b_data_dirty[i] == true)
+				write_back_data(i);
+		}
 	}
 
 	bool exists(const std::string &file_name) const {
@@ -88,11 +96,7 @@ public:
 				}
 			}
 
-			/* if the data is dirty, then write it back to the file to update the data in the disk */
-			if(b_data_dirty[index] == true) {
-				ofstream fout(lru_data[index].image_file_name, ios::out | ios::binary);
-				fout.write(reinterpret_cast<char*>(&lru_data[index].image_data[0]), file_cell_numbers*sizeof(T));
-			}
+			if(!write_back_data(index)) return npos;
 
 			/* put the new data in the remove index, the data will be covered by the new data read from file */
 			lru_data[index].image_file_name = file_name;
@@ -101,14 +105,35 @@ public:
 		/* read the data into cache */
 		std::vector<T> &data = lru_data[index].image_data;
 		fin.read(reinterpret_cast<char*>(&data[0]), file_cell_numbers*sizeof(T));
+		if(!fin.eof() && fin.fail()) {
+			cerr << "read image file " << lru_data[index].image_file_name << " fails" << endl;
+			return npos;
+		}
 
 		fin.close();
 		update_count(index);
 		return index;
 	}
 
+	bool write_back_data(int index) 
+	{
+		/* if the data is dirty, then write it back to the file to update the data in the disk */
+		if(b_data_dirty[index] == true) {
+			ofstream fout(lru_data[index].image_file_name, ios::out | ios::binary);
+			fout.write(reinterpret_cast<char*>(&lru_data[index].image_data[0]), file_cell_numbers*sizeof(T));
+
+			if(fout.fail()) {
+				cerr << "write image file " << lru_data[index].image_file_name << " fails" << endl;
+				return false;
+			}
+			fout.close();
+		}
+
+		return true;
+	}
+
 	void update_count(int index) {
-		BOOST_ASSERT(index < lru_data.size() && index > 0);
+		BOOST_ASSERT(index < lru_data.size() && index >= 0);
 		for(size_t i = 0; i < lru_data.size(); ++i) {
 			++lru_data[i].count;
 		}
@@ -118,12 +143,12 @@ public:
 	}
 
 	const std::vector<T>& get_const_data(int index) const {
-		BOOST_ASSERT(index < lru_data.size() && index > 0);
+		BOOST_ASSERT(index < lru_data.size() && index >= 0);
 		return lru_data[index].image_data;
 	}
 
 	std::vector<T>& get_data(int index) {
-		BOOST_ASSERT(index < lru_data.size() && index > 0);
+		BOOST_ASSERT(index < lru_data.size() && index >= 0);
 		
 		/* if get the image data by this function, then the data will be marked as dirty */
 		b_data_dirty[index] = true;

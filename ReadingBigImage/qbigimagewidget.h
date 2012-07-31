@@ -12,8 +12,10 @@ class QPaintEvent;
 class QResizeEvent;
 class QMouseEvent;
 class QWheelEvent;
+class QKeyEvent;
 
 /* library module */
+#include <boost/timer.hpp>
 #include <boost/shared_ptr.hpp>
 #include <vector>
 #include <iostream>
@@ -33,6 +35,7 @@ protected:
 	virtual void mouseReleaseEvent(QMouseEvent *event);
 	virtual void mouseMoveEvent(QMouseEvent *event);
 	virtual void wheelEvent(QWheelEvent *event);
+	virtual void keyPressEvent(QKeyEvent * event);
 
 private:
 
@@ -96,6 +99,7 @@ private:
 
 					return false;
 				}
+
 			} catch (std::exception  &err) {
                  QMessageBox::critical(this, "ReadingBigImage", QString::fromLocal8Bit("ÄÚ´æ·ÖÅäÊ§°Ü"), QMessageBox::Ok);
 				 m_parent->close();
