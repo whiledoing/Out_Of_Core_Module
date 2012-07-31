@@ -29,9 +29,6 @@ public:
 	virtual bool init(size_t rows, size_t cols);
 	virtual bool reset();
 
-	static boost::shared_ptr<BlockwiseImage<T, memory_usage> > load_image(const char *file_name);
-	static boost::shared_ptr<BlockwiseImage<T, memory_usage> > load_image(const std::string &file_name);
-
 	virtual bool write_image(const char *file_name);
 	virtual bool write_image(const std::string &file_name);
 
@@ -112,4 +109,5 @@ boost::shared_ptr<GiantImageInterface<T> > get_block_wise_image_by_meomory_usage
 		return boost::make_shared<BlockwiseImage<T, 64> >(rows, cols, method);
 	}
 }
+
 #endif

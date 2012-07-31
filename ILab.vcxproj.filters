@@ -69,6 +69,12 @@
     <ClInclude Include="src\CommanFunc.h">
       <Filter>源文件\头文件</Filter>
     </ClInclude>
+    <ClInclude Include="src\GiantDiskImage.h">
+      <Filter>image_lab\template</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GiantDiskImage.hpp">
+      <Filter>image_lab\implement</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\MainApp.cpp">
