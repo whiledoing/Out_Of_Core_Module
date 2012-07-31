@@ -376,7 +376,7 @@ inline size_t make_less_four_multiply(size_t number) {
 }
 
 template<typename T, size_t memory_usage>
-void HierarchicalImage<T, memory_usage>::set_current_level(size_t level)
+void HierarchicalImage<T, memory_usage>::set_current_level(int level)
 {
 	BOOST_ASSERT(level <= m_max_level);
 
@@ -393,6 +393,7 @@ void HierarchicalImage<T, memory_usage>::set_current_level(size_t level)
 	/* change the image level data path to the specific level*/
 	img_level_data_path = img_data_path + "/level_" + boost::lexical_cast<string>(level);
 }
+
 template<typename T, size_t memory_usage>
 bool HierarchicalImage<T, memory_usage>::read_from_index_range(size_t front, size_t tail, ZOrderIndex::IndexType start_index, 
 	const std::vector<DataIndexInfo> &index_info_vector, std::vector<T> &data_vector)
