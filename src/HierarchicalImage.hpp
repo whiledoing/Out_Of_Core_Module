@@ -485,6 +485,8 @@ bool HierarchicalImage<T, memory_usage>::check_para_validation(int level, int st
 		cout << "cols is too large, changed to the appropriate size" << endl; 
 		return false;
 	}
+
+	return true;
 }
 
 template<typename T, size_t memory_usage>
