@@ -16,7 +16,7 @@ public:
      * @para width, height ： 长宽
      * @return : 是否返回成功
      */
-	virtual bool init(size_t rows, size_t cols) = 0;
+	virtual bool init(int rows, int cols) = 0;
 
     /*
      * @brief : 清空图像数据

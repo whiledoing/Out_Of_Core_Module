@@ -114,6 +114,7 @@
     <ClInclude Include="src\BlockwiseImage.h" />
     <ClInclude Include="src\HierarchicalImage.h" />
     <ClInclude Include="src\TinyImage.h" />
+    <ClInclude Include="Src\UtlityFunc.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\CommanFunc.cpp" />

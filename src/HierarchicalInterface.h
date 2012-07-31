@@ -1,6 +1,7 @@
 #ifndef _GIANT_HIERARCHICAL_INTERFACE_H
 #define _GIANT_HIERARCHICAL_INTERFACE_H
 #include "GiantImageInterface.h"
+#include "UtlityFunc.h"
 
 template<typename T>
 class HierarchicalInterface
@@ -62,21 +63,6 @@ public:
 	size_t get_max_image_level() const 
 	{
 		return m_max_level;
-	}
-
-protected:
-	size_t get_least_order_number(size_t number)
-	{
-		while(number & (number - 1)) {
-			number &= (number - 1);
-		}
-		int count = 0;
-		while(number) {
-			++count;
-			number >>= 1;
-		}
-
-		return (count < 1) ? 0 : (count - 1);
 	}
 
 protected:

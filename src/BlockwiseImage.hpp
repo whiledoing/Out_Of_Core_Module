@@ -12,10 +12,12 @@ namespace bf=boost::filesystem3;
 using namespace std;
 
 template<typename T, unsigned memory_usage>
-BlockwiseImage<T, memory_usage>::BlockwiseImage(size_t rows, size_t cols, boost::shared_ptr<IndexMethodInterface> method)
+BlockwiseImage<T, memory_usage>::BlockwiseImage(int rows, int cols, int mini_rows, int mini_cols, 
+	boost::shared_ptr<IndexMethodInterface> method)
 	: GiantImageInterface(method ? method : (boost::shared_ptr<IndexMethodInterface>(new ZOrderIndex(rows, cols))))
 {
 	init(rows, cols);
+	set_minimal_resolution(rows, cols, mini_rows, mini_cols);
 }
 
 template<typename T, unsigned memory_usage>
@@ -186,6 +188,9 @@ bool BlockwiseImage<T, memory_usage>::write_image(const char* file_name)
 			file_out.write(reinterpret_cast<const char*>(&c_img_container[last_index]), sizeof(T));
 		}
 		file_out.close();
+
+		if(save_mini_image()) return false;
+
 	} catch(bf::filesystem_error &err) {
 		cerr << err.what() << endl;
 		return false;
@@ -203,8 +208,10 @@ bool BlockwiseImage<T, memory_usage>::reset()
 }
 
 template<typename T, unsigned memory_usage>
-bool BlockwiseImage<T, memory_usage>::init(size_t rows, size_t cols)
+bool BlockwiseImage<T, memory_usage>::init(int rows, int cols)
 {
+	BOOST_ASSERT(rows >= 0 && cols >= 0);
+
 	/* ensure index_method is valid */
 	BOOST_ASSERT(index_method.use_count() != 0);
 
@@ -265,113 +272,13 @@ bool BlockwiseImage<T, memory_usage>::write_image_head_file(const char* file_nam
 	fout << "filenodesize=" << file_node_size << endl;
 	fout << "filenodeshiftnum=" << file_node_shift_num << endl;
 	fout << "indexmethod=" << index_method->get_index_method_name() << endl;
+	fout << "minirows=" << m_mini_rows << endl;
+	fout << "minicols=" << m_mini_cols << endl;
+
 	fout.close();
 
 	return true;
 }
 
-template<typename T, unsigned memory_usage>
-bool BlockwiseImage<T, memory_usage>::load_image_head_file(const char* file_name)
-{
-	/* first check file existence */
-	try {
-		bf::path file_path(file_name);
-		if(!bf::exists(file_path)) {
-			cerr << "not exists the bigimage file" << endl;
-			return false;
-		}
-		if(!bf::is_regular_file(file_path)) {
-			cerr << "file name is not a regular file" << endl;
-			return false;
-		}
-		if(bf::extension(file_path) != str_extension) {
-			cerr << "extension should be bigimage" << endl;
-			return false;
-		}
-	} catch(bf::filesystem_error &err) {
-		cerr << err.what() << endl;
-		return false;
-	}
-
-	ifstream fin(file_name, ios::in);
-	if(!fin.is_open()) {
-		cerr << file_name << " can't be opened for reading" << endl;
-		return false;
-	}
-
-	string str;
-	string::size_type index = 0;
-	getline(fin, str);
-
-	/* check image head type */
-	if(str != "type=BlockwiseImage") {
-		cerr << "image format is not correct" << endl;
-		return false;
-	}
-
-	try {
-		/* get the image rows */
-		getline(fin, str);
-		index = str.find('=');
-		if(index == string::npos || str.substr(0, index) != "rows") {
-			cerr << "image format is not correct" << endl;
-			return false;
-		}
-		img_size.rows = boost::lexical_cast<size_t>(str.substr(index+1));
-
-		/* get the image cols */
-		getline(fin, str);
-		index = str.find('=');
-		if(index == string::npos || str.substr(0, index) != "cols") {
-			cerr << "image format is not correct" << endl;
-			return false;
-		}
-		img_size.cols = boost::lexical_cast<size_t>(str.substr(index+1));
-
-		/* get the file node size */
-		getline(fin, str);
-		index = str.find('=');
-		if(index == string::npos || str.substr(0, index) != "filenodesize") {
-			cerr << "image format is not correct" << endl;
-			return false;
-		}
-		file_node_size = boost::lexical_cast<size_t>(str.substr(index+1));
-
-		/* get the file node shift number */
-		getline(fin, str);
-		index = str.find('=');
-		if(index == string::npos || str.substr(0, index) != "filenodeshiftnum") {
-			cerr << "image format is not correct" << endl;
-			return false;
-		}
-		file_node_shift_num = boost::lexical_cast<size_t>(str.substr(index+1));
-	} catch(boost::bad_lexical_cast &err) {
-		cerr << err.what() << endl;
-		fin.close();
-		return false;
-	}
-
-	/* get the index method */
-	getline(fin, str);
-	index = str.find('=');
-	if(index == string::npos || str.substr(0, index) != "indexmethod") {
-		cerr << "image format is not correct" << endl;
-		return false;
-	}
-	string index_str = str.substr(index+1);
-	if(index_str == "ZOrderIndex") {
-		index_method = boost::make_shared<ZOrderIndex>(img_size.rows, img_size.cols);
-	} else if (index_str == "ZOrderIndexIntuition") {
-		index_method = boost::make_shared<ZOrderIndexIntuition>(img_size.rows, img_size.cols);
-	} else {
-		cerr << "image format is not correct" << endl;
-		return false;
-	}
-
-	if(fin.eof())	return true;
-	if(fin.fail()) return false;
-
-	return true;
-}
 
 #endif

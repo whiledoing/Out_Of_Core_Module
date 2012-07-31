@@ -25,7 +25,7 @@ public:
      * @brief : 设置保存大图像数据的文件节点的大小（分割成多个小文件处理）
      * @para size : 文件大小（以Byte为单位）
      */
-	virtual void set_file_node_size(int64 size)
+	void set_file_node_size(int64 size)
 	{
 		/* make size the multiple of image cell's type */
 		size = int64(std::ceil((double)(size) / sizeof(T)));
