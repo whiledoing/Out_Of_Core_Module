@@ -12,7 +12,7 @@
 
 /* out of core module */
 #include <boost/format.hpp>
-#include "../src/HierarchicalImage.hpp"
+#include "../src/GiantImageFromDisk.hpp"
 
 QBigImageWidget::QBigImageWidget(QWidget *parent)
 	: m_parent(parent), QWidget(parent)
@@ -25,13 +25,13 @@ QBigImageWidget::QBigImageWidget(QWidget *parent)
 bool QBigImageWidget::load_big_image(QString file_name)
 {
 	try {
-		big_image = HierarchicalImage<Vec3b, 256>::load_image(file_name.toStdString().c_str());
+		big_image = load_image<Vec3b>(file_name.toStdString());
 
 		/* if big_image is null, so just load_image failure */
 		if(!big_image) return false;
 
 		/* set the cache size is 32 */
-		reinterpret_cast<HierarchicalImage<Vec3b, 256>*>(big_image.get())->set_file_cache_number(64);
+		big_image->set_file_cache_number(32);
 	} catch (const std::bad_alloc &err){
 		init_para();
 		throw err;

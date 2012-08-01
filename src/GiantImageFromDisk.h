@@ -10,6 +10,8 @@
 #define BOOST_FILESYSTEM_VERSION 3
 #include <boost/filesystem.hpp>
 
+#include <boost/lexical_cast.hpp>
+
 #include <vector>
 
 template<typename T>
@@ -33,19 +35,25 @@ public:
 		return img_current_level_size.cols;
 	}
 
-public:
-	/* specific utility func */
-    /*
-	 *	@brief : set the file cache number of lru when loading image data 
-	 */
-	inline void set_file_cache_number(int _file_cache_number) 
+	virtual bool set_file_cache_number(int _file_cache_number)
 	{
-		BOOST_ASSERT(_file_cache_number > 0);
+		if(_file_cache_number < 0) {
+			std::cerr << "GiantImageFromDisk::set_file_cache_number fail : invalid file cache number" << std::endl;
+			return false;
+		}
+
 		file_cache_number = _file_cache_number;
 		lru_image_files.init(file_node_size, file_cache_number);
+
+		return true;
 	}
 
-	/* some public utility function */
+	virtual size_t get_max_image_level() const 
+	{
+		return m_max_level;
+	}
+
+public:
 	size_t get_minimal_image_rows() const 
 	{
 		return m_mini_rows;
@@ -54,11 +62,6 @@ public:
 	size_t get_minimal_image_cols() const 
 	{
 		return m_mini_cols;
-	}
-
-	size_t get_max_image_level() const 
-	{
-		return m_max_level;
 	}
 
 protected:

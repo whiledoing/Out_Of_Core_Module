@@ -36,6 +36,18 @@ public:
 	 */
 	virtual bool set_current_level(int level) = 0;
 	virtual size_t get_current_level() const = 0;
+
+    /*
+	 *	@brief : set the file cache number when loading image data since the image from disk
+	 *	is too large so when load data from disk, using several file caches to save the image data for
+	 *	improving I/O.
+	 */
+	virtual bool set_file_cache_number(int _file_cache_number) = 0;
+
+	/*
+	 *	@brief : get the maximum image level thus the minimal size image's scale level
+	 */
+	virtual size_t get_max_image_level() const = 0;
 };
 
 #endif

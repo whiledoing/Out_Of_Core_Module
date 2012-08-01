@@ -199,8 +199,8 @@ int main(int argc, char **argv)
 	//lru.put_into_lru("../Release/bigimage/bear/level_0/5");
 
 	//writing_blockwise(argc, argv);
-	//writing_hierarchical(argc, argv);
-	test_read_level_range_image(argc, argv);
+	writing_hierarchical(argc, argv);
+	//test_read_level_range_image(argc, argv);
 	return 0;
 }
 
