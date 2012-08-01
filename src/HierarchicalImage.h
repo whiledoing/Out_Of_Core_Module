@@ -16,31 +16,40 @@ class HierarchicalImage: public BlockwiseImage<T, memory_usage>
 {
 public:
 	HierarchicalImage(size_t rows, size_t cols, size_t mini_rows, size_t mini_cols,
-		size_t file_cache_number = 16, boost::shared_ptr<IndexMethodInterface> method = boost::shared_ptr<IndexMethodInterface>());
+		boost::shared_ptr<IndexMethodInterface> method = boost::shared_ptr<IndexMethodInterface>());
 	virtual ~HierarchicalImage();
 
 /* Derived from BlockwiseImage */
+
 	virtual bool write_image(const char* file_name);
 	virtual bool write_image(const std::string &file_name);
+	virtual bool save_mini_image();
 
 /* specific method */
+
+public:
+
 	/*
-	 *	@brief : set the number for writing image files concurrently 
+	 * @brief : set the number for writing image files concurrently 
 	 */
 	inline void set_mutliply_ways_writing_number(size_t number);
 
+protected:
+
 	/*
-	 *	@brief : set the image data path from the big image file name
+	 * @brief : set the image data path from the big image file name
 				for example : the file_name is /a/x.bigimage then the data_path is /a/x/
 	 */
-	inline void set_image_data_path(const char * file_name); 
+	inline void set_image_data_path(const char *file_name); 
 
 private:
-	struct DataIndexInfo{
+	struct DataIndexInfo
+	{
 		int64 index;			//keeps the original index (in row-major order)
 		int64 zorder_index;	//keeps the zorder index according to the row-major index
 
-		friend inline bool operator< (const DataIndexInfo& lhs, const DataIndexInfo& rhs) {
+		friend inline bool operator< (const DataIndexInfo& lhs, const DataIndexInfo& rhs) 
+		{
 			return (lhs.zorder_index < rhs.zorder_index);
 		}
 	};
@@ -59,14 +68,13 @@ protected:
 
 	/* the image current level */
 	Size img_current_level_size;
-
-
-	/* the number of cache file number for lru manager */
-	//size_t file_cache_number;
-
-	/* the lru image files manager */
-	//ImageFileLRU<Vec3b> lru_image_files;
 };
+
+template<typename T, size_t memory_usage>
+bool HierarchicalImage<T, memory_usage>::save_mini_image()
+{
+	return true;
+}
 
 template<typename T, size_t memory_usage>
 inline void HierarchicalImage<T, memory_usage>::set_mutliply_ways_writing_number(size_t number) {

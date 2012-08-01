@@ -31,25 +31,16 @@ using namespace std;
 
 template<typename T, size_t memory_usage>
 HierarchicalImage<T, memory_usage>::HierarchicalImage(size_t rows, size_t cols, size_t mini_rows, size_t mini_cols,
-	size_t file_cache_number, boost::shared_ptr<IndexMethodInterface> method)
-	//: HierarchicalInterface(rows, cols, mini_rows, mini_cols),
+	boost::shared_ptr<IndexMethodInterface> method)
 	: BlockwiseImage<T, memory_usage>(rows, cols, mini_rows, mini_cols, method)
 {
 	/* default is maximum way concurrent writing */
 	set_mutliply_ways_writing_number(get_max_image_level() + 1);
-
-	//set_file_cache_number(file_cache_number);
 }
 
 template<typename T, size_t memory_usage>
 HierarchicalImage<T, memory_usage>::~HierarchicalImage()
 {
-}
-
-template<typename T, size_t memory_usage>
-bool HierarchicalImage<T, memory_usage>::write_image(const std::string &file_name)
-{
-	return write_image(file_name.c_str());
 }
 
 template<typename T, size_t memory_usage>
@@ -65,8 +56,6 @@ bool HierarchicalImage<T, memory_usage>::write_image_head_file(const char *file_
 			cerr << "open " << file_name << " failure" << endl;
 			return false;
 		}
-		//fout << "minirows=" << m_mini_rows << endl;
-		//fout << "minicols=" << m_mini_cols << endl;
 
 		/* just write the max level para */
 		fout << "maxlevel=" << m_max_level << endl;
@@ -75,6 +64,76 @@ bool HierarchicalImage<T, memory_usage>::write_image_head_file(const char *file_
 
 	return true;
 }
+
+template<typename T, size_t memory_usage>
+bool HierarchicalImage<T, memory_usage>::write_image(const char *file_name)
+{
+	try {
+		if(!write_image_head_file(file_name))	return false;
+
+		/* set the img_data_path */
+		set_image_data_path(file_name);
+
+		/* check the validation of img_data_path */
+		bf::path data_path(img_data_path);
+		if(bf::exists(data_path)) {
+			bf::remove_all(data_path);
+			cout << "[Warning] : " << data_path.generic_string() 
+				<< " is existing, and the original directory will be removed" << endl;
+		}
+		if(!bf::create_directory(data_path)) {
+			cerr << "create directory " << data_path.generic_string() << " failure" << endl;
+			return false;
+		}
+
+		const int64 file_number = std::ceil((double)(img_container.size()) / file_node_size);
+
+		/* now write the code for multiply ways concurrently writing image data */
+		size_t max_concurrent_loop = (get_max_image_level() + 1) / concurrent_number;
+		for(size_t concurrent_loop = 0; concurrent_loop < max_concurrent_loop; ++concurrent_loop) {
+			size_t start_level = concurrent_loop*concurrent_number;
+
+			/* write concurrent_number level in concurrent begging from the start_level */
+			if(!write_image_inner_loop(start_level, concurrent_number, data_path, file_number))
+				return false;
+		} // end for concurrent loop
+
+		/* write the residual concurrent_loop */
+		size_t start_level = max_concurrent_loop * concurrent_number;
+		if(!write_image_inner_loop(start_level, get_max_image_level() - start_level + 1, data_path, file_number))
+			return false;
+
+		/* now just read the highest level image to save for some kind for observation */
+		//set_current_level(get_max_image_level());
+
+		//std::vector<T> img_data;
+		//int start_rows = 0, start_cols = 0, rows = img_current_level_size.rows, cols = img_current_level_size.cols;
+
+		//TODO : get the max level image to save as a jpg file
+		//if(!get_pixels_by_level(m_max_level, start_rows, start_cols, rows, cols, img_data)) {
+		//	cerr << "get the maximum image failure" << endl;
+		//	return false;
+		//}
+
+		//cv::Mat result_image(rows, cols, CV_8UC3, img_data.data());
+
+		///* convert the RGB format to opencv BGR format */
+		//cv::cvtColor(result_image, result_image, CV_RGB2BGR);
+
+		//bf::path file_path(file_name);
+		//string result_image_name = (file_path.parent_path() / (file_path.stem().generic_string() + ".jpg")).generic_string();
+		//cv::imwrite(result_image_name, result_image);
+		
+		if(!save_mini_image()) return false;
+
+	} catch(bf::filesystem_error &err) {
+		cerr << err.what() << endl;
+		return false;
+	}
+
+	return true;
+}
+
 
 template<typename T, size_t memory_usage>
 bool HierarchicalImage<T, memory_usage>::write_image_inner_loop(size_t start_level, size_t merge_number,
@@ -193,72 +252,9 @@ bool HierarchicalImage<T, memory_usage>::write_image_inner_loop(size_t start_lev
 }
 
 template<typename T, size_t memory_usage>
-bool HierarchicalImage<T, memory_usage>::write_image(const char *file_name)
+bool HierarchicalImage<T, memory_usage>::write_image(const std::string &file_name)
 {
-	try {
-		if(!write_image_head_file(file_name))	return false;
-
-		/* set the img_data_path */
-		set_image_data_path(file_name);
-
-		/* check the validation of img_data_path */
-		bf::path data_path(img_data_path);
-		if(bf::exists(data_path)) {
-			bf::remove_all(data_path);
-			cout << "[Warning] : " << data_path.generic_string() 
-				<< " is existing, and the original directory will be removed" << endl;
-		}
-		if(!bf::create_directory(data_path)) {
-			cerr << "create directory " << data_path.generic_string() << " failure" << endl;
-			return false;
-		}
-
-		const int64 file_number = std::ceil((double)(img_container.size()) / file_node_size);
-
-		/* now write the code for multiply ways concurrently writing image data */
-		size_t max_concurrent_loop = (get_max_image_level() + 1) / concurrent_number;
-		for(size_t concurrent_loop = 0; concurrent_loop < max_concurrent_loop; ++concurrent_loop) {
-			size_t start_level = concurrent_loop*concurrent_number;
-
-			/* write concurrent_number level in concurrent begging from the start_level */
-			if(!write_image_inner_loop(start_level, concurrent_number, data_path, file_number))
-				return false;
-		} // end for concurrent loop
-
-		/* write the residual concurrent_loop */
-		size_t start_level = max_concurrent_loop * concurrent_number;
-		if(!write_image_inner_loop(start_level, get_max_image_level() - start_level + 1, data_path, file_number))
-			return false;
-
-		/* now just read the highest level image to save for some kind for observation */
-		//set_current_level(get_max_image_level());
-
-		//std::vector<T> img_data;
-		//int start_rows = 0, start_cols = 0, rows = img_current_level_size.rows, cols = img_current_level_size.cols;
-
-		//TODO : get the max level image to save as a jpg file
-		//if(!get_pixels_by_level(m_max_level, start_rows, start_cols, rows, cols, img_data)) {
-		//	cerr << "get the maximum image failure" << endl;
-		//	return false;
-		//}
-
-		//cv::Mat result_image(rows, cols, CV_8UC3, img_data.data());
-
-		///* convert the RGB format to opencv BGR format */
-		//cv::cvtColor(result_image, result_image, CV_RGB2BGR);
-
-		//bf::path file_path(file_name);
-		//string result_image_name = (file_path.parent_path() / (file_path.stem().generic_string() + ".jpg")).generic_string();
-		//cv::imwrite(result_image_name, result_image);
-		
-		if(!save_mini_image()) return false;
-
-	} catch(bf::filesystem_error &err) {
-		cerr << err.what() << endl;
-		return false;
-	}
-
-	return true;
+	return write_image(file_name.c_str());
 }
 
 #endif
