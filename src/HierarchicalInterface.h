@@ -34,7 +34,7 @@ public:
     /*
 	 *	@brief : set the image current level before any access to the hierarchical image data
 	 */
-	virtual void set_current_level(int level) = 0;
+	virtual bool set_current_level(int level) = 0;
 	virtual size_t get_current_level() const = 0;
 };
 

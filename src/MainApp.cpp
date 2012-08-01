@@ -136,7 +136,8 @@ bool test_read_level_range_image(int argc, char **argv)
 		int rows = atoi(str_array[3].c_str());
 		int cols = atoi(str_array[4].c_str());
 
-		big_image->set_current_level(level);
+		if(!big_image->set_current_level(level)) continue;
+
 		cout << "The level image size is " << "("
 			<< big_image->get_current_level_image_rows() << "," 
 			<< big_image->get_current_level_image_cols() << ")" << endl;

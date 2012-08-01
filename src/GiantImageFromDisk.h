@@ -18,7 +18,7 @@ public:
 
 	virtual bool get_pixels_by_level(int level, int &start_row, int &start_col, int &rows, int &cols, std::vector<T> &vec);
 	virtual bool set_pixel_by_level(int level, int start_row, int start_col, int rows, int cols, const std::vector<T> &vec);
-	virtual void set_current_level(int level);
+	virtual bool set_current_level(int level);
 	virtual size_t get_current_level() const; 
 
 	virtual size_t get_current_level_image_rows() const 
@@ -124,12 +124,15 @@ protected:
 };
 
 template<typename T>
-void GiantImageFromDisk<T>::set_current_level(int level)
+bool GiantImageFromDisk<T>::set_current_level(int level)
 {
-	BOOST_ASSERT(level >= 0 && level <= m_max_level);
+    if(level > m_max_level || level < 0) {
+        cerr << "GiantImageFromDisk::set_current_level function para error : invalid level" << endl;
+        return false;
+    }
 
 	/* if set the same level, do nothing */
-	if(m_current_level == level)	return;
+	if(m_current_level == level)	return true;
 
 	m_current_level = level;
 
@@ -142,6 +145,8 @@ void GiantImageFromDisk<T>::set_current_level(int level)
 
 	/* change the image level data path to the specific level*/
 	img_level_data_path = img_data_path + "/level_" + boost::lexical_cast<string>(level);
+
+	return true;
 }
 
 template<typename T>
@@ -205,32 +210,25 @@ bool GiantImageFromDisk<T>::read_from_index_range(size_t front, size_t tail, ZOr
 template<typename T>
 bool GiantImageFromDisk<T>::check_para_validation(int level, int start_row, int start_col, int rows, int cols) 
 {
-	if(level > m_max_level || level < 0) {
-		cerr << "HierarchicalImage::get_pixels_by_level function para error : invalid level" << endl;
-		return false;
-	}
-
-	set_current_level(level);
+	if(!set_current_level(level)) return false;
 
 	if(start_row >= img_current_level_size.rows || start_row < 0) {
-		cerr << "HierarchicalImage::get_pixels_by_level function para error : invalid start_rows" << endl;
+		cerr << "GiantImageFromDisk::get_pixels_by_level function para error : invalid start_rows" << endl;
 		return false;
 	}
 
 	if(start_col >= img_current_level_size.cols || start_col < 0) {
-		cerr << "HierarchicalImage::get_pixels_by_level function para error : invalid start_cols" << endl;
+		cerr << "GiantImageFromDisk::get_pixels_by_level function para error : invalid start_cols" << endl;
 		return false;
 	}
 
-	if(start_row + rows > img_current_level_size.rows) {
-		cerr << "HierarchicalImage::get_pixels_by_level function para error "<< endl;
-		cerr << "rows is too large, changed to the appropriate size" << endl; 
+	if(start_row + rows > img_current_level_size.rows || rows < 0) {
+		cerr << "GiantImageFromDisk::get_pixels_by_level function para error : invalid rows"<< endl;
 		return false;
 	}
 
-	if(start_col + cols > img_current_level_size.cols) {
-		cerr << "HierarchicalImage::get_pixels_by_level function para err" << endl;
-		cout << "cols is too large, changed to the appropriate size" << endl; 
+	if(start_col + cols > img_current_level_size.cols || cols < 0) {
+		cerr << "GiantImageFromDisk::get_pixels_by_level function para err : invalid cols" << endl;
 		return false;
 	}
 
