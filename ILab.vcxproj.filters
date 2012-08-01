@@ -39,16 +39,10 @@
     <ClInclude Include="src\HierarchicalImage.hpp">
       <Filter>image_lab\implement</Filter>
     </ClInclude>
-    <ClInclude Include="src\TinyImage.hpp">
-      <Filter>image_lab\implement</Filter>
-    </ClInclude>
     <ClInclude Include="src\BlockwiseImage.h">
       <Filter>image_lab\template</Filter>
     </ClInclude>
     <ClInclude Include="src\HierarchicalImage.h">
-      <Filter>image_lab\template</Filter>
-    </ClInclude>
-    <ClInclude Include="src\TinyImage.h">
       <Filter>image_lab\template</Filter>
     </ClInclude>
     <ClInclude Include="src\IndexMethodInterface.h">

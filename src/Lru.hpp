@@ -30,6 +30,12 @@ private:
 	typedef std::vector<ValueType> DataType;
 
 public:
+
+	/*
+	 *	@brief : initialize the lru manager
+	 *	@para _file_cell_numbers : the cell number in one file
+	 *	@para _file_cache_numbers : the file cache number
+	 */
 	void init(int _file_cell_numbers, int _file_cache_numbers)
 	{
 		BOOST_ASSERT(_file_cache_numbers > 0);
@@ -51,6 +57,9 @@ public:
 		}
 	}
 
+	/*
+	 *	@brief : checks whether the file_name is in the file cache
+	 */
 	bool exists(const std::string &file_name) const {
 		for(DataType::const_iterator ite = lru_data.cbegin(); ite != lru_data.cend(); ++ite) {
 			if(ite->image_file_name == file_name)
@@ -59,6 +68,9 @@ public:
 		return false;
 	}
 
+	/*
+	 *	@brief : find the index of the file_name in the lru manager, if not exist, return npos
+	 */
 	int find(const std::string &file_name) const {
 		for(DataType::const_iterator ite = lru_data.cbegin(); ite != lru_data.cend(); ++ite) {
 			if(ite->image_file_name == file_name)
@@ -67,6 +79,10 @@ public:
 		return npos;
 	}
 
+	/*
+	 *	@brief : put the file_name into the lru manager, and return the index of the specific file_name in the 
+	 *	lru manager.
+	 */
 	int put_into_lru(const std::string &file_name) {
 		using namespace std;
 
@@ -118,6 +134,9 @@ public:
 		return index;
 	}
 
+	/*
+	 *	@brief : write the index data into the file system
+	 */
 	bool write_back_data(int index) 
 	{
 		using namespace std;
@@ -137,6 +156,9 @@ public:
 		return true;
 	}
 
+	/*
+	 *	@brief : update the count of all the file cache count
+	 */
 	void update_count(int index) {
 		BOOST_ASSERT(index < lru_data.size() && index >= 0);
 		for(size_t i = 0; i < lru_data.size(); ++i) {
@@ -147,11 +169,17 @@ public:
 		lru_data[index].count = 0;
 	}
 
+	/*
+	 *	@brief : get the index file cache's const data
+	 */
 	const std::vector<T>& get_const_data(int index) const {
 		BOOST_ASSERT(index < lru_data.size() && index >= 0);
 		return lru_data[index].image_data;
 	}
 
+	/*
+	 *	@brief : get the index file cache's data
+	 */
 	std::vector<T>& get_data(int index) {
 		BOOST_ASSERT(index < lru_data.size() && index >= 0);
 		
@@ -161,7 +189,7 @@ public:
 	}
 
 public:
-	/* the npos means some kind of invalid index */
+	/* the npos means invalid index */
 	static const int npos = -1;
 
 private:

@@ -109,10 +109,8 @@
     <ClInclude Include="src\IndexMethod.hpp" />
     <ClInclude Include="src\IndexMethodInterface.h" />
     <ClInclude Include="src\Lru.hpp" />
-    <ClInclude Include="src\TinyImage.hpp" />
     <ClInclude Include="src\BlockwiseImage.h" />
     <ClInclude Include="src\HierarchicalImage.h" />
-    <ClInclude Include="src\TinyImage.h" />
     <ClInclude Include="Src\UtlityFunc.h" />
   </ItemGroup>
   <ItemGroup>
