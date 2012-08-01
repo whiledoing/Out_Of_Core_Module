@@ -8,8 +8,6 @@
 #include <boost/filesystem.hpp>
 #include <boost/lexical_cast.hpp>
 #include <strstream>
-namespace bf=boost::filesystem3;
-using namespace std;
 
 template<typename T, unsigned memory_usage>
 BlockwiseImage<T, memory_usage>::BlockwiseImage(int rows, int cols, int mini_rows, int mini_cols, 
@@ -172,6 +170,9 @@ T& BlockwiseImage<T, memory_usage>::get_pixel(int row, int col)
 template<typename T, unsigned memory_usage>
 bool BlockwiseImage<T, memory_usage>::write_image_head_file(const char* file_name)
 {
+	namespace bf = boost::filesystem3;
+	using namespace std;
+
 	try {
 		bf::path file_path(file_name);
 		if(bf::is_directory(file_path)) {
@@ -215,6 +216,9 @@ bool BlockwiseImage<T, memory_usage>::write_image_head_file(const char* file_nam
 template<typename T, unsigned memory_usage>
 bool BlockwiseImage<T, memory_usage>::write_image(const char* file_name)
 {
+	using namespace std;
+	namespace bf=boost::filesystem3;
+
 	try {
 		if(!write_image_head_file(file_name))	return false;
 

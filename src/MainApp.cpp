@@ -15,6 +15,8 @@ int writing_hierarchical(int argc, char ** argv);
 
 int writing_blockwise(int argc, char **argv)
 {
+	using namespace std;
+
 	if(argc < 6) {
 		cout << "Usage : [file name] [res row] [res col] [write image file name] [enlarge number]"
 			" [optinal (show image)] " << endl;
@@ -107,6 +109,7 @@ int writing_blockwise(int argc, char **argv)
 
 bool test_read_level_range_image(int argc, char **argv)
 {
+	using namespace std;
 	if(argc < 2) {
 		cout << "Input the big image file name to get level data" << endl;
 		cout << "Usage : [image file name] " << endl;
@@ -203,6 +206,8 @@ int main(int argc, char **argv)
 
 int writing_hierarchical(int argc, char ** argv)
 {
+	using namespace std;
+
 	if(argc < 7) {
 		cout << "Usage : [file name] [res row] [res col] [write image file name] [multiply ways number] [enlarge number]"
 			" [optinal (show image)] " << endl;

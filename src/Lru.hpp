@@ -67,6 +67,8 @@ public:
 	}
 
 	int put_into_lru(const std::string &file_name) {
+		using namespace std;
+
 		int index = find(file_name);
 
 		/* value is in the lru caches, just return the index */
@@ -117,6 +119,8 @@ public:
 
 	bool write_back_data(int index) 
 	{
+		using namespace std;
+
 		/* if the data is dirty, then write it back to the file to update the data in the disk */
 		if(b_data_dirty[index] == true) {
 			ofstream fout(lru_data[index].image_file_name, ios::out | ios::binary);

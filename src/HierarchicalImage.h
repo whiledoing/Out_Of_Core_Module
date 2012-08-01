@@ -7,10 +7,6 @@
 #include "Lru.hpp"
 #include "IndexMethod.hpp"
 
-#define BOOST_FILESYSTEM_VERSION 3
-#include <boost/filesystem.hpp>
-namespace bf = boost::filesystem3;
-
 template<typename T, size_t memory_usage = 64>
 class HierarchicalImage: public BlockwiseImage<T, memory_usage>
 {
@@ -44,7 +40,7 @@ protected:
 
 protected:
 	bool write_image_head_file(const char *file_name);
-	bool write_image_inner_loop(size_t start_level, size_t merge_number, const bf::path &data_path, const int64 &file_number);
+	bool write_image_inner_loop(size_t start_level, size_t merge_number, const boost::filesystem3::path &data_path, const int64 &file_number);
 	//bool load_image_head_file(const char *file_name);
 
 protected:
@@ -73,6 +69,8 @@ inline void HierarchicalImage<T, memory_usage>::set_mutliply_ways_writing_number
 template<typename T, size_t memory_usage>
 inline void HierarchicalImage<T, memory_usage>::set_image_data_path(const char * file_name) 
 {
+	namespace bf = boost::filesystem3;
+
 	/* save the img_data_path */
 	bf::path file_path = file_name;
 	img_data_path = (file_path.parent_path() / file_path.stem()).generic_string();

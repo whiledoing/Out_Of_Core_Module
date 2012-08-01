@@ -17,6 +17,10 @@
 #pragma comment(lib, "libstxxl_debug.lib")
 #endif
 
+/* filesystem part */
+#define BOOST_FILESYSTEM_VERSION 3
+#include <boost/filesystem.hpp>
+
 template<typename T, unsigned memory_usage = 64>
 class BlockwiseImage: public GiantImageInterface<T>
 {

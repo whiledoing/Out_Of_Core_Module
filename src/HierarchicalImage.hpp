@@ -26,9 +26,6 @@
 #endif
 /*---------------------------------------------*/
 
-using boost::lexical_cast;
-using namespace std;
-
 template<typename T, size_t memory_usage>
 HierarchicalImage<T, memory_usage>::HierarchicalImage(size_t rows, size_t cols, size_t mini_rows, size_t mini_cols,
 	boost::shared_ptr<IndexMethodInterface> method)
@@ -51,14 +48,14 @@ bool HierarchicalImage<T, memory_usage>::write_image_head_file(const char *file_
 
 	/* append the specific hierarchical image head info */
 	{
-		ofstream fout(file_name, ios::out | ios::app);
+		std::ofstream fout(file_name, std::ios::out | std::ios::app);
 		if(!fout.is_open()) {
-			cerr << "open " << file_name << " failure" << endl;
+			std::cerr << "open " << file_name << " failure" << std::endl;
 			return false;
 		}
 
 		/* just write the max level para */
-		fout << "maxlevel=" << m_max_level << endl;
+		fout << "maxlevel=" << m_max_level << std::endl;
 		fout.close();
 	}
 
@@ -68,6 +65,9 @@ bool HierarchicalImage<T, memory_usage>::write_image_head_file(const char *file_
 template<typename T, size_t memory_usage>
 bool HierarchicalImage<T, memory_usage>::write_image(const char *file_name)
 {
+	using namespace std;
+	namespace bf = boost::filesystem3;
+
 	try {
 		if(!write_image_head_file(file_name))	return false;
 
@@ -137,7 +137,7 @@ bool HierarchicalImage<T, memory_usage>::write_image(const char *file_name)
 
 template<typename T, size_t memory_usage>
 bool HierarchicalImage<T, memory_usage>::write_image_inner_loop(size_t start_level, size_t merge_number,
-	const bf::path &data_path, const int64 &file_number)
+	const boost::filesystem3::path &data_path, const int64 &file_number)
 {
 	/*
 	*	fout_array : different ofstream for multiply ways writing into files
@@ -150,6 +150,11 @@ bool HierarchicalImage<T, memory_usage>::write_image_inner_loop(size_t start_lev
 	*	the entire file name is like:
 	*	./some image/level_0/fout_file_level_number;
 	*/
+
+	using boost::lexical_cast;
+	using namespace std;
+	namespace bf = boost::filesystem3;
+
 	static const ContainerType &c_img_container = img_container;
 
 	std::vector<ofstream> fout_array(merge_number);

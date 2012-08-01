@@ -7,6 +7,10 @@
 #include "Lru.hpp"
 #include "IndexMethod.hpp"
 
+/* filesystem part */
+#define BOOST_FILESYSTEM_VERSION 3
+#include <boost/filesystem.hpp>
+
 #include <vector>
 
 template<typename T>
@@ -127,7 +131,7 @@ template<typename T>
 bool GiantImageFromDisk<T>::set_current_level(int level)
 {
     if(level > m_max_level || level < 0) {
-        cerr << "GiantImageFromDisk::set_current_level function para error : invalid level" << endl;
+		std::cerr << "GiantImageFromDisk::set_current_level function para error : invalid level" << std::endl;
         return false;
     }
 
@@ -144,7 +148,7 @@ bool GiantImageFromDisk<T>::set_current_level(int level)
 	index_method = boost::shared_ptr<IndexMethodInterface>(new ZOrderIndex(img_current_level_size.rows, img_current_level_size.cols));
 
 	/* change the image level data path to the specific level*/
-	img_level_data_path = img_data_path + "/level_" + boost::lexical_cast<string>(level);
+	img_level_data_path = img_data_path + "/level_" + boost::lexical_cast<std::string>(level);
 
 	return true;
 }
@@ -159,6 +163,8 @@ template<typename T>
 bool GiantImageFromDisk<T>::read_from_index_range(size_t front, size_t tail, ZOrderIndex::IndexType start_index, 
 	const std::vector<DataIndexInfo> &index_info_vector, std::vector<T> &data_vector)
 {
+	using namespace std;
+
 	BOOST_ASSERT(tail > front);
 
 	/* total number for reading */
@@ -210,6 +216,8 @@ bool GiantImageFromDisk<T>::read_from_index_range(size_t front, size_t tail, ZOr
 template<typename T>
 bool GiantImageFromDisk<T>::check_para_validation(int level, int start_row, int start_col, int rows, int cols) 
 {
+	using namespace std;
+
 	if(!set_current_level(level)) return false;
 
 	if(start_row >= img_current_level_size.rows || start_row < 0) {
@@ -239,6 +247,8 @@ template<typename T>
 bool GiantImageFromDisk<T>::get_pixels_by_level(int level, int &start_row, int &start_col,
 	int &rows, int &cols, std::vector<T> &vec)
 {
+	using namespace std;
+
 	if(!check_para_validation(level, start_row, start_col, rows, cols)) return false;
 
 	/* first recalculate the para */
@@ -344,6 +354,8 @@ template<typename T>
 bool GiantImageFromDisk<T>::set_pixel_by_level(int level, int start_row, int start_col, 
 	int rows, int cols, const std::vector<T> &vec)
 {	
+	using namespace std;
+
 	if(!check_para_validation(level, start_row, start_col, rows, cols)) return false;
 
 	/* save the zorder indexing method information*/
@@ -412,7 +424,7 @@ bool GiantImageFromDisk<T>::set_pixel_by_level(int level, int start_row, int sta
 				 * of the memory */
 				vector<Vec3b> &file_data = lru_image_files.get_data(file_index);
 
-				size_t read_number = min<size_t>(tail - front, file_node_size - start_seekg);
+				size_t read_number = std::min<size_t>(tail - front, file_node_size - start_seekg);
 
 				/* just read the data into the right place */
 				for(size_t i = 0; i < read_number; ++i) {
@@ -441,6 +453,9 @@ bool GiantImageFromDisk<T>::set_pixel_by_level(int level, int start_row, int sta
 template<typename T>
 bool GiantImageFromDisk<T>::load_image_head_file(const char* file_name)
 {
+	using namespace std;
+	namespace bf = boost::filesystem3;
+
 	/* first check file existence */
 	try {
 		bf::path file_path(file_name);
@@ -583,6 +598,8 @@ bool GiantImageFromDisk<T>::load_image_head_file(const char* file_name)
 template<typename T>
 inline void GiantImageFromDisk<T>::set_image_data_path(const char * file_name) 
 {
+	namespace bf = boost::filesystem3;
+
 	/* save the img_data_path */
 	bf::path file_path = file_name;
 	img_data_path = (file_path.parent_path() / file_path.stem()).generic_string();
