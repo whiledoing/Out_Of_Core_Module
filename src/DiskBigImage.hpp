@@ -546,4 +546,5 @@ boost::shared_ptr<DiskBigImage<T> > load_image(const std::string &file_name)
 {
 	return load_image<T>(file_name.c_str());
 }
+
 #endif

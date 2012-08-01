@@ -56,10 +56,28 @@ protected:
 	};
 
 protected:
+
+	/*
+	 *	@brief : read out the [front, tail) range cells in the index_info_vector, and write
+	 *	the data into the data_vector, which keeps the row-major format image data that
+	 *	will be the result of get_pixels_by_level() function
+	 */
 	bool read_from_index_range(size_t front, size_t tail, ZOrderIndex::IndexType start_index, 
 		const std::vector<DataIndexInfo> &index_info_vector, std::vector<T> &data_vector);
+
+	/* 
+	 * @brief : checks the parameter invalidation before calling the get_pixels_by_level() function
+	 */
 	bool check_para_validation(int level, int start_row, int start_col, int rows, int cols);
+
+	/*
+	 * @brief : load the image head file before load image
+	 */
 	bool load_image_head_file(const char *file_name);
+
+	/*
+	 *	@brief : get he image data path form the file_name(*.bigimage)
+	 */
 	void set_image_data_path(const char * file_name);
 
 protected:
@@ -80,6 +98,7 @@ protected:
 	/* the shared_ptr of index method */
 	boost::shared_ptr<IndexMethodInterface> index_method;
 
+	/* size of the minimum size image */
 	size_t m_mini_rows, m_mini_cols;
 
     /*
@@ -95,10 +114,10 @@ protected:
 	/* the current level for reading and writing */
 	size_t m_current_level;
 
-	/* the data of the image file data */
+	/* the path of the image data in filesystem */
 	std::string img_data_path;
 
-	/* the specific image level data */
+	/* the specific level image data path */
 	std::string img_level_data_path;
 
 	/* the number of cache file number for lru manager */
