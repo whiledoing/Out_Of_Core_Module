@@ -57,9 +57,6 @@
     <ClInclude Include="src\IndexMethod.hpp">
       <Filter>image_lab\implement</Filter>
     </ClInclude>
-    <ClInclude Include="src\HierarchicalInterface.h">
-      <Filter>image_lab\interface</Filter>
-    </ClInclude>
     <ClInclude Include="src\Lru.hpp">
       <Filter>image_lab\implement</Filter>
     </ClInclude>
@@ -77,6 +74,9 @@
     </ClInclude>
     <ClInclude Include="src\BasicType.h">
       <Filter>源文件\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DiskImageInterface.h">
+      <Filter>image_lab\interface</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

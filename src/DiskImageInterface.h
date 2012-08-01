@@ -4,7 +4,7 @@
 #include "UtlityFunc.h"
 
 template<typename T>
-class HierarchicalInterface
+class DiskImageInterface
 {
 public:
 	/* pure virtual function */

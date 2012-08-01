@@ -3,18 +3,18 @@
 
 #include "BasicType.h"
 #include "ConstData.h"
-#include "HierarchicalInterface.h"
+#include "DiskImageInterface.h"
 #include "Lru.hpp"
 #include "IndexMethod.hpp"
 
 #include <vector>
 
 template<typename T>
-class GiantImageFromDisk : public HierarchicalInterface<T>
+class GiantImageFromDisk : public DiskImageInterface<T>
 {
 
 public:
-	/* Derived from HierarchicalInterface */
+	/* Derived from DiskImageInterface */
 
 	virtual bool get_pixels_by_level(int level, int &start_row, int &start_col, int &rows, int &cols, std::vector<T> &vec);
 	virtual bool set_pixel_by_level(int level, int start_row, int start_col, int rows, int cols, const std::vector<T> &vec);

@@ -428,9 +428,9 @@ bool test_read_level_range_image(int argc, char **argv)
 	}
 
 	const char *file_name = argv[1];
-	boost::shared_ptr<HierarchicalInterface<Vec3b> > big_image = 
+	boost::shared_ptr<DiskImageInterface<Vec3b> > big_image = 
 		load_hierarchical_image_by_meomory_usage<Vec3b>(512, file_name);
-    //boost::shared_ptr<HierarchicalInterface<Vec3b> > big_image =
+    //boost::shared_ptr<DiskImageInterface<Vec3b> > big_image =
     //    HierarchicalImage<Vec3b, 512>::load_image(file_name);
 
 	std::string str_array[5];
