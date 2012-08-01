@@ -29,6 +29,8 @@ public:
 
 	/*
 	 * @para rows, cols : the image size
+	 * @para mini_rows, mini_cols : the minimum size of the image ( after write the image into
+	 * the filesystem, a minimum size image will be saved in the disk as a jpg file format)
 	 * @para method : the index method shared_ptr object(default is zorder index method)
 	 */
 	BlockwiseImage(int rows, int cols, int mini_rows, int mini_cols, 
