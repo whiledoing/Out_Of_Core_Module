@@ -5,6 +5,8 @@
 
 #include "GiantImageInterface.h"
 #include "UtlityFunc.h"
+#include "ConstData.h"
+
 #include <string>
 
 /* stxxl part */
@@ -69,14 +71,9 @@ protected:
 	typedef stxxl::vector<T, 4, stxxl::lru_pager<(memory_usage >> 3)> >  ContainerType;
 	ContainerType img_container;
 
-	static const std::string str_extension;
-
 	size_t m_mini_rows, m_mini_cols;
 	size_t m_max_level;
 };
-
-template<typename T, unsigned memory_usage>
-const std::string BlockwiseImage<T, memory_usage>::str_extension = ".bigimage";
 
 template<typename T, unsigned memory_usage>
 inline size_t BlockwiseImage<T, memory_usage>::get_minimal_image_rows() const

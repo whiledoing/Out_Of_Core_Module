@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-#include "DataType.h"
+#include "BasicType.h"
 
 template<typename T>
 class ImageInterface

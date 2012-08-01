@@ -27,9 +27,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\DataType.h">
-      <Filter>image_lab</Filter>
-    </ClInclude>
     <ClInclude Include="src\GiantImageInterface.h">
       <Filter>image_lab\interface</Filter>
     </ClInclude>
@@ -66,16 +63,19 @@
     <ClInclude Include="src\Lru.hpp">
       <Filter>image_lab\implement</Filter>
     </ClInclude>
-    <ClInclude Include="src\CommanFunc.h">
+    <ClInclude Include="Src\UtlityFunc.h">
       <Filter>源文件\头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\GiantDiskImage.h">
+    <ClInclude Include="src\GiantImageFromDisk.h">
       <Filter>image_lab\template</Filter>
     </ClInclude>
-    <ClInclude Include="src\GiantDiskImage.hpp">
+    <ClInclude Include="src\GiantImageFromDisk.hpp">
       <Filter>image_lab\implement</Filter>
     </ClInclude>
-    <ClInclude Include="Src\UtlityFunc.h">
+    <ClInclude Include="src\BasicType.h">
+      <Filter>image_lab</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\ConstData.h">
       <Filter>源文件\头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -83,7 +83,10 @@
     <ClCompile Include="src\MainApp.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\CommanFunc.cpp">
+    <ClCompile Include="src\UtilityFunc.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\ConstData.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

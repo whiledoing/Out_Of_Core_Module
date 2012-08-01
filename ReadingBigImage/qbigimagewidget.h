@@ -1,7 +1,7 @@
 #ifndef QBIGIMAGEWIDGET_H
 #define QBIGIMAGEWIDGET_H
 
-#include "../src/DataType.h"
+#include "../src/BasicType.h"
 #include "../src/HierarchicalInterface.h"
 
 /* qt module */

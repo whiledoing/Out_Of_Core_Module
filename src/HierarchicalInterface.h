@@ -7,9 +7,6 @@ template<typename T>
 class HierarchicalInterface
 {
 public:
-	HierarchicalInterface(int rows, int cols, int mini_rows, int mini_cols);
-
-public:
 	/* pure virtual function */
 
 	/*
@@ -34,79 +31,11 @@ public:
 	 */
 	virtual size_t get_current_level_image_cols() const = 0;
 
-	/*
-     * @brief ： 设置最小分辨率
-     * @para rows, cols : 图像的大小
-     * @para mini_rows, mini_cols : 图像分辨率
-     */
-	void set_minimal_resolution(int rows, int cols, int mini_rows, int mini_cols);
-
     /*
 	 *	@brief : set the image current level before any access to the hierarchical image data
 	 */
 	virtual void set_current_level(int level) = 0;
 	virtual size_t get_current_level() const = 0;
-
-public:
-
-	/* some public utility function */
-	size_t get_minimal_image_rows() const 
-	{
-		return m_mini_rows;
-	}
-
-	size_t get_minimal_image_cols() const 
-	{
-		return m_mini_cols;
-	}
-
-	size_t get_max_image_level() const 
-	{
-		return m_max_level;
-	}
-
-protected:
-	size_t m_mini_rows, m_mini_cols;
-
-	/*
-	 * the max image hierarchical level
-	 * level = 0 : means no scale
-	 * level = n : means scale 1/2^n of original image
-	 */
-	size_t m_max_level;
-
-	/* the current level for reading and writing */
-	size_t current_level;
 };
-
-template<typename T>
-HierarchicalInterface<T>::HierarchicalInterface(int rows, int cols, int mini_rows, int mini_cols)
-{
-	set_minimal_resolution(rows, cols, mini_rows, mini_cols);
-	
-	/* init to the max int size */
-	current_level = UINT_MAX;
-}
-
-template<typename T>
-void HierarchicalInterface<T>::set_minimal_resolution(int rows, int cols, int mini_rows, int mini_cols)
-{
-	BOOST_ASSERT(m_mini_rows >= 0 && m_mini_cols >= 0 && rows >= mini_rows && cols >= mini_cols);
-
-	/* ensure the mini_rows and mini_cols not zero to insure the correctness of the division */
-	if(mini_rows == 0)	mini_rows = 1;
-	if(mini_cols == 0)	mini_cols = 1;
-
-	size_t level_row = rows / mini_rows, level_col = cols / mini_cols;
-	level_row = get_least_order_number(level_row);
-	level_col = get_least_order_number(level_col);
-
-	/* ensure the smallest image (the max scale level) is not less than mini_rows or mini_cols which user specified */
-	m_max_level = std::min(level_row, level_col);
-
-	/* recalculate the mini_rows and mini_cols */
-	m_mini_rows = std::ceil((double)(rows) / (1 << m_max_level));
-	m_mini_cols = std::ceil((double)(cols) / (1 << m_max_level));
-}
 
 #endif

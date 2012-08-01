@@ -1,7 +1,7 @@
 #ifndef _INDEX_METHOD_INTERFACE_H
 #define _INDEX_METHOD_INTERFACE_H
 
-#include "DataType.h"
+#include "BasicType.h"
 #include <string>
 
 class IndexMethodInterface

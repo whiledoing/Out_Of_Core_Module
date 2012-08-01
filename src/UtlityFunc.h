@@ -1,7 +1,29 @@
 #ifndef _UTILITY_FUNC_H
 #define _UTILITY_FUNC_H
 
-size_t get_least_order_number(size_t number)
+#include <string>
+extern bool string_to_int(const std::string &str, int &value);
+extern bool string_to_unsigned(const std::string &str, size_t &value);
+
+inline size_t make_upper_four_multiply(size_t number)
+{
+	//number % 4 != 0
+	if(number & 0x00000003) return ((number >> 2) + 1) << 2;
+
+	//number is the multiply of 4, then just get the number itself
+	return number;
+}
+
+inline size_t make_less_four_multiply(size_t number) 
+{
+	//number % 4 != 0
+	if(number & 0x00000003) return ((number >> 2) << 2);
+
+	//number is the multiply of 4, then just get the number itself
+	return number;
+}
+
+inline size_t get_least_order_number(size_t number)
 {
 	while(number & (number - 1)) {
 		number &= (number - 1);

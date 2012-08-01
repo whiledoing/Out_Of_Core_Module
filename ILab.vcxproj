@@ -98,10 +98,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\CommanFunc.h" />
-    <ClInclude Include="src\DataType.h" />
-    <ClInclude Include="src\GiantDiskImage.h" />
-    <ClInclude Include="src\GiantDiskImage.hpp" />
+    <ClInclude Include="src\BasicType.h" />
+    <ClInclude Include="Src\ConstData.h" />
+    <ClInclude Include="src\GiantImageFromDisk.h" />
+    <ClInclude Include="src\GiantImageFromDisk.hpp" />
     <ClInclude Include="src\HierarchicalInterface.h" />
     <ClInclude Include="src\GiantImageInterface.h" />
     <ClInclude Include="src\ImageInterface.h" />
@@ -117,7 +117,8 @@
     <ClInclude Include="Src\UtlityFunc.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\CommanFunc.cpp" />
+    <ClCompile Include="Src\ConstData.cpp" />
+    <ClCompile Include="src\UtilityFunc.cpp" />
     <ClCompile Include="src\MainApp.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

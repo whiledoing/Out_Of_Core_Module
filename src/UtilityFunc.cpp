@@ -1,4 +1,5 @@
-#include "CommanFunc.h"
+#include "UtlityFunc.h"
+
 bool string_to_int(const std::string &str, int &value)
 {
 	int base = 1;

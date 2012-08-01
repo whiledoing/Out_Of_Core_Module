@@ -1,7 +1,8 @@
 #ifndef _GIANTDISK_IMAGE_H
 #define _GIANTDISK_IMAGE_H 
 
-#include "DataType.h"
+#include "BasicType.h"
+#include "ConstData.h"
 #include "HierarchicalInterface.h"
 #include "Lru.hpp"
 #include "IndexMethod.hpp"
