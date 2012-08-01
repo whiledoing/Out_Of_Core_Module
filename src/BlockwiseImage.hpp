@@ -269,7 +269,7 @@ bool BlockwiseImage<T, memory_usage>::write_image(const char* file_name)
 		}
 		file_out.close();
 
-		if(save_mini_image()) return false;
+		if(!save_mini_image()) return false;
 
 	} catch(bf::filesystem_error &err) {
 		cerr << err.what() << endl;
