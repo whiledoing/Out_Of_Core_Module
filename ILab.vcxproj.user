@@ -3,6 +3,6 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LocalDebuggerWorkingDirectory>$(TargetDir)</LocalDebuggerWorkingDirectory>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
-    <LocalDebuggerCommandArguments>D:\\Out_Of_Core_Git\\Release\\xxx\\bear.bigimage</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>hierarchical/bear.bigimage</LocalDebuggerCommandArguments>
   </PropertyGroup>
 </Project>

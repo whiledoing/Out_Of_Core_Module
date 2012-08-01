@@ -551,14 +551,16 @@ bool GiantImageFromDisk<T>::load_image_head_file(const char* file_name)
         }
         m_mini_cols = boost::lexical_cast<size_t>(str.substr(index+1));
 
-		/* TODO : this is hierarchical part */
+		/* this is hierarchical part */
+        /* get the hierarchal image max scale level */
+        getline(fin, str);
+
+		/* this means this is just the blockwiseimage, so the max level is 0 only */
 		if(fin.eof()) {
 			m_max_level = 0;
 			return true;
 		}
 
-        /* get the hierarchal image max scale level */
-        getline(fin, str);
         index = str.find('=');
         if(index == string::npos || str.substr(0, index) != "maxlevel") {
             cerr << "image format is not correct" << endl;
@@ -566,6 +568,7 @@ bool GiantImageFromDisk<T>::load_image_head_file(const char* file_name)
         }
         m_max_level = boost::lexical_cast<size_t>(str.substr(index+1));
 
+		getline(fin, str);
         if(fin.eof()) return true;
         if(fin.fail()) return false;
 
@@ -602,6 +605,10 @@ boost::shared_ptr<GiantImageFromDisk<T> > load_image(const char *file_name)
 
 	/* set the image data path for some kind of optimization when calling set or get pixels functions */
 	dst_image->set_image_data_path(file_name);
+
+	/* set the current level to be the max : let it different from the first level user will be 
+	 * set in the set_current_level() function */
+	dst_image->m_current_level = UINT_MAX;
 
 	/*
 	 * hierarchical image don't save specific level image data
