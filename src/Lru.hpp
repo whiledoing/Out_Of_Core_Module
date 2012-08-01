@@ -1,5 +1,5 @@
-#ifndef _LRU_H
-#define _LRU_H
+#ifndef _LRU_HPP
+#define _LRU_HPP 
 
 #include <list>
 #include <vector>
@@ -7,6 +7,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+
 #include <boost/assert.hpp>
 
 template<typename T>

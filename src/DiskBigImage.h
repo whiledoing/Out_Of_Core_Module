@@ -1,5 +1,5 @@
-#ifndef _GIANTDISK_IMAGE_H
-#define _GIANTDISK_IMAGE_H 
+#ifndef _DISK_BIG_IMAGE_H
+#define _DISK_BIG_IMAGE_H
 
 #include "BasicType.h"
 #include "DiskBigImageInterface.h"
@@ -9,7 +9,6 @@
 /* filesystem part */
 #define BOOST_FILESYSTEM_VERSION 3
 #include <boost/filesystem.hpp>
-
 #include <boost/lexical_cast.hpp>
 
 #include <vector>

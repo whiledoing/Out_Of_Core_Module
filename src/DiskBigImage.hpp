@@ -1,5 +1,5 @@
-#ifndef _GIANTDISK_IMAGE_HPP
-#define _GIANTDISK_IMAGE_HPP
+#ifndef _DISK_BIG_IMAGE_HPP
+#define _DISK_BIG_IMAGE_HPP
 #include "DiskBigImage.h"
 
 template<typename T>

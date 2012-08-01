@@ -1,5 +1,6 @@
-#ifndef _GIANT_HIERARCHICAL_INTERFACE_H
-#define _GIANT_HIERARCHICAL_INTERFACE_H
+#ifndef _DISK_BIG_IMAGE_INTERFACE_H
+#define _DISK_BIG_IMAGE_INTERFACE_H
+
 #include "GiantImageInterface.h"
 #include "UtlityFunc.h"
 

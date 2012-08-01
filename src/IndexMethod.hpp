@@ -1,5 +1,5 @@
-#ifndef _INDEX_METHOD_H
-#define _INDEX_METHOD_H
+#ifndef _INDEX_METHOD_HPP
+#define _INDEX_METHOD_HPP
 
 #include "IndexMethodInterface.h"
 #include <cmath>
