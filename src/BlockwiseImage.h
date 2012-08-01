@@ -48,74 +48,17 @@ public:
 	virtual T& at(IndexMethodInterface::IndexType index);
 	virtual const T& at(IndexMethodInterface::IndexType index) const;
 
-	size_t get_minimal_image_rows() const
-	{
-		return m_mini_rows;
-	}
+	inline size_t get_minimal_image_rows() const;
+	inline size_t get_minimal_image_cols() const;
 
-	size_t get_minimal_image_cols() const
-	{
-		return m_mini_cols;
-	}
-
-	size_t get_max_image_level() const 
-	{
-		return m_max_level;
-	}
+	inline size_t get_max_image_level() const;
 
 protected:
 	bool write_image_head_file(const char* file_name);
 
-	void set_minimal_resolution(int rows, int cols, int mini_rows, int mini_cols)
-	{
-		BOOST_ASSERT(m_mini_rows >= 0 && m_mini_cols >= 0 && rows >= mini_rows && cols >= mini_cols);
+	void set_minimal_resolution(int rows, int cols, int mini_rows, int mini_cols);
 
-		/* ensure the mini_rows and mini_cols not zero to insure the correctness of the division */
-		if(mini_rows == 0)	mini_rows = 1;
-		if(mini_cols == 0)	mini_cols = 1;
-
-		size_t level_row = rows / mini_rows, level_col = cols / mini_cols;
-		level_row = get_least_order_number(level_row);
-		level_col = get_least_order_number(level_col);
-
-		/* ensure the smallest image (the max scale level) is not less than mini_rows or mini_cols which user specified */
-		m_max_level = min(level_row, level_col);
-
-		/* recalculate the mini_rows and mini_cols */
-		m_mini_rows = std::ceil((double)(rows) / (1 << m_max_level));
-		m_mini_cols = std::ceil((double)(cols) / (1 << m_max_level));
-	}
-
-	bool save_mini_image() {
-		//TODO : get the max level image to save as a jpg file
-		//if(!get_pixels_by_level(m_max_level, start_rows, start_cols, rows, cols, img_data)) {
-		//	cerr << "get the maximum image failure" << endl;
-		//	return false;
-		//}
-
-		//cv::Mat result_image(rows, cols, CV_8UC3, img_data.data());
-
-		///* convert the RGB format to opencv BGR format */
-		//cv::cvtColor(result_image, result_image, CV_RGB2BGR);
-
-		//bf::path file_path(file_name);
-		//string result_image_name = (file_path.parent_path() / (file_path.stem().generic_string() + ".jpg")).generic_string();
-		//cv::imwrite(result_image_name, result_image);
-		
-  //      const ContainerType &c_img_container = img_container;
-
-		//std::vector<T> img_data;
-		//std::vector<T> img_zorder_data;
-		//IndexMethodInterface::IndexType total_size, file_cell_size, delta_count;
-		//total_size = c_img_container.size();
-		//file_cell_size = total_size >> (2*m_max_level);
-		//delta_count = 1 << (2*m_max_level);
-		//for(IndexMethodInterface::IndexType i = 0, count = 0; i < file_cell_size; ++i, count += delta_count) {
-		//	img_zorder_data[i] = c_img_container[count];
-		//}
-		//for(size_t i = 0; i <)
-		return true;
-	}
+	virtual bool save_mini_image();
 
 protected:
 	/*
@@ -134,6 +77,24 @@ protected:
 
 template<typename T, unsigned memory_usage>
 const std::string BlockwiseImage<T, memory_usage>::str_extension = ".bigimage";
+
+template<typename T, unsigned memory_usage>
+inline size_t BlockwiseImage<T, memory_usage>::get_minimal_image_rows() const
+{
+	return m_mini_rows;
+}
+
+template<typename T, unsigned memory_usage>
+inline size_t BlockwiseImage<T, memory_usage>::get_minimal_image_cols() const
+{
+	return m_mini_cols;
+}
+
+template<typename T, unsigned memory_usage>
+inline size_t BlockwiseImage<T, memory_usage>::get_max_image_level() const 
+{
+	return m_max_level;
+}
 
 /*
  * @brief : return the block wise image by memroy_usage, maximum support 4G

@@ -21,6 +21,49 @@ BlockwiseImage<T, memory_usage>::BlockwiseImage(int rows, int cols, int mini_row
 }
 
 template<typename T, unsigned memory_usage>
+bool BlockwiseImage<T, memory_usage>::reset()
+{
+	init(0, 0);
+	return true;
+}
+
+template<typename T, unsigned memory_usage>
+bool BlockwiseImage<T, memory_usage>::init(int rows, int cols)
+{
+	BOOST_ASSERT(rows >= 0 && cols >= 0);
+
+	/* ensure index_method is valid */
+	BOOST_ASSERT(index_method.use_count() != 0);
+
+	img_size.rows = rows;
+	img_size.cols = cols;
+
+	img_container.resize(index_method->get_max_index() + 1);
+	return true;
+}
+
+template<typename T, unsigned memory_usage>
+void BlockwiseImage<T, memory_usage>::set_minimal_resolution(int rows, int cols, int mini_rows, int mini_cols)
+{
+	BOOST_ASSERT(m_mini_rows >= 0 && m_mini_cols >= 0 && rows >= mini_rows && cols >= mini_cols);
+
+	/* ensure the mini_rows and mini_cols not zero to insure the correctness of the division */
+	if(mini_rows == 0)	mini_rows = 1;
+	if(mini_cols == 0)	mini_cols = 1;
+
+	size_t level_row = rows / mini_rows, level_col = cols / mini_cols;
+	level_row = get_least_order_number(level_row);
+	level_col = get_least_order_number(level_col);
+
+	/* ensure the smallest image (the max scale level) is not less than mini_rows or mini_cols which user specified */
+	m_max_level = min(level_row, level_col);
+
+	/* recalculate the mini_rows and mini_cols */
+	m_mini_rows = std::ceil((double)(rows) / (1 << m_max_level));
+	m_mini_cols = std::ceil((double)(cols) / (1 << m_max_level));
+}
+
+template<typename T, unsigned memory_usage>
 BlockwiseImage<T, memory_usage>::~BlockwiseImage()
 {
 	img_container.clear();
@@ -127,9 +170,46 @@ T& BlockwiseImage<T, memory_usage>::get_pixel(int row, int col)
 }
 
 template<typename T, unsigned memory_usage>
-bool BlockwiseImage<T, memory_usage>::write_image(const std::string &file_name)
+bool BlockwiseImage<T, memory_usage>::write_image_head_file(const char* file_name)
 {
-	return write_image(file_name.c_str());
+	try {
+		bf::path file_path(file_name);
+		if(bf::is_directory(file_path)) {
+			cerr << "file name should be a normal file"  << endl;
+			return false;
+		}
+
+		if(bf::extension(file_path) != str_extension) {
+			cerr << "extension should be bigimage" << endl;
+			return false;
+		}
+
+		if(!bf::exists(file_path.parent_path()))
+			bf::create_directories(file_path.parent_path());
+	} catch(bf::filesystem_error &err) {
+		cerr << err.what() << endl;
+		return false;
+	}
+
+	ofstream fout(file_name, ios::out);
+	if(!fout.is_open()) {
+		cerr << "create " << file_name << " failure" << endl;
+		return false;
+	}
+
+	/* the head file info */
+	fout << "type=" << "BlockwiseImage" << endl;
+	fout << "rows=" << img_size.rows << endl;
+	fout << "cols=" << img_size.cols << endl;
+	fout << "filenodesize=" << file_node_size << endl;
+	fout << "filenodeshiftnum=" << file_node_shift_num << endl;
+	fout << "indexmethod=" << index_method->get_index_method_name() << endl;
+	fout << "minirows=" << m_mini_rows << endl;
+	fout << "minicols=" << m_mini_cols << endl;
+
+	fout.close();
+
+	return true;
 }
 
 template<typename T, unsigned memory_usage>
@@ -200,26 +280,9 @@ bool BlockwiseImage<T, memory_usage>::write_image(const char* file_name)
 }
 
 template<typename T, unsigned memory_usage>
-bool BlockwiseImage<T, memory_usage>::reset()
+bool BlockwiseImage<T, memory_usage>::write_image(const std::string &file_name)
 {
-	img_size.cols = img_size.rows = 0;
-	img_container.resize(0);
-	return true;
-}
-
-template<typename T, unsigned memory_usage>
-bool BlockwiseImage<T, memory_usage>::init(int rows, int cols)
-{
-	BOOST_ASSERT(rows >= 0 && cols >= 0);
-
-	/* ensure index_method is valid */
-	BOOST_ASSERT(index_method.use_count() != 0);
-
-	img_size.rows = rows;
-	img_size.cols = cols;
-
-	img_container.resize(index_method->get_max_index() + 1);
-	return true;
+	return write_image(file_name.c_str());
 }
 
 template<typename T, unsigned memory_usage>
@@ -238,47 +301,36 @@ T& BlockwiseImage<T, memory_usage>::at(IndexMethodInterface::IndexType index)
 }
 
 template<typename T, unsigned memory_usage>
-bool BlockwiseImage<T, memory_usage>::write_image_head_file(const char* file_name)
+bool BlockwiseImage<T, memory_usage>::save_mini_image() 
 {
-	try {
-		bf::path file_path(file_name);
-		if(bf::is_directory(file_path)) {
-			cerr << "file name should be a normal file"  << endl;
-			return false;
-		}
+	//TODO : get the max level image to save as a jpg file
+	//if(!get_pixels_by_level(m_max_level, start_rows, start_cols, rows, cols, img_data)) {
+	//	cerr << "get the maximum image failure" << endl;
+	//	return false;
+	//}
 
-		if(bf::extension(file_path) != str_extension) {
-			cerr << "extension should be bigimage" << endl;
-			return false;
-		}
+	//cv::Mat result_image(rows, cols, CV_8UC3, img_data.data());
 
-		if(!bf::exists(file_path.parent_path()))
-			bf::create_directories(file_path.parent_path());
-	} catch(bf::filesystem_error &err) {
-		cerr << err.what() << endl;
-		return false;
-	}
+	///* convert the RGB format to opencv BGR format */
+	//cv::cvtColor(result_image, result_image, CV_RGB2BGR);
 
-	ofstream fout(file_name, ios::out);
-	if(!fout.is_open()) {
-		cerr << "create " << file_name << " failure" << endl;
-		return false;
-	}
+	//bf::path file_path(file_name);
+	//string result_image_name = (file_path.parent_path() / (file_path.stem().generic_string() + ".jpg")).generic_string();
+	//cv::imwrite(result_image_name, result_image);
 
-	/* the head file info */
-	fout << "type=" << "BlockwiseImage" << endl;
-	fout << "rows=" << img_size.rows << endl;
-	fout << "cols=" << img_size.cols << endl;
-	fout << "filenodesize=" << file_node_size << endl;
-	fout << "filenodeshiftnum=" << file_node_shift_num << endl;
-	fout << "indexmethod=" << index_method->get_index_method_name() << endl;
-	fout << "minirows=" << m_mini_rows << endl;
-	fout << "minicols=" << m_mini_cols << endl;
+	//      const ContainerType &c_img_container = img_container;
 
-	fout.close();
-
+	//std::vector<T> img_data;
+	//std::vector<T> img_zorder_data;
+	//IndexMethodInterface::IndexType total_size, file_cell_size, delta_count;
+	//total_size = c_img_container.size();
+	//file_cell_size = total_size >> (2*m_max_level);
+	//delta_count = 1 << (2*m_max_level);
+	//for(IndexMethodInterface::IndexType i = 0, count = 0; i < file_cell_size; ++i, count += delta_count) {
+	//	img_zorder_data[i] = c_img_container[count];
+	//}
+	//for(size_t i = 0; i <)
 	return true;
 }
-
 
 #endif
