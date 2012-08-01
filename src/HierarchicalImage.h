@@ -53,12 +53,6 @@ protected:
 };
 
 template<typename T, size_t memory_usage>
-bool HierarchicalImage<T, memory_usage>::save_mini_image(const char* file_name)
-{
-	return true;
-}
-
-template<typename T, size_t memory_usage>
 inline void HierarchicalImage<T, memory_usage>::set_mutliply_ways_writing_number(size_t number) {
 	size_t max_number = get_max_image_level() + 1;
 	concurrent_number = (number > max_number) ? max_number : number;

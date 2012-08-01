@@ -87,28 +87,8 @@ bool HierarchicalImage<T, memory_usage>::write_image(const char *file_name)
 		if(!write_image_inner_loop(start_level, get_max_image_level() - start_level + 1, data_path, file_number))
 			return false;
 
-		/* now just read the highest level image to save for some kind for observation */
-		//set_current_level(get_max_image_level());
-
-		//std::vector<T> img_data;
-		//int start_rows = 0, start_cols = 0, rows = img_current_level_size.rows, cols = img_current_level_size.cols;
-
-		//TODO : get the max level image to save as a jpg file
-		//if(!get_pixels_by_level(m_max_level, start_rows, start_cols, rows, cols, img_data)) {
-		//	cerr << "get the maximum image failure" << endl;
-		//	return false;
-		//}
-
-		//cv::Mat result_image(rows, cols, CV_8UC3, img_data.data());
-
-		///* convert the RGB format to opencv BGR format */
-		//cv::cvtColor(result_image, result_image, CV_RGB2BGR);
-
-		//bf::path file_path(file_name);
-		//string result_image_name = (file_path.parent_path() / (file_path.stem().generic_string() + ".jpg")).generic_string();
-		//cv::imwrite(result_image_name, result_image);
-		
-		if(!save_mini_image("abc")) return false;
+		/* save the mini image as a jpg format */
+		if(!save_mini_image(file_name)) return false;
 
 	} catch(bf::filesystem_error &err) {
 		cerr << err.what() << endl;
@@ -244,6 +224,39 @@ template<typename T, size_t memory_usage>
 bool HierarchicalImage<T, memory_usage>::write_image(const std::string &file_name)
 {
 	return write_image(file_name.c_str());
+}
+
+#include "GiantImageFromDisk.hpp"
+template<typename T, size_t memory_usage>
+bool HierarchicalImage<T, memory_usage>::save_mini_image(const char* file_name)
+{
+	/* since the image data has been write successfully, we can using the DiskImageInterface to access
+	 * the image data in the disk
+	 */
+	boost::shared_ptr<DiskImageInterface<T> > big_image = load_image<T>(file_name);
+
+	/* now just read the highest level image to save as a jpg file */
+	big_image->set_current_level(big_image->get_max_image_level());
+
+	int start_rows = 0, start_cols = 0;
+	int rows = big_image->get_current_level_image_rows();
+	int cols = big_image->get_current_level_image_cols();
+
+	std::vector<T> img_data;
+	if(!big_image->get_pixels_by_level(m_max_level, start_rows, start_cols, rows, cols, img_data)) {
+		std::cerr << "get the maximum image failure" << std::endl;
+		return false;
+	}
+
+	cv::Mat result_image(rows, cols, CV_8UC3, img_data.data());
+
+	/* convert the RGB format to opencv BGR format */
+	cv::cvtColor(result_image, result_image, CV_RGB2BGR);
+	boost::filesystem3::path file_path(file_name);
+	std::string result_image_name = (file_path.parent_path() / (file_path.stem().generic_string() + ".jpg")).generic_string();
+	cv::imwrite(result_image_name, result_image);
+
+	return true;
 }
 
 #endif
