@@ -10,7 +10,7 @@
 #include <vector>
 
 template<typename T>
-class GiantDiskImage : public HierarchicalInterface<T>
+class GiantImageFromDisk : public HierarchicalInterface<T>
 {
 
 public:
@@ -78,10 +78,10 @@ protected:
 	void set_image_data_path(const char * file_name);
 
 protected:
-	GiantDiskImage() {}
+	GiantImageFromDisk() {}
 
 	template<typename T>
-	friend boost::shared_ptr<GiantDiskImage<T> > load_image(const char *file_name);
+	friend boost::shared_ptr<GiantImageFromDisk<T> > load_image(const char *file_name);
 
 protected:
 	Size img_size;
@@ -124,7 +124,7 @@ protected:
 };
 
 template<typename T>
-void GiantDiskImage<T>::set_current_level(int level)
+void GiantImageFromDisk<T>::set_current_level(int level)
 {
 	BOOST_ASSERT(level >= 0 && level <= m_max_level);
 
@@ -145,13 +145,13 @@ void GiantDiskImage<T>::set_current_level(int level)
 }
 
 template<typename T>
-size_t GiantDiskImage<T>::get_current_level() const 
+size_t GiantImageFromDisk<T>::get_current_level() const 
 {
 	return m_current_level;
 }
 
 template<typename T>
-bool GiantDiskImage<T>::read_from_index_range(size_t front, size_t tail, ZOrderIndex::IndexType start_index, 
+bool GiantImageFromDisk<T>::read_from_index_range(size_t front, size_t tail, ZOrderIndex::IndexType start_index, 
 	const std::vector<DataIndexInfo> &index_info_vector, std::vector<T> &data_vector)
 {
 	BOOST_ASSERT(tail > front);
@@ -203,7 +203,7 @@ bool GiantDiskImage<T>::read_from_index_range(size_t front, size_t tail, ZOrderI
 }
 
 template<typename T>
-bool GiantDiskImage<T>::check_para_validation(int level, int start_row, int start_col, int rows, int cols) 
+bool GiantImageFromDisk<T>::check_para_validation(int level, int start_row, int start_col, int rows, int cols) 
 {
 	if(level > m_max_level || level < 0) {
 		cerr << "HierarchicalImage::get_pixels_by_level function para error : invalid level" << endl;
@@ -238,7 +238,7 @@ bool GiantDiskImage<T>::check_para_validation(int level, int start_row, int star
 }
 
 template<typename T>
-bool GiantDiskImage<T>::get_pixels_by_level(int level, int &start_row, int &start_col,
+bool GiantImageFromDisk<T>::get_pixels_by_level(int level, int &start_row, int &start_col,
 	int &rows, int &cols, std::vector<T> &vec)
 {
 	if(!check_para_validation(level, start_row, start_col, rows, cols)) return false;
@@ -343,7 +343,7 @@ bool GiantDiskImage<T>::get_pixels_by_level(int level, int &start_row, int &star
 }
 
 template<typename T>
-bool GiantDiskImage<T>::set_pixel_by_level(int level, int start_row, int start_col, 
+bool GiantImageFromDisk<T>::set_pixel_by_level(int level, int start_row, int start_col, 
 	int rows, int cols, const std::vector<T> &vec)
 {	
 	if(!check_para_validation(level, start_row, start_col, rows, cols)) return false;
@@ -441,7 +441,7 @@ bool GiantDiskImage<T>::set_pixel_by_level(int level, int start_row, int start_c
 }
 
 template<typename T>
-bool GiantDiskImage<T>::load_image_head_file(const char* file_name)
+bool GiantImageFromDisk<T>::load_image_head_file(const char* file_name)
 {
 	/* first check file existence */
 	try {
@@ -580,7 +580,7 @@ bool GiantDiskImage<T>::load_image_head_file(const char* file_name)
 }
 
 template<typename T>
-inline void GiantDiskImage<T>::set_image_data_path(const char * file_name) 
+inline void GiantImageFromDisk<T>::set_image_data_path(const char * file_name) 
 {
 	/* save the img_data_path */
 	bf::path file_path = file_name;
@@ -588,10 +588,10 @@ inline void GiantDiskImage<T>::set_image_data_path(const char * file_name)
 }
 
 template<typename T>
-boost::shared_ptr<GiantDiskImage<T> > load_image(const char *file_name)
+boost::shared_ptr<GiantImageFromDisk<T> > load_image(const char *file_name)
 {
-	typedef boost::shared_ptr<GiantDiskImage<T> > PtrType;
-	PtrType dst_image(new GiantDiskImage<T>);
+	typedef boost::shared_ptr<GiantImageFromDisk<T> > PtrType;
+	PtrType dst_image(new GiantImageFromDisk<T>);
 	PtrType null_image;
 
 	if(!dst_image->load_image_head_file(file_name))	 return null_image;
@@ -613,7 +613,7 @@ boost::shared_ptr<GiantDiskImage<T> > load_image(const char *file_name)
 }
 
 template<typename T>
-boost::shared_ptr<GiantDiskImage<T> > load_image(const std::string &file_name)
+boost::shared_ptr<GiantImageFromDisk<T> > load_image(const std::string &file_name)
 {
 	return load_image<T>(file_name.c_str());
 }
