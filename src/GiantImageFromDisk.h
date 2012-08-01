@@ -15,6 +15,7 @@ class GiantDiskImage : public HierarchicalInterface<T>
 
 public:
 	/* Derived from HierarchicalInterface */
+
 	virtual bool get_pixels_by_level(int level, int &start_row, int &start_col, int &rows, int &cols, std::vector<T> &vec);
 	virtual bool set_pixel_by_level(int level, int start_row, int start_col, int rows, int cols, const std::vector<T> &vec);
 	virtual void set_current_level(int level);
@@ -30,6 +31,7 @@ public:
 	}
 
 public:
+	/* specific utility func */
     /*
 	 *	@brief : set the file cache number of lru when loading image data 
 	 */
@@ -40,26 +42,21 @@ public:
 		lru_image_files.init(file_node_size, file_cache_number);
 	}
 
-protected:
-	bool read_from_index_range(size_t front, size_t tail, ZOrderIndex::IndexType start_index, 
-		const std::vector<DataIndexInfo> &index_info_vector, std::vector<T> &data_vector);
-	bool check_para_validation(int level, int start_row, int start_col, int rows, int cols);
-	bool load_image_head_file(const char *file_name);
-	void set_image_data_path(const char * file_name);
-	void init() 
+	/* some public utility function */
+	size_t get_minimal_image_rows() const 
 	{
-		/* by default, the cache number is 16 */
-		set_file_cache_number(16);
+		return m_mini_rows;
 	}
 
-protected:
-	GiantDiskImage() 
+	size_t get_minimal_image_cols() const 
 	{
-		init();
+		return m_mini_cols;
 	}
 
-	template<typename T>
-	friend boost::shared_ptr<GiantDiskImage<T> > load_image(const char *file_name);
+	size_t get_max_image_level() const 
+	{
+		return m_max_level;
+	}
 
 protected:
 	struct DataIndexInfo
@@ -74,6 +71,19 @@ protected:
 	};
 
 protected:
+	bool read_from_index_range(size_t front, size_t tail, ZOrderIndex::IndexType start_index, 
+		const std::vector<DataIndexInfo> &index_info_vector, std::vector<T> &data_vector);
+	bool check_para_validation(int level, int start_row, int start_col, int rows, int cols);
+	bool load_image_head_file(const char *file_name);
+	void set_image_data_path(const char * file_name);
+
+protected:
+	GiantDiskImage() {}
+
+	template<typename T>
+	friend boost::shared_ptr<GiantDiskImage<T> > load_image(const char *file_name);
+
+protected:
 	Size img_size;
 
 	/* the number of cells in individual file*/
@@ -85,11 +95,23 @@ protected:
 	/* the shared_ptr of index method */
 	boost::shared_ptr<IndexMethodInterface> index_method;
 
-	/* the data of the image file data */
-	std::string img_data_path;
+	size_t m_mini_rows, m_mini_cols;
+
+    /*
+	 * the max image hierarchical level
+	 * level = 0 : means no scale
+	 * level = n : means scale 1/2^n of original image
+	 */
+	size_t m_max_level;
 
 	/* the image current level */
 	Size img_current_level_size;
+
+	/* the current level for reading and writing */
+	size_t m_current_level;
+
+	/* the data of the image file data */
+	std::string img_data_path;
 
 	/* the specific image level data */
 	std::string img_level_data_path;
@@ -101,31 +123,15 @@ protected:
 	ImageFileLRU<Vec3b> lru_image_files;
 };
 
-inline size_t make_upper_four_multiply(size_t number) {
-	//number % 4 != 0
-	if(number & 0x00000003) return ((number >> 2) + 1) << 2;
-
-	//number is the multiply of 4, then just get the number itself
-	return number;
-}
-
-inline size_t make_less_four_multiply(size_t number) {
-	//number % 4 != 0
-	if(number & 0x00000003) return ((number >> 2) << 2);
-
-	//number is the multiply of 4, then just get the number itself
-	return number;
-}
-
 template<typename T>
 void GiantDiskImage<T>::set_current_level(int level)
 {
 	BOOST_ASSERT(level >= 0 && level <= m_max_level);
 
 	/* if set the same level, do nothing */
-	if(current_level == level)	return;
+	if(m_current_level == level)	return;
 
-	current_level = level;
+	m_current_level = level;
 
 	/* current image size */
 	img_current_level_size.rows = std::ceil((double)(img_size.rows) / (1 << level));
@@ -141,7 +147,7 @@ void GiantDiskImage<T>::set_current_level(int level)
 template<typename T>
 size_t GiantDiskImage<T>::get_current_level() const 
 {
-	return current_level;
+	return m_current_level;
 }
 
 template<typename T>
@@ -573,89 +579,29 @@ bool GiantDiskImage<T>::load_image_head_file(const char* file_name)
 	}
 }
 
-//boost::shared_ptr<BlockwiseImage<T, memory_usage> > BlockwiseImage<T, memory_usage>::load_image(const char *file_name)
-//{
-//	typedef boost::shared_ptr<BlockwiseImage<T, memory_usage> > PtrType;
-//	PtrType dst_image(new BlockwiseImage<T, memory_usage> (0, 0));
-//	PtrType null_image;
-//
-//	if(!dst_image->load_image_head_file(file_name))	return null_image;
-//
-//	bf::path file_path(file_name);
-//	bf::path data_path = (file_path.parent_path() / file_path.stem()).make_preferred();
-//	data_path /= "level_0";
-//	if(!bf::exists(data_path)) {
-//		cerr << "image data missing" << endl;
-//		return null_image;
-//	}
-//
-//	/* get the new value, then init for using */
-//	dst_image->init(dst_image->get_image_rows(), dst_image->get_image_cols());
-//
-//	ContainerType &img_container = dst_image->img_container;
-//	int64 file_number = std::ceil((double)(img_container.size()) / dst_image->file_node_size);
-//
-//	int64 start_index = 0, file_loop = 0;
-//	int64 file_node_shift_num = dst_image->file_node_shift_num;
-//	int64 file_node_size = dst_image->file_node_size;
-//
-//	/* first read the full context files */
-//	for(; file_loop < file_number - 1; ++file_loop) {
-//		std::ostrstream strstream;
-//		strstream << data_path.generic_string() << "/" << file_loop << '\0';
-//		if(!bf::exists(bf::path(strstream.str()))) {
-//			cerr << "image data missing" << endl;
-//			return null_image;
-//		}
-//
-//		/* now read the existing data file */
-//		ifstream file_in(strstream.str(), ios::out | ios::binary);
-//		if(!file_in.is_open()) {
-//			cerr << "open" << strstream.str() << " failure" << endl;
-//			return null_image;
-//		}
-//
-//		start_index = (int64)(file_loop) << file_node_shift_num;
-//		for(int64 i = 0; i < file_node_size; ++i) {
-//			file_in.read(reinterpret_cast<char*>(&img_container[start_index + i]), sizeof(T));
-//		}
-//		file_in.close();
-//	}
-//
-//	/* now read the last file */
-//	start_index = (int64)(file_loop) << file_node_shift_num;
-//	std::ostrstream strstream;
-//	strstream << data_path.generic_string() << "/" << file_loop << '\0';
-//	if(!bf::exists(bf::path(strstream.str()))) {
-//		cerr << "image data missing" << endl;
-//		return null_image;
-//	}
-//	ifstream file_in(strstream.str(), ios::out | ios::binary);
-//	if(!file_in.is_open()) {
-//		cerr << "open" << strstream.str() << " failure" << endl;
-//		return null_image;
-//	}
-//	for(int64 last_index = start_index; last_index < img_container.size(); ++last_index) {
-//		file_in.read(reinterpret_cast<char*>(&img_container[last_index]), sizeof(T));
-//	}
-//	file_in.close();
-//
-//	return dst_image;
-//}
+template<typename T>
+inline void GiantDiskImage<T>::set_image_data_path(const char * file_name) 
+{
+	/* save the img_data_path */
+	bf::path file_path = file_name;
+	img_data_path = (file_path.parent_path() / file_path.stem()).generic_string();
+}
 
 template<typename T>
 boost::shared_ptr<GiantDiskImage<T> > load_image(const char *file_name)
 {
 	typedef boost::shared_ptr<GiantDiskImage<T> > PtrType;
-	PtrType dst_image(new GiantDiskImage);
+	PtrType dst_image(new GiantDiskImage<T>);
 	PtrType null_image;
 
 	if(!dst_image->load_image_head_file(file_name))	 return null_image;
 
-	/* initialization */
+	/* initialization the default config para */
+	/* by default, the cache number is 16 */
+	dst_image->set_file_cache_number(16);
+
+	/* set the image data path for some kind of optimization when calling set or get pixels functions */
 	dst_image->set_image_data_path(file_name);
-	dst_image->set_mutliply_ways_writing_number(dst_image->get_max_image_level() + 1);
-	//dst_image->set_file_cache_number(dst_image->file_cache_number);
 
 	/*
 	 * hierarchical image don't save specific level image data
@@ -670,14 +616,6 @@ template<typename T>
 boost::shared_ptr<GiantDiskImage<T> > load_image(const std::string &file_name)
 {
 	return load_image<T>(file_name.c_str());
-}
-
-template<typename T>
-inline void GiantDiskImage<T>::set_image_data_path(const char * file_name) 
-{
-	/* save the img_data_path */
-	bf::path file_path = file_name;
-	img_data_path = (file_path.parent_path() / file_path.stem()).generic_string();
 }
 
 #endif
