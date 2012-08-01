@@ -1,4 +1,7 @@
-#include "../src/HierarchicalImage.hpp"
+// WriteBlockWiseImage.cpp : Defines the entry point for the console application.
+//
+
+#include "../src/BlockwiseImage.hpp"
 
 #include <boost/timer.hpp>
 #include <boost/progress.hpp>
@@ -19,12 +22,12 @@
 #endif
 /*---------------------------------------------*/
 
-bool test_writing_hierarchical(int argc, char ** argv)
+bool test_writing_blockwise(int argc, char **argv)
 {
 	using namespace std;
 
-	if(argc < 7) {
-		cout << "Usage : [file name] [res row] [res col] [write image file name] [multiply ways number] [enlarge number]"
+	if(argc < 6) {
+		cout << "Usage : [file name] [res row] [res col] [write image file name] [enlarge number]"
 			" [optinal (show image)] " << endl;
 		return false;
 	}
@@ -33,9 +36,8 @@ bool test_writing_hierarchical(int argc, char ** argv)
 	size_t mini_rows = atoi(argv[2]);
 	size_t mini_cols = atoi(argv[3]);
 	const char *write_image_name = argv[4];
-	size_t merge_number = atoi(argv[5]);
-	size_t enlarge_number = atoi(argv[6]);
-	bool show_image = (argc >= 8) ? atoi(argv[7]) : false;
+	size_t enlarge_number = atoi(argv[5]);
+	bool show_image = (argc >= 7) ? atoi(argv[6]) : false;
 
 	cv::Mat original_img = cv::imread(file_name);
 	if(original_img.empty()) {
@@ -60,8 +62,8 @@ bool test_writing_hierarchical(int argc, char ** argv)
 		fout.close();
 	}
 
-	HierarchicalImage<Vec3b, 512> big_image(large_rows, large_cols, mini_rows, mini_cols);
-	big_image.set_mutliply_ways_writing_number(merge_number);
+	typedef BlockwiseImage<Vec3b, 512> ImageType;
+	ImageType big_image(large_rows, large_cols, mini_rows, mini_cols);
 	cout << "mini_rows " << big_image.get_minimal_image_rows() << endl;
 	cout << "mini_cols " << big_image.get_minimal_image_cols() << endl;
 	cout << "max_level " << big_image.get_max_image_level() << endl;
@@ -98,7 +100,7 @@ bool test_writing_hierarchical(int argc, char ** argv)
 	cout << "Write Hierarchical Image Cost : " << t.elapsed() << " s " << endl;
 
 	if(show_image) {
-		const HierarchicalImage<Vec3b, 512> &c_big_image = big_image;
+		const ImageType &c_big_image = big_image;
 		std::vector<Vec3b> vec(large_rows*large_cols);
 		for(IndexType i = 0; i < big_image.get_image_rows(); ++i) {
 			for(IndexType j = 0; j < big_image.get_image_cols(); ++j) {
@@ -118,6 +120,7 @@ bool test_writing_hierarchical(int argc, char ** argv)
 
 int main(int argc, char **argv)
 {
-	test_writing_hierarchical(argc, argv);
+	test_writing_blockwise(argc, argv);
 	return 0;
 }
+

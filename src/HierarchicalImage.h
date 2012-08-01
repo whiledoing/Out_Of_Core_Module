@@ -3,9 +3,7 @@
 
 #include <string>
 
-#include "BlockwiseImage.hpp"
-#include "Lru.hpp"
-#include "IndexMethod.hpp"
+#include "BlockwiseImage.h"
 
 template<typename T, size_t memory_usage = 64>
 class HierarchicalImage: public BlockwiseImage<T, memory_usage>

@@ -2,6 +2,7 @@
 #define _BLOCKWISE_IMAGE_HPP
 
 #include "BlockwiseImage.h"
+#include "IndexMethod.hpp"
 
 #include <boost/assert.hpp>
 #include <string>

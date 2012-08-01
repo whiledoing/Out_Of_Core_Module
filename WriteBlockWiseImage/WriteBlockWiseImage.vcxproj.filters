@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="WriteHierarchicalImage.cpp">
+    <ClCompile Include="WriteBlockWiseImage.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

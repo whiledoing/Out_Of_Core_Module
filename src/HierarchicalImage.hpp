@@ -5,6 +5,7 @@
 #undef max
 
 #include "HierarchicalImage.h"
+#include "BlockwiseImage.hpp"
 
 #include <boost/lexical_cast.hpp>
 #include <algorithm>
