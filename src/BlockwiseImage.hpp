@@ -291,8 +291,7 @@ bool BlockwiseImage<T, memory_usage>::write_image(const char* file_name)
 		}
 		file_out.close();
 		
-		std::string mini_image_name = (file_path.parent_path() / (file_path.stem().generic_string() + ".jpg")).generic_string();
-		if(!save_mini_image(mini_image_name.c_str())) return false;
+		if(!save_mini_image(file_name)) return false;
 
 	} catch(bf::filesystem_error &err) {
 		cerr << err.what() << endl;
@@ -326,23 +325,12 @@ T& BlockwiseImage<T, memory_usage>::at(IndexMethodInterface::IndexType index)
 template<typename T, unsigned memory_usage>
 bool BlockwiseImage<T, memory_usage>::save_mini_image(const char *file_name) 
 {
-	//TODO : get the max level image to save as a jpg file
-	//if(!get_pixels_by_level(m_max_level, start_rows, start_cols, rows, cols, img_data)) {
-	//	cerr << "get the maximum image failure" << endl;
-	//	return false;
-	//}
-
-	//cv::Mat result_image(rows, cols, CV_8UC3, img_data.data());
-
-	///* convert the RGB format to opencv BGR format */
-	//cv::cvtColor(result_image, result_image, CV_RGB2BGR);
-
-	//bf::path file_path(file_name);
-	//string result_image_name = (file_path.parent_path() / (file_path.stem().generic_string() + ".jpg")).generic_string();
-	//cv::imwrite(result_image_name, result_image);
-
 	const ContainerType &c_img_container = img_container;
 
+	/* total_size is the total cell size of the minimum size image
+	 * delta_count is the delta size when access the minimum size image data in 
+	 * the whole size img_container
+	 */
 	IndexMethodInterface::IndexType total_size, file_cell_size, delta_count;
 	total_size = c_img_container.size();
 	file_cell_size = total_size >> (2*m_max_level);
@@ -351,20 +339,28 @@ bool BlockwiseImage<T, memory_usage>::save_mini_image(const char *file_name)
 	std::vector<T> img_data(m_mini_rows*m_mini_cols);
 	std::vector<T> img_zorder_data(file_cell_size);
 
+	/* get the hierarchical image first */
 	for(IndexMethodInterface::IndexType i = 0, count = 0; i < file_cell_size; ++i, count += delta_count) {
 		img_zorder_data[i] = c_img_container[count];
 	}
+
+	/* convert it to the row-major format */
 	for(size_t row = 0; row < m_mini_rows; ++row) {
 		IndexMethodInterface::IndexType row_result = index_method->get_row_result(row);
 		for(size_t col = 0; col < m_mini_cols; ++col) {
 			img_data[row*m_mini_cols+col] = img_zorder_data[index_method->get_index_by_row_result(row_result, col)];
 		}
 	}
+
+    boost::filesystem3::path file_path = file_name;
+    std::string mini_image_name = (file_path.parent_path() / (file_path.stem().generic_string() + ".jpg")).generic_string();
+
+	/* save the image into opencv format */
 	cv::Mat result_image(m_mini_rows, m_mini_cols, CV_8UC3, img_data.data());
 
 	/* convert the RGB format to opencv BGR format */
 	cv::cvtColor(result_image, result_image, CV_RGB2BGR);
-    cv::imwrite(file_name, result_image);
+    cv::imwrite(mini_image_name.c_str(), result_image);
 	return true;
 }
 
