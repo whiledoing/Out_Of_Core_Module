@@ -5,12 +5,13 @@
 #include "IndexMethod.hpp"
 
 #include <boost/assert.hpp>
+#include <boost/lexical_cast.hpp>
+
 #include <string>
 #include <fstream>
-#include <boost/filesystem.hpp>
-#include <boost/lexical_cast.hpp>
 #include <strstream>
 
+/*---------------------------------------------*/
 /* opencv part */
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>

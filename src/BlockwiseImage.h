@@ -24,6 +24,9 @@ template<typename T, unsigned memory_usage = 64>
 class BlockwiseImage: public GiantImageInterface<T>
 {
 public:
+
+	/* derived form GiantImageInterface */
+
 	/*
 	 * @para rows, cols : the image size
 	 * @para method : the index method shared_ptr object(default is zorder index method)
@@ -53,19 +56,41 @@ public:
 	virtual T& at(IndexMethodInterface::IndexType index);
 	virtual const T& at(IndexMethodInterface::IndexType index) const;
 
+public:
+	/* 
+	 * @brief : get the minimum image size
+	 */
 	inline size_t get_minimal_image_rows() const;
 	inline size_t get_minimal_image_cols() const;
 
+	/*
+	 * @brief : get the maximum image level
+	 */
 	inline size_t get_max_image_level() const;
 
 protected:
+
+	/*
+	 *	@brief : write the image head info before write the actual image data
+	 */
 	bool write_image_head_file(const char* file_name);
 
+	/*
+	 *	@brief : set the minimum image size according to the image size (rows, cols),
+	 *	according to the principle : the mini image size*2^n = total image size
+	 *	@para rows, cols : the total size of the image
+	 *	@para mini_rows, mini_cols : the image minimum size specified by user
+	 */
 	void set_minimal_resolution(int rows, int cols, int mini_rows, int mini_cols);
 
+	/*
+	 *	@brief : save the mini size image as a jpg file for observation
+	 *	@para file_name : the bigimage file name (*.bigimage)
+	 */
 	virtual bool save_mini_image(const char* file_name);
 
 protected:
+
 	/*
 	 *	4 means a page has 4 blocks
 	 *	lru_pages<n> : n means the number of pages in memory
