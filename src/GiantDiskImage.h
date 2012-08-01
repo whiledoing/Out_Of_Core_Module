@@ -61,6 +61,18 @@ protected:
 	friend boost::shared_ptr<GiantDiskImage<T> > load_image(const char *file_name);
 
 protected:
+	struct DataIndexInfo
+	{
+		int64 index;			//keeps the original index (in row-major order)
+		int64 zorder_index;	//keeps the zorder index according to the row-major index
+
+		friend inline bool operator< (const DataIndexInfo& lhs, const DataIndexInfo& rhs) 
+		{
+			return (lhs.zorder_index < rhs.zorder_index);
+		}
+	};
+
+protected:
 	Size img_size;
 
 	/* the number of cells in individual file*/
