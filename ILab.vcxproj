@@ -99,9 +99,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\BasicType.h" />
-    <ClInclude Include="src\GiantImageFromDisk.h" />
-    <ClInclude Include="src\GiantImageFromDisk.hpp" />
-    <ClInclude Include="src\DiskImageInterface.h" />
+    <ClInclude Include="src\DiskBigImage.h" />
+    <ClInclude Include="src\DiskBigImage.hpp" />
+    <ClInclude Include="src\DiskBigImageInterface.h" />
     <ClInclude Include="src\GiantImageInterface.h" />
     <ClInclude Include="src\ImageInterface.h" />
     <ClInclude Include="src\BlockwiseImage.hpp" />

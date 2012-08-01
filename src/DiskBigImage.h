@@ -2,7 +2,7 @@
 #define _GIANTDISK_IMAGE_H 
 
 #include "BasicType.h"
-#include "DiskImageInterface.h"
+#include "DiskBigImageInterface.h"
 #include "Lru.hpp"
 #include "IndexMethod.hpp"
 
@@ -15,11 +15,11 @@
 #include <vector>
 
 template<typename T>
-class GiantImageFromDisk : public DiskImageInterface<T>
+class DiskBigImage : public DiskBigImageInterface<T>
 {
 
 public:
-	/* Derived from DiskImageInterface */
+	/* Derived from DiskBigImageInterface */
 	virtual bool get_pixels_by_level(int level, int &start_row, int &start_col, int &rows, int &cols, std::vector<T> &vec);
 	virtual bool set_pixel_by_level(int level, int start_row, int start_col, int rows, int cols, const std::vector<T> &vec);
 
@@ -63,10 +63,10 @@ protected:
 	void set_image_data_path(const char * file_name);
 
 protected:
-	GiantImageFromDisk() {}
+	DiskBigImage() {}
 
 	template<typename T>
-	friend boost::shared_ptr<GiantImageFromDisk<T> > load_image(const char *file_name);
+	friend boost::shared_ptr<DiskBigImage<T> > load_image(const char *file_name);
 
 protected:
 	Size img_size;
@@ -109,13 +109,13 @@ protected:
 };
 
 template<typename T>
-inline size_t GiantImageFromDisk<T>::get_minimal_image_rows() const 
+inline size_t DiskBigImage<T>::get_minimal_image_rows() const 
 {
 	return m_mini_rows;
 }
 
 template<typename T>
-inline size_t GiantImageFromDisk<T>::get_minimal_image_cols() const 
+inline size_t DiskBigImage<T>::get_minimal_image_cols() const 
 {
 	return m_mini_cols;
 }

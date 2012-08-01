@@ -2,7 +2,7 @@
 #define QBIGIMAGEWIDGET_H
 
 #include "../src/BasicType.h"
-#include "../src/DiskImageInterface.h"
+#include "../src/DiskBigImageInterface.h"
 
 /* qt module */
 #include <QWidget>
@@ -170,7 +170,7 @@ private:
 
 private:
 	/* save the big image object read from the image file in disk */
-	boost::shared_ptr<DiskImageInterface<Vec3b> > big_image;
+	boost::shared_ptr<DiskBigImageInterface<Vec3b> > big_image;
 
 	/* saves the actual image data for painting */
 	std::vector<Vec3b> img_data;

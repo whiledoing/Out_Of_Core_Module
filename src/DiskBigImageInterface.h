@@ -4,10 +4,9 @@
 #include "UtlityFunc.h"
 
 template<typename T>
-class DiskImageInterface
+class DiskBigImageInterface
 {
 public:
-	/* pure virtual function */
 
 	/*
 	* @brief : 获取制定等级下区域图像数据

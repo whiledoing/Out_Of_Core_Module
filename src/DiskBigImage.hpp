@@ -1,24 +1,24 @@
 #ifndef _GIANTDISK_IMAGE_HPP
 #define _GIANTDISK_IMAGE_HPP
-#include "GiantImageFromDisk.h"
+#include "DiskBigImage.h"
 
 template<typename T>
-size_t GiantImageFromDisk<T>::get_current_level_image_rows() const 
+size_t DiskBigImage<T>::get_current_level_image_rows() const 
 {
 	return img_current_level_size.rows;
 }
 
 template<typename T>
-size_t GiantImageFromDisk<T>::get_current_level_image_cols() const 
+size_t DiskBigImage<T>::get_current_level_image_cols() const 
 {
 	return img_current_level_size.cols;
 }
 
 template<typename T>
-bool GiantImageFromDisk<T>::set_file_cache_number(int _file_cache_number)
+bool DiskBigImage<T>::set_file_cache_number(int _file_cache_number)
 {
 	if(_file_cache_number < 0) {
-		std::cerr << "GiantImageFromDisk::set_file_cache_number fail : invalid file cache number" << std::endl;
+		std::cerr << "DiskBigImage::set_file_cache_number fail : invalid file cache number" << std::endl;
 		return false;
 	}
 
@@ -29,16 +29,16 @@ bool GiantImageFromDisk<T>::set_file_cache_number(int _file_cache_number)
 }
 
 template<typename T>
-size_t GiantImageFromDisk<T>::get_max_image_level() const 
+size_t DiskBigImage<T>::get_max_image_level() const 
 {
 	return m_max_level;
 }
 
 template<typename T>
-bool GiantImageFromDisk<T>::set_current_level(int level)
+bool DiskBigImage<T>::set_current_level(int level)
 {
     if(level > m_max_level || level < 0) {
-		std::cerr << "GiantImageFromDisk::set_current_level function para error : invalid level" << std::endl;
+		std::cerr << "DiskBigImage::set_current_level function para error : invalid level" << std::endl;
         return false;
     }
 
@@ -61,13 +61,13 @@ bool GiantImageFromDisk<T>::set_current_level(int level)
 }
 
 template<typename T>
-size_t GiantImageFromDisk<T>::get_current_level() const 
+size_t DiskBigImage<T>::get_current_level() const 
 {
 	return m_current_level;
 }
 
 template<typename T>
-bool GiantImageFromDisk<T>::read_from_index_range(size_t front, size_t tail, ZOrderIndex::IndexType start_index, 
+bool DiskBigImage<T>::read_from_index_range(size_t front, size_t tail, ZOrderIndex::IndexType start_index, 
 	const std::vector<DataIndexInfo> &index_info_vector, std::vector<T> &data_vector)
 {
 	using namespace std;
@@ -121,29 +121,29 @@ bool GiantImageFromDisk<T>::read_from_index_range(size_t front, size_t tail, ZOr
 }
 
 template<typename T>
-bool GiantImageFromDisk<T>::check_para_validation(int level, int start_row, int start_col, int rows, int cols) 
+bool DiskBigImage<T>::check_para_validation(int level, int start_row, int start_col, int rows, int cols) 
 {
 	using namespace std;
 
 	if(!set_current_level(level)) return false;
 
 	if(start_row >= img_current_level_size.rows || start_row < 0) {
-		cerr << "GiantImageFromDisk::get_pixels_by_level function para error : invalid start_rows" << endl;
+		cerr << "DiskBigImage::get_pixels_by_level function para error : invalid start_rows" << endl;
 		return false;
 	}
 
 	if(start_col >= img_current_level_size.cols || start_col < 0) {
-		cerr << "GiantImageFromDisk::get_pixels_by_level function para error : invalid start_cols" << endl;
+		cerr << "DiskBigImage::get_pixels_by_level function para error : invalid start_cols" << endl;
 		return false;
 	}
 
 	if(start_row + rows > img_current_level_size.rows || rows < 0) {
-		cerr << "GiantImageFromDisk::get_pixels_by_level function para error : invalid rows"<< endl;
+		cerr << "DiskBigImage::get_pixels_by_level function para error : invalid rows"<< endl;
 		return false;
 	}
 
 	if(start_col + cols > img_current_level_size.cols || cols < 0) {
-		cerr << "GiantImageFromDisk::get_pixels_by_level function para err : invalid cols" << endl;
+		cerr << "DiskBigImage::get_pixels_by_level function para err : invalid cols" << endl;
 		return false;
 	}
 
@@ -151,7 +151,7 @@ bool GiantImageFromDisk<T>::check_para_validation(int level, int start_row, int 
 }
 
 template<typename T>
-bool GiantImageFromDisk<T>::get_pixels_by_level(int level, int &start_row, int &start_col,
+bool DiskBigImage<T>::get_pixels_by_level(int level, int &start_row, int &start_col,
 	int &rows, int &cols, std::vector<T> &vec)
 {
 	using namespace std;
@@ -258,7 +258,7 @@ bool GiantImageFromDisk<T>::get_pixels_by_level(int level, int &start_row, int &
 }
 
 template<typename T>
-bool GiantImageFromDisk<T>::set_pixel_by_level(int level, int start_row, int start_col, 
+bool DiskBigImage<T>::set_pixel_by_level(int level, int start_row, int start_col, 
 	int rows, int cols, const std::vector<T> &vec)
 {	
 	using namespace std;
@@ -358,7 +358,7 @@ bool GiantImageFromDisk<T>::set_pixel_by_level(int level, int start_row, int sta
 }
 
 template<typename T>
-bool GiantImageFromDisk<T>::load_image_head_file(const char* file_name)
+bool DiskBigImage<T>::load_image_head_file(const char* file_name)
 {
 	using namespace std;
 	namespace bf = boost::filesystem3;
@@ -503,7 +503,7 @@ bool GiantImageFromDisk<T>::load_image_head_file(const char* file_name)
 }
 
 template<typename T>
-inline void GiantImageFromDisk<T>::set_image_data_path(const char * file_name) 
+inline void DiskBigImage<T>::set_image_data_path(const char * file_name) 
 {
 	namespace bf = boost::filesystem3;
 
@@ -513,10 +513,10 @@ inline void GiantImageFromDisk<T>::set_image_data_path(const char * file_name)
 }
 
 template<typename T>
-boost::shared_ptr<GiantImageFromDisk<T> > load_image(const char *file_name)
+boost::shared_ptr<DiskBigImage<T> > load_image(const char *file_name)
 {
-	typedef boost::shared_ptr<GiantImageFromDisk<T> > PtrType;
-	PtrType dst_image(new GiantImageFromDisk<T>);
+	typedef boost::shared_ptr<DiskBigImage<T> > PtrType;
+	PtrType dst_image(new DiskBigImage<T>);
 	PtrType null_image;
 
 	if(!dst_image->load_image_head_file(file_name))	 return null_image;
@@ -542,7 +542,7 @@ boost::shared_ptr<GiantImageFromDisk<T> > load_image(const char *file_name)
 }
 
 template<typename T>
-boost::shared_ptr<GiantImageFromDisk<T> > load_image(const std::string &file_name)
+boost::shared_ptr<DiskBigImage<T> > load_image(const std::string &file_name)
 {
 	return load_image<T>(file_name.c_str());
 }
