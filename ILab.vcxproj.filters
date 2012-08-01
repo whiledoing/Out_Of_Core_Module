@@ -69,9 +69,6 @@
     <ClInclude Include="src\GiantImageFromDisk.hpp">
       <Filter>image_lab\implement</Filter>
     </ClInclude>
-    <ClInclude Include="Src\ConstData.h">
-      <Filter>源文件\头文件</Filter>
-    </ClInclude>
     <ClInclude Include="src\BasicType.h">
       <Filter>源文件\头文件</Filter>
     </ClInclude>
@@ -81,12 +78,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\MainApp.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="src\UtilityFunc.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\ConstData.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

@@ -2,7 +2,6 @@
 #define _GIANTDISK_IMAGE_H 
 
 #include "BasicType.h"
-#include "ConstData.h"
 #include "DiskImageInterface.h"
 #include "Lru.hpp"
 #include "IndexMethod.hpp"
@@ -467,7 +466,7 @@ bool GiantImageFromDisk<T>::load_image_head_file(const char* file_name)
 			cerr << "file name is not a regular file" << endl;
 			return false;
 		}
-		if(bf::extension(file_path) != str_extension) {
+		if(bf::extension(file_path) != ".bigimage") {
 			cerr << "extension should be bigimage" << endl;
 			return false;
 		}

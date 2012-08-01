@@ -3,7 +3,7 @@
 
 #include <string>
 
-#include "BlockwiseImage.h"
+#include "BlockwiseImage.hpp"
 #include "Lru.hpp"
 #include "IndexMethod.hpp"
 

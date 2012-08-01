@@ -2,6 +2,7 @@
 #define _BLOCKWISE_IMAGE_HPP
 
 #include "BlockwiseImage.h"
+
 #include <boost/assert.hpp>
 #include <string>
 #include <fstream>
@@ -180,7 +181,7 @@ bool BlockwiseImage<T, memory_usage>::write_image_head_file(const char* file_nam
 			return false;
 		}
 
-		if(bf::extension(file_path) != str_extension) {
+		if(bf::extension(file_path) != ".bigimage") {
 			cerr << "extension should be bigimage" << endl;
 			return false;
 		}

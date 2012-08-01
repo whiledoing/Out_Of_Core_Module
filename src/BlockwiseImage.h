@@ -5,7 +5,6 @@
 
 #include "GiantImageInterface.h"
 #include "UtlityFunc.h"
-#include "ConstData.h"
 
 #include <string>
 
