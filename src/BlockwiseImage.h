@@ -63,7 +63,7 @@ protected:
 
 	void set_minimal_resolution(int rows, int cols, int mini_rows, int mini_cols);
 
-	virtual bool save_mini_image();
+	virtual bool save_mini_image(const char* file_name);
 
 protected:
 	/*

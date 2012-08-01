@@ -10,22 +10,6 @@
 #include <boost/lexical_cast.hpp>
 #include <algorithm>
 
-/* opencv part */
-#include <opencv2/core/core.hpp>
-#include <opencv2/highgui/highgui.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
-
-#ifdef NDEBUG
-#pragma comment(lib, "opencv_highgui240.lib")
-#pragma comment(lib, "opencv_core240.lib")
-#pragma comment(lib, "opencv_imgproc240.lib")
-#else
-#pragma comment(lib, "opencv_highgui240d.lib")
-#pragma comment(lib, "opencv_core240d.lib")
-#pragma comment(lib, "opencv_imgproc240d.lib")
-#endif
-/*---------------------------------------------*/
-
 template<typename T, size_t memory_usage>
 HierarchicalImage<T, memory_usage>::HierarchicalImage(size_t rows, size_t cols, size_t mini_rows, size_t mini_cols,
 	boost::shared_ptr<IndexMethodInterface> method)
@@ -124,7 +108,7 @@ bool HierarchicalImage<T, memory_usage>::write_image(const char *file_name)
 		//string result_image_name = (file_path.parent_path() / (file_path.stem().generic_string() + ".jpg")).generic_string();
 		//cv::imwrite(result_image_name, result_image);
 		
-		if(!save_mini_image()) return false;
+		if(!save_mini_image("abc")) return false;
 
 	} catch(bf::filesystem_error &err) {
 		cerr << err.what() << endl;

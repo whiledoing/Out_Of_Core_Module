@@ -17,7 +17,7 @@ public:
 
 	virtual bool write_image(const char* file_name);
 	virtual bool write_image(const std::string &file_name);
-	virtual bool save_mini_image();
+	virtual bool save_mini_image(const char* file_name);
 
 /* specific method */
 
@@ -53,7 +53,7 @@ protected:
 };
 
 template<typename T, size_t memory_usage>
-bool HierarchicalImage<T, memory_usage>::save_mini_image()
+bool HierarchicalImage<T, memory_usage>::save_mini_image(const char* file_name)
 {
 	return true;
 }

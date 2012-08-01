@@ -11,6 +11,22 @@
 #include <boost/lexical_cast.hpp>
 #include <strstream>
 
+/* opencv part */
+#include <opencv2/core/core.hpp>
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
+
+#ifdef NDEBUG
+#pragma comment(lib, "opencv_highgui240.lib")
+#pragma comment(lib, "opencv_core240.lib")
+#pragma comment(lib, "opencv_imgproc240.lib")
+#else
+#pragma comment(lib, "opencv_highgui240d.lib")
+#pragma comment(lib, "opencv_core240d.lib")
+#pragma comment(lib, "opencv_imgproc240d.lib")
+#endif
+/*---------------------------------------------*/
+
 template<typename T, unsigned memory_usage>
 BlockwiseImage<T, memory_usage>::BlockwiseImage(int rows, int cols, int mini_rows, int mini_cols, 
 	boost::shared_ptr<IndexMethodInterface> method)
@@ -56,7 +72,7 @@ void BlockwiseImage<T, memory_usage>::set_minimal_resolution(int rows, int cols,
 	level_col = get_least_order_number(level_col);
 
 	/* ensure the smallest image (the max scale level) is not less than mini_rows or mini_cols which user specified */
-	m_max_level = min(level_row, level_col);
+	m_max_level = std::min(level_row, level_col);
 
 	/* recalculate the mini_rows and mini_cols */
 	m_mini_rows = std::ceil((double)(rows) / (1 << m_max_level));
@@ -274,8 +290,9 @@ bool BlockwiseImage<T, memory_usage>::write_image(const char* file_name)
 			file_out.write(reinterpret_cast<const char*>(&c_img_container[last_index]), sizeof(T));
 		}
 		file_out.close();
-
-		if(!save_mini_image()) return false;
+		
+		std::string mini_image_name = (file_path.parent_path() / (file_path.stem().generic_string() + ".jpg")).generic_string();
+		if(!save_mini_image(mini_image_name.c_str())) return false;
 
 	} catch(bf::filesystem_error &err) {
 		cerr << err.what() << endl;
@@ -307,7 +324,7 @@ T& BlockwiseImage<T, memory_usage>::at(IndexMethodInterface::IndexType index)
 }
 
 template<typename T, unsigned memory_usage>
-bool BlockwiseImage<T, memory_usage>::save_mini_image() 
+bool BlockwiseImage<T, memory_usage>::save_mini_image(const char *file_name) 
 {
 	//TODO : get the max level image to save as a jpg file
 	//if(!get_pixels_by_level(m_max_level, start_rows, start_cols, rows, cols, img_data)) {
@@ -324,18 +341,30 @@ bool BlockwiseImage<T, memory_usage>::save_mini_image()
 	//string result_image_name = (file_path.parent_path() / (file_path.stem().generic_string() + ".jpg")).generic_string();
 	//cv::imwrite(result_image_name, result_image);
 
-	//      const ContainerType &c_img_container = img_container;
+	const ContainerType &c_img_container = img_container;
 
-	//std::vector<T> img_data;
-	//std::vector<T> img_zorder_data;
-	//IndexMethodInterface::IndexType total_size, file_cell_size, delta_count;
-	//total_size = c_img_container.size();
-	//file_cell_size = total_size >> (2*m_max_level);
-	//delta_count = 1 << (2*m_max_level);
-	//for(IndexMethodInterface::IndexType i = 0, count = 0; i < file_cell_size; ++i, count += delta_count) {
-	//	img_zorder_data[i] = c_img_container[count];
-	//}
-	//for(size_t i = 0; i <)
+	IndexMethodInterface::IndexType total_size, file_cell_size, delta_count;
+	total_size = c_img_container.size();
+	file_cell_size = total_size >> (2*m_max_level);
+	delta_count = 1 << (2*m_max_level);
+
+	std::vector<T> img_data(m_mini_rows*m_mini_cols);
+	std::vector<T> img_zorder_data(file_cell_size);
+
+	for(IndexMethodInterface::IndexType i = 0, count = 0; i < file_cell_size; ++i, count += delta_count) {
+		img_zorder_data[i] = c_img_container[count];
+	}
+	for(size_t row = 0; row < m_mini_rows; ++row) {
+		IndexMethodInterface::IndexType row_result = index_method->get_row_result(row);
+		for(size_t col = 0; col < m_mini_cols; ++col) {
+			img_data[row*m_mini_cols+col] = img_zorder_data[index_method->get_index_by_row_result(row_result, col)];
+		}
+	}
+	cv::Mat result_image(m_mini_rows, m_mini_cols, CV_8UC3, img_data.data());
+
+	/* convert the RGB format to opencv BGR format */
+	cv::cvtColor(result_image, result_image, CV_RGB2BGR);
+    cv::imwrite(file_name, result_image);
 	return true;
 }
 
