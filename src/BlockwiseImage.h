@@ -25,13 +25,17 @@ class BlockwiseImage: public GiantImageInterface<T>
 {
 public:
 
-	/* derived form GiantImageInterface */
-
-	/*
-	 * @para rows, cols : the image size
-	 * @para mini_rows, mini_cols : the minimum size of the image ( after write the image into
-	 * the filesystem, a minimum size image will be saved in the disk as a jpg file format)
-	 * @para method : the index method shared_ptr object(default is zorder index method)
+	/**
+	 * @brief get the blockwise image container according to the image size.
+	 * 
+	 * After write the image into the filesystem, a minimum size image will be saved in the disk as a jpg file format,
+	 * so the constructor needs the minimum image size information
+	 *
+	 * @param rows the image rows
+	 * @param cols the image cols
+	 * @param mini_rows the minimum rows of the image
+	 * @param mini_cols the minimum cols of the image 
+	 * @param method  the index method shared_ptr object(default is zorder index method)
 	 */
 	BlockwiseImage(int rows, int cols, int mini_rows, int mini_cols, 
 		boost::shared_ptr<IndexMethodInterface> method = boost::shared_ptr<IndexMethodInterface>());
@@ -59,41 +63,47 @@ public:
 	virtual const T& at(IndexMethodInterface::IndexType index) const;
 
 public:
-	/* 
+	/** 
 	 * @brief : get the minimum image size
 	 */
 	inline size_t get_minimal_image_rows() const;
 	inline size_t get_minimal_image_cols() const;
 
-	/*
+	/**
 	 * @brief : get the maximum image level
 	 */
 	inline size_t get_max_image_level() const;
 
 protected:
 
-	/*
+	/**
 	 *	@brief : write the image head info before write the actual image data
 	 */
 	bool write_image_head_file(const char* file_name);
 
-	/*
-	 *	@brief : set the minimum image size according to the image size (rows, cols),
-	 *	according to the principle : the mini image size*2^n = total image size
-	 *	@para rows, cols : the total size of the image
-	 *	@para mini_rows, mini_cols : the image minimum size specified by user
+	/**
+	 * @brief : set the minimum image size according to the image size (rows, cols).
+	 *
+	 * The minimum image size is set according to the principle : the mini image size*2^n = total image size
+	 *
+	 * @param rows the image rows
+	 * @param cols the image cols
+	 * @param mini_rows the minimum rows of the image
+	 * @param mini_cols the minimum cols of the image 
 	 */
 	void set_minimal_resolution(int rows, int cols, int mini_rows, int mini_cols);
 
-	/*
-	 *	@brief : save the mini size image as a jpg file for observation
-	 *	@para file_name : the bigimage file name (*.bigimage)
+	/**
+	 *	@brief save the mini size image as a jpg file for observation
+	 *	@param file_name the bigimage file name (*.bigimage)
 	 */
 	virtual bool save_mini_image(const char* file_name);
 
 protected:
 
-	/*
+	/**
+	 * @brief saves the image data in the disk.
+	 * 
 	 *	4 means a page has 4 blocks
 	 *	lru_pages<n> : n means the number of pages in memory
 	 *	each block is 2M , thus total memroy usage = 8M * (number of pages) , thus why right shift 3 bit
@@ -123,20 +133,23 @@ inline size_t BlockwiseImage<T, memory_usage>::get_max_image_level() const
 	return m_max_level;
 }
 
-/*
- * @brief : return the block wise image by memroy_usage, maximum support 4G
- * @para memory_usage : the memory usage of the main memory
- * @para method : the index method shared_ptr object
- * @para rows, cols : the image size
+/**
+ * @brief return the block wise image by memroy_usage, maximum support 4G.
+ * 
+ * @relates BlockwiseImage
+ * @param memory_usage the memory usage of the main memory
+ * @param method the index method shared_ptr object
+ * @param rows the image rows
+ * @param cols the image cols
  */
 template<typename T>
 boost::shared_ptr<GiantImageInterface<T> > get_block_wise_image_by_meomory_usage(unsigned memory_usage,
 	size_t rows, size_t cols, boost::shared_ptr<IndexMethodInterface> method = boost::shared_ptr<IndexMethodInterface>())
 {
-	/* ensure memory_usage is bigger than 8 */
+	/** ensure memory_usage is bigger than 8 */
 	memory_usage = (memory_usage < 8) ? 8 : memory_usage;
 
-	/* make memory_usage = 2^order (order >=3 && order <= 12) */
+	/** make memory_usage = 2^order (order >=3 && order <= 12) */
 	while(memory_usage & (memory_usage - 1)) {
 		memory_usage &= (memory_usage - 1);
 	}
