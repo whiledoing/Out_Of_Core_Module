@@ -5,16 +5,30 @@
 
 #include "BlockwiseImage.h"
 
+/**
+ * @class HierarchicalImage HierarchicalImage.h
+ *
+ * @brief Derived from BlockwiseImage, support the big image operation, can save the image data in a hierarchical way.
+ *
+ * HierarchicalImage can support very big image processing and storing, different with the BlockwiseImage, HierarchicalImage 
+ * can write the image into different levels, but the BlockwiseImage can only save the full size of the image.
+ *
+ * @tparam T The type of the image cell
+ * @tparam memory_usage The memory usage used as a I/O cache in the main memory, and it must be bigger than 8 (in the unit of M).
+ *		 By default, memory_usage is set to 64M
+ */
+
 template<typename T, size_t memory_usage = 64>
 class HierarchicalImage: public BlockwiseImage<T, memory_usage>
 {
 public:
 
-	/*
-	 * @para rows, cols : the image size
-	 * @para mini_rows, mini_cols : the minimum size of the image ( after write the image into
-	 * the filesystem, a minimum size image will be saved in the disk as a jpg file format)
-	 * @para method : the index method shared_ptr object(default is zorder index method)
+	/**
+	 * @param rows the image total rows
+	 * @param cols the image total cols
+	 * @param mini_rows the minimum size image rows
+	 * @param mini_cols the minimum size image cols
+	 * @param method : the index method shared_ptr object(default is zorder index method)
 	 */
 	HierarchicalImage(size_t rows, size_t cols, size_t mini_rows, size_t mini_cols,
 		boost::shared_ptr<IndexMethodInterface> method = boost::shared_ptr<IndexMethodInterface>());
@@ -31,39 +45,43 @@ public:
 
 public:
 
-	/*
-	 * @brief : set the number for writing image files concurrently 
+	/**
+	 * @brief set the number for writing image files concurrently
+	 * 
+	 * If the image has n levels(thus max level is n-1), then when write the image data in a hierarchical way into disk
+	 * the maximum concurrent number is n.
 	 */
 	inline void set_mutliply_ways_writing_number(size_t number);
 
 protected:
 
-	/*
-	 * @brief : set the image data path from the big image file name. 
+	/**
+	 * @brief set the image data path from the big image file name. 
+	 *
 	 * For example : the file_name is /a/x.bigimage then the data_path is /a/x/
 	 */
 	inline void set_image_data_path(const char *file_name); 
 
 protected:
 
-	/*
-	 *	@brief : write the image head file
+	/**
+	 *	@brief write the image head file
 	 */
 	bool write_image_head_file(const char *file_name);
 
-	/* 
-	 * @brief : write the start_level image data in the write image inner loop
+	/** 
+	 * @brief write the start_level image data in the write image inner loop
 	 */
 	bool write_image_inner_loop(size_t start_level, size_t merge_number, const boost::filesystem3::path &data_path, const int64 &file_number);
 
 protected:
-	/* the number for writing image data files in concurrently */
+	/** the number for writing image data files in concurrently */
 	size_t concurrent_number;
 
-	/* the data of the image file data */
+	/** the data of the image file data */
 	std::string img_data_path;
 
-	/* the image current level */
+	/** the image current level */
 	Size img_current_level_size;
 };
 
@@ -83,11 +101,16 @@ inline void HierarchicalImage<T, memory_usage>::set_image_data_path(const char *
 	img_data_path = (file_path.parent_path() / file_path.stem()).generic_string();
 }
 
-/*
- * @brief : return the hierarchical image by memroy_usage, maximum support 4G
- * @para memory_usage : the memory usage of the main memory
- * @para method : the index method shared_ptr object
- * @para rows, cols : the image size
+/**
+ * @brief return the hierarchical image by memroy_usage, maximum support 4G
+ * @param memory_usage the memory usage of the main memory
+ * @param method the index method shared_ptr object
+ * @param rows the image total rows
+ * @param cols the image total cols
+ * @param mini_rows the minimum size image rows
+ * @param mini_cols the minimum size image cols
+ * @return the shared_ptr of the GiantImageInterface object which indeed is a HierarchicalImage object
+ * @relates HierarchicalImage
  */
 template<typename T>
 boost::shared_ptr<GiantImageInterface<T> > get_hierarchical_image_by_meomory_usage(unsigned memory_usage,

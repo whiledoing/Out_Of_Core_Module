@@ -20,6 +20,18 @@
 #define BOOST_FILESYSTEM_VERSION 3
 #include <boost/filesystem.hpp>
 
+/**
+ * @class BlockwiseImage BlockwiseImage.h
+ *
+ * @brief Derived from GiantImageInterface, support the big image operation, and saves the whole image into disk.
+ *
+ * BlockwiseImage can support very big image processing and storing, and can be wrote into the disk in a non compressed way.
+ *
+ * @tparam T The type of the image cell
+ * @tparam memory_usage The memory usage used as a I/O cache in the main memory, and it must be bigger than 8 (in the unit of M).
+ *		 By default, memory_usage is set to 64M
+ */
+
 template<typename T, unsigned memory_usage = 64>
 class BlockwiseImage: public GiantImageInterface<T>
 {
@@ -139,17 +151,21 @@ inline size_t BlockwiseImage<T, memory_usage>::get_max_image_level() const
  * @relates BlockwiseImage
  * @param memory_usage the memory usage of the main memory
  * @param method the index method shared_ptr object
- * @param rows the image rows
- * @param cols the image cols
+ * @param rows the image total rows
+ * @param cols the image total cols
+ * @param mini_rows the minimum size image rows
+ * @param mini_cols the minimum size image cols
+ * @return the shared_ptr of the GiantImageInterface object which indeed is a BlockwiseImage object
  */
 template<typename T>
 boost::shared_ptr<GiantImageInterface<T> > get_block_wise_image_by_meomory_usage(unsigned memory_usage,
-	size_t rows, size_t cols, boost::shared_ptr<IndexMethodInterface> method = boost::shared_ptr<IndexMethodInterface>())
+	size_t rows, size_t cols, size_t mini_rows, size_t mini_cols, 
+	boost::shared_ptr<IndexMethodInterface> method = boost::shared_ptr<IndexMethodInterface>())
 {
-	/** ensure memory_usage is bigger than 8 */
+	/* ensure memory_usage is bigger than 8 */
 	memory_usage = (memory_usage < 8) ? 8 : memory_usage;
 
-	/** make memory_usage = 2^order (order >=3 && order <= 12) */
+	/* make memory_usage = 2^order (order >=3 && order <= 12) */
 	while(memory_usage & (memory_usage - 1)) {
 		memory_usage &= (memory_usage - 1);
 	}
