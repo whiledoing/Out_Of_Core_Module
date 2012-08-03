@@ -1,12 +1,14 @@
-#include "../src/IndexMethod.hpp"
+#include "testIndexMethod.h"
+
 #include <iostream>
 #include <iomanip>
 #include <algorithm>
 #include <vector>
 #include <boost/assert.hpp>
 #include <string>
-#include <Windows.h>
-#include "testIndexMethod.h"
+
+#include "../src/IndexMethod.hpp"
+
 using namespace std;
 
 bool test_block_index(int argc, char **argv)

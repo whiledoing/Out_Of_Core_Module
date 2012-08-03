@@ -87,7 +87,7 @@ BlockwiseImage<T, memory_usage>::~BlockwiseImage()
 }
 
 template<typename T, unsigned memory_usage>
-bool BlockwiseImage<T, memory_usage>::set_pixel(int start_row, int start_col, int rows, int cols, const std::vector<T> &data)
+bool BlockwiseImage<T, memory_usage>::set_pixels(int start_row, int start_col, int rows, int cols, const std::vector<T> &data)
 {
 	if(start_row < 0 || start_col < 0 || start_row > (get_image_rows()-1) || start_col > (get_image_cols()-1)
 		|| rows < 0 || cols < 0 || (start_row+rows) > get_image_rows() || (start_col+cols) > get_image_cols())
@@ -106,7 +106,7 @@ bool BlockwiseImage<T, memory_usage>::set_pixel(int start_row, int start_col, in
 }
 
 template<typename T, unsigned memory_usage>
-bool BlockwiseImage<T, memory_usage>::get_pixel(int start_row, int start_col, int rows, int cols, std::vector<T> &data) const
+bool BlockwiseImage<T, memory_usage>::get_pixels(int start_row, int start_col, int rows, int cols, std::vector<T> &data) const
 {
 	if(start_row < 0 || start_col < 0 || start_row > (get_image_rows()-1) || start_col > (get_image_cols()-1)
 		|| rows < 0 || cols < 0 || (start_row+rows) > get_image_rows() || (start_col+cols) > get_image_cols())

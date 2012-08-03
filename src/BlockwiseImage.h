@@ -65,8 +65,8 @@ public:
 	virtual T& operator() (int row, int col);
 	virtual const T& operator() (int row, int col) const;
 
-	virtual bool get_pixel(int start_row, int start_col, int rows, int cols, std::vector<T> &data) const;
-	virtual bool set_pixel(int start_row, int start_col, int rows, int cols, const std::vector<T> &data);
+	virtual bool get_pixels(int start_row, int start_col, int rows, int cols, std::vector<T> &data) const;
+	virtual bool set_pixels(int start_row, int start_col, int rows, int cols, const std::vector<T> &data);
 
 	virtual T& at(IndexMethodInterface::IndexType index);
 	virtual const T& at(IndexMethodInterface::IndexType index) const;
@@ -170,27 +170,27 @@ boost::shared_ptr<GiantImageInterface<T> > get_block_wise_image_by_meomory_usage
 	switch(memory_usage)
 	{
 	case 8:
-		return boost::make_shared<BlockwiseImage<T, 8> >(rows, cols, method);
+		return boost::make_shared<BlockwiseImage<T, 8> >(rows, cols, mini_rows, mini_cols, method);
 	case 16:
-		return boost::make_shared<BlockwiseImage<T, 16> >(rows, cols, method);
+		return boost::make_shared<BlockwiseImage<T, 16> >(rows, cols, mini_rows, mini_cols, method);
 	case 32:
-		return boost::make_shared<BlockwiseImage<T, 32> >(rows, cols, method);
+		return boost::make_shared<BlockwiseImage<T, 32> >(rows, cols, mini_rows, mini_cols, method);
 	case 64:
-		return boost::make_shared<BlockwiseImage<T, 64> >(rows, cols, method);
+		return boost::make_shared<BlockwiseImage<T, 64> >(rows, cols, mini_rows, mini_cols, method);
 	case 128:
-		return boost::make_shared<BlockwiseImage<T, 128> >(rows, cols, method);
+		return boost::make_shared<BlockwiseImage<T, 128> >(rows, cols, mini_rows, mini_cols, method);
 	case 256:
-		return boost::make_shared<BlockwiseImage<T, 256> >(rows, cols, method);
+		return boost::make_shared<BlockwiseImage<T, 256> >(rows, cols, mini_rows, mini_cols, method);
 	case 512:
-		return boost::make_shared<BlockwiseImage<T, 512> >(rows, cols, method);
+		return boost::make_shared<BlockwiseImage<T, 512> >(rows, cols, mini_rows, mini_cols, method);
 	case 1024:
-		return boost::make_shared<BlockwiseImage<T, 1024> >(rows, cols, method);
+		return boost::make_shared<BlockwiseImage<T, 1024> >(rows, cols, mini_rows, mini_cols, method);
 	case 2048:
-		return boost::make_shared<BlockwiseImage<T, 2048> >(rows, cols, method);
+		return boost::make_shared<BlockwiseImage<T, 2048> >(rows, cols, mini_rows, mini_cols, method);
 	case 4096:
-		return boost::make_shared<BlockwiseImage<T, 4096> >(rows, cols, method);
+		return boost::make_shared<BlockwiseImage<T, 4096> >(rows, cols, mini_rows, mini_cols, method);
 	default:
-		return boost::make_shared<BlockwiseImage<T, 64> >(rows, cols, method);
+		return boost::make_shared<BlockwiseImage<T, 64> >(rows, cols, mini_rows, mini_cols, method);
 	}
 }
 

@@ -58,8 +58,8 @@ public:
      * @param data [Out] Returns the image data vector
      * @return Whether get the data successfully
      */
-	virtual bool get_pixel(int start_row, int start_col, int rows, int cols, std::vector<T> &data) const = 0;
-	virtual bool set_pixel(int start_row, int start_col, int rows, int cols, const std::vector<T> &data) = 0;
+	virtual bool get_pixels(int start_row, int start_col, int rows, int cols, std::vector<T> &data) const = 0;
+	virtual bool set_pixels(int start_row, int start_col, int rows, int cols, const std::vector<T> &data) = 0;
 
 public:
 	size_t get_image_cols() const { return img_size.cols; }
