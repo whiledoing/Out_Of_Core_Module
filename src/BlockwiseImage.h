@@ -65,11 +65,8 @@ public:
 	virtual T& operator() (int row, int col);
 	virtual const T& operator() (int row, int col) const;
 
-	virtual bool get_pixel(int min_row, int max_row, int min_col, int max_col, T* ptr) const;
-	virtual bool set_pixel(int min_row, int max_row, int min_col, int max_col, const T* ptr);
-
-	virtual bool get_pixel(int min_row, int max_row, int min_col, int max_col, std::vector<T> &data) const;
-	virtual bool set_pixel(int min_row, int max_row, int min_col, int max_col, const std::vector<T> &data);
+	virtual bool get_pixel(int start_row, int start_col, int rows, int cols, std::vector<T> &data) const;
+	virtual bool set_pixel(int start_row, int start_col, int rows, int cols, const std::vector<T> &data);
 
 	virtual T& at(IndexMethodInterface::IndexType index);
 	virtual const T& at(IndexMethodInterface::IndexType index) const;

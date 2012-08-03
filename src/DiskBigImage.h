@@ -60,6 +60,17 @@ public:
 	inline size_t get_minimal_image_rows() const; 
 	inline size_t get_minimal_image_cols() const;
 
+
+	/**
+	 *	@brief get the total image size.
+	 *	
+	 *	The size info can also be got by calling such functions.
+	 *	1) set_current_level(0);
+	 *	2) get_current_level_image_rows() && get_current_level_image_cols()
+	 */
+	inline size_t get_image_rows() const;
+	inline size_t get_image_cols() const;
+
 protected:
 
 	/**
@@ -174,6 +185,18 @@ template<typename T>
 inline size_t DiskBigImage<T>::get_minimal_image_cols() const 
 {
 	return m_mini_cols;
+}
+
+template<typename T>
+inline size_t DiskBigImage<T>::get_image_rows() const
+{
+	return img_size.rows;
+}
+
+template<typename T>
+inline size_t DiskBigImage<T>::get_image_cols() const
+{
+	return img_size.cols;
 }
 
 #endif

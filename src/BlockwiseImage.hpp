@@ -87,73 +87,39 @@ BlockwiseImage<T, memory_usage>::~BlockwiseImage()
 }
 
 template<typename T, unsigned memory_usage>
-bool BlockwiseImage<T, memory_usage>::set_pixel(int min_row, int max_row, int min_col, int max_col, const T* ptr)
+bool BlockwiseImage<T, memory_usage>::set_pixel(int start_row, int start_col, int rows, int cols, const std::vector<T> &data)
 {
-	BOOST_ASSERT(ptr != NULL);
-	BOOST_ASSERT(0 <= min_col && min_col <= max_col && max_col < img_size.cols && 0 <= min_row
-		&& min_row <= max_row && max_row < img_size.rows);
+	if(start_row < 0 || start_col < 0 || start_row > (get_image_rows()-1) || start_col > (get_image_cols()-1)
+		|| rows < 0 || cols < 0 || (start_row+rows) > get_image_rows() || (start_col+cols) > get_image_cols())
+		return false;
+
+	if(data.size() < (rows*cols))	return false;
 
 	size_t count = 0;
-	for(IndexMethodInterface::RowMajorIndexType row = min_row; row <= max_row; ++row) {
-		IndexMethodInterface::IndexType row_result = index_method->get_row_result(row);
-		for(IndexMethodInterface::RowMajorIndexType col = min_col; col <= max_col; ++col) {
-			img_container[index_method->get_index_by_row_result(row_result, col)]	 = ptr[count++];
+	for(IndexMethodInterface::RowMajorIndexType row = 0; row < rows; ++row) {
+		IndexMethodInterface::IndexType row_result = index_method->get_row_result(start_row+row);
+		for(IndexMethodInterface::RowMajorIndexType col = 0; col <= cols; ++col) {
+			img_container[index_method->get_index_by_row_result(row_result, start_col+col)] = data[count++];
 		}
 	}
 	return true;
 }
 
 template<typename T, unsigned memory_usage>
-bool BlockwiseImage<T, memory_usage>::get_pixel(int min_row, int max_row, int min_col, int max_col, T* ptr) const
+bool BlockwiseImage<T, memory_usage>::get_pixel(int start_row, int start_col, int rows, int cols, std::vector<T> &data) const
 {
-	BOOST_ASSERT(ptr != NULL);
-	BOOST_ASSERT(0 <= min_col && min_col <= max_col && max_col < img_size.cols && 0 <= min_row
-		&& min_row <= max_row && max_row < img_size.rows);
+	if(start_row < 0 || start_col < 0 || start_row > (get_image_rows()-1) || start_col > (get_image_cols()-1)
+		|| rows < 0 || cols < 0 || (start_row+rows) > get_image_rows() || (start_col+cols) > get_image_cols())
+		return false;
+
+	data.resize(rows*cols);
 
 	static const ContainerType &c_img_container = img_container;
 	size_t count = 0;
-
-	for(IndexMethodInterface::RowMajorIndexType row = min_row; row <= max_row; ++row) {
-		IndexMethodInterface::IndexType row_result = index_method->get_row_result(row);
-		for(IndexMethodInterface::RowMajorIndexType col = min_col; col <= max_col; ++col) {
-			ptr[count++] = c_img_container[index_method->get_index_by_row_result(row_result, col)];
-		}
-	}
-	return true;
-}
-
-template<typename T, unsigned memory_usage>
-bool BlockwiseImage<T, memory_usage>::set_pixel(int min_row, int max_row, int min_col, int max_col, const std::vector<T> &data)
-{
-	BOOST_ASSERT(data.size() >= (max_col - min_col + 1) * (max_row - min_row + 1));
-	BOOST_ASSERT(0 <= min_col && min_col <= max_col && max_col < img_size.cols && 0 <= min_row
-		&& min_row <= max_row && max_row < img_size.rows);
-
-	size_t count = 0;
-	for(IndexMethodInterface::RowMajorIndexType row = min_row; row <= max_row; ++row) {
-		IndexMethodInterface::IndexType row_result = index_method->get_row_result(row);
-		for(IndexMethodInterface::RowMajorIndexType col = min_col; col <= max_col; ++col) {
-			img_container[index_method->get_index_by_row_result(row_result, col)] = data[count++];
-		}
-	}
-	return true;
-}
-
-template<typename T, unsigned memory_usage>
-bool BlockwiseImage<T, memory_usage>::get_pixel(int min_row, int max_row, int min_col, int max_col, std::vector<T> &data) const
-{
-	BOOST_ASSERT(0 <= min_col && min_col <= max_col && max_col < img_size.cols && 0 <= min_row
-		&& min_row <= max_row && max_row < img_size.rows);
-
-	data.resize((max_col - min_col + 1) * (max_row - min_row + 1));
-
-	static const ContainerType &c_img_container = img_container;
-	size_t count = 0;
-
-	for(IndexMethodInterface::RowMajorIndexType row = min_row; row <= max_row; ++row) {
-		IndexMethodInterface::IndexType row_result = index_method->get_row_result(row);
-		for(IndexMethodInterface::RowMajorIndexType col = min_col; col <= max_col; ++col) {
-			data[count++] = c_img_container[index_method->get_index_by_row_result(row_result, col)];
+	for(IndexMethodInterface::RowMajorIndexType row = 0; row < rows; ++row) {
+		IndexMethodInterface::IndexType row_result = index_method->get_row_result(start_row+row);
+		for(IndexMethodInterface::RowMajorIndexType col = 0; col <= cols; ++col) {
+			data[count++] = c_img_container[index_method->get_index_by_row_result(row_result, start_col+col)];
 		}
 	}
 	return true;

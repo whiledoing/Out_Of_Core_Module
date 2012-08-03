@@ -51,19 +51,15 @@ public:
 
     /**
      * @brief Get the range image data
-     * @param ptr [Out] Returns the image data pointer
-     * @return Whether get the data successfully
-     */
-	virtual bool get_pixel(int min_row, int max_row, int min_col, int max_col, T* ptr) const = 0;
-	virtual bool set_pixel(int min_row, int max_row, int min_col, int max_col, const T* ptr) = 0;
-
-    /**
-     * @brief Get the range image data
+	* @param start_row The left-corner point row
+	* @param start_col The left-corner point col
+     * @param rows The row scope of the range, thus the rows get is [start_row, start_row + rows)
+     * @param cols The col scope of the range
      * @param data [Out] Returns the image data vector
      * @return Whether get the data successfully
      */
-	virtual bool get_pixel(int min_row, int max_row, int min_col, int max_col, std::vector<T> &data) const = 0;
-	virtual bool set_pixel(int min_row, int max_row, int min_col, int max_col, const std::vector<T> &data) = 0;
+	virtual bool get_pixel(int start_row, int start_col, int rows, int cols, std::vector<T> &data) const = 0;
+	virtual bool set_pixel(int start_row, int start_col, int rows, int cols, const std::vector<T> &data) = 0;
 
 public:
 	size_t get_image_cols() const { return img_size.cols; }
