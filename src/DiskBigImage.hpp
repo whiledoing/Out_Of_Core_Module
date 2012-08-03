@@ -151,24 +151,17 @@ bool DiskBigImage<T>::check_para_validation(int level, int start_row, int start_
 }
 
 template<typename T>
-bool DiskBigImage<T>::get_pixels_by_level(int level, int &start_row, int &start_col,
-	int &rows, int &cols, std::vector<T> &vec)
+bool DiskBigImage<T>::get_pixels_by_level(int level, int start_row, int start_col, int rows, int cols, std::vector<T> &vec)
 {
 	using namespace std;
 
 	if(!check_para_validation(level, start_row, start_col, rows, cols)) return false;
 
-	/* first recalculate the para */
-	start_row = make_less_four_multiply(start_row);
-	start_col = make_less_four_multiply(start_col);
-	rows = make_less_four_multiply(rows);
-	cols = make_less_four_multiply(cols);
-
-    /* save the zorder indexing method information*/
+	/* save the zorder indexing method information*/
 	std::vector<DataIndexInfo> index_info_vector(rows*cols);
 
 	/* save the actual image data in row-major */
-    vec.resize(rows*cols);
+	vec.resize(rows*cols);
 
 	/* the start index of the image range, thus the zorder index of the top-left point */
 	ZOrderIndex::IndexType start_zorder_index = index_method->get_index(start_row, start_col);
@@ -255,6 +248,23 @@ bool DiskBigImage<T>::get_pixels_by_level(int level, int &start_row, int &start_
 	}
 
 	return true;
+}
+
+template<typename T>
+bool DiskBigImage<T>::get_pixels_by_level_fast(int level, int &start_row, int &start_col,
+	int &rows, int &cols, std::vector<T> &vec)
+{
+	using namespace std;
+
+	if(!check_para_validation(level, start_row, start_col, rows, cols)) return false;
+
+	/* first recalculate the para to get the most fast suitable para */
+	start_row = make_less_four_multiply(start_row);
+	start_col = make_less_four_multiply(start_col);
+	rows = make_less_four_multiply(rows);
+	cols = make_less_four_multiply(cols);
+
+	return get_pixels_by_level(level, start_row, start_col, rows, cols, vec);
 }
 
 template<typename T>

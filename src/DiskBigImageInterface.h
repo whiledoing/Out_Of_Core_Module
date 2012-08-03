@@ -30,9 +30,12 @@ public:
 	* @param vec [Out] Saves the image data get from the bigimage files 
 	* @return whether get the data successfully
 	*/
-	virtual bool get_pixels_by_level(int level, int &start_row, int &start_col,
-		int &rows, int &cols, std::vector<T> &vec) = 0;
+	virtual bool get_pixels_by_level(int level, int start_row, int start_col,
+		int rows, int cols, std::vector<T> &vec) = 0;
 	virtual bool set_pixel_by_level(int level, int start_row, int start_col, int rows, int cols, const std::vector<T> &vec) = 0;
+
+	virtual bool get_pixels_by_level_fast(int level, int &start_row, int &start_col,
+		int &rows, int &cols, std::vector<T> &vec) = 0;
 
     /**
 	 *	@brief get the current level image rows after calling the set_current_level function

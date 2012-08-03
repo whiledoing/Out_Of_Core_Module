@@ -33,8 +33,10 @@ class DiskBigImage : public DiskBigImageInterface<T>
 public:
 	/* Derived from DiskBigImageInterface */
 
-	virtual bool get_pixels_by_level(int level, int &start_row, int &start_col, int &rows, int &cols, std::vector<T> &vec);
+	virtual bool get_pixels_by_level(int level, int start_row, int start_col, int rows, int cols, std::vector<T> &vec);
 	virtual bool set_pixel_by_level(int level, int start_row, int start_col, int rows, int cols, const std::vector<T> &vec);
+
+    virtual bool get_pixels_by_level_fast(int level, int &start_row, int &start_col, int &rows, int &cols, std::vector<T> &vec);
 
 	virtual bool set_current_level(int level);
 	virtual size_t get_current_level() const; 
@@ -105,9 +107,9 @@ protected:
 protected:
 	/**
 	 * @brief DiskBigImage can only be constructed in the subclass or friend function.
-	 * Main used in the load_big_image function to get a new object from the big image file
+	 * Main used in the load_disk_image function to get a new object from the big image file
 	 *
-	 * @see load_big_image()
+	 * @see load_disk_image()
 	 */
 	DiskBigImage() {}
 	
