@@ -513,7 +513,7 @@ inline void DiskBigImage<T>::set_image_data_path(const char * file_name)
 }
 
 template<typename T>
-boost::shared_ptr<DiskBigImage<T> > load_image(const char *file_name)
+boost::shared_ptr<DiskBigImage<T> > load_disk_image(const char *file_name)
 {
 	typedef boost::shared_ptr<DiskBigImage<T> > PtrType;
 	PtrType dst_image(new DiskBigImage<T>);
@@ -542,9 +542,9 @@ boost::shared_ptr<DiskBigImage<T> > load_image(const char *file_name)
 }
 
 template<typename T>
-boost::shared_ptr<DiskBigImage<T> > load_image(const std::string &file_name)
+boost::shared_ptr<DiskBigImage<T> > load_disk_image(const std::string &file_name)
 {
-	return load_image<T>(file_name.c_str());
+	return load_disk_image<T>(file_name.c_str());
 }
 
 #endif

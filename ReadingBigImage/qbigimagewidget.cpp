@@ -22,10 +22,10 @@ QBigImageWidget::QBigImageWidget(QWidget *parent)
 	setFocusPolicy(Qt::StrongFocus);
 }
 
-bool QBigImageWidget::load_big_image(QString file_name)
+bool QBigImageWidget::load_image(QString file_name)
 {
 	try {
-		big_image = load_image<Vec3b>(file_name.toStdString());
+		big_image = load_disk_image<Vec3b>(file_name.toStdString());
 
 		/* if big_image is null, so just load_image failure */
 		if(!big_image) return false;

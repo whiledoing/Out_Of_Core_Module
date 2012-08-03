@@ -105,9 +105,9 @@ protected:
 protected:
 	/**
 	 * @brief DiskBigImage can only be constructed in the subclass or friend function.
-	 * Main used in the load_image function to get a new object from the big image file
+	 * Main used in the load_big_image function to get a new object from the big image file
 	 *
-	 * @see load_image()
+	 * @see load_big_image()
 	 */
 	DiskBigImage() {}
 	
@@ -118,7 +118,7 @@ protected:
 	 * @return the shared_ptr of the big image object DiskBigImage
 	 */
 	template<typename T>
-	friend boost::shared_ptr<DiskBigImage<T> > load_image(const char *file_name);
+	friend boost::shared_ptr<DiskBigImage<T> > load_disk_image(const char *file_name);
 
 protected:
 	/** saves the whole size of the image */

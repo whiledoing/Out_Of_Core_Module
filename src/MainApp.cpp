@@ -21,7 +21,7 @@ bool test_read_level_range_image(int argc, char **argv)
 	}
 
 	const char *file_name = argv[1];
-	boost::shared_ptr<DiskBigImageInterface<Vec3b> > big_image = load_image<Vec3b>(file_name); 
+	boost::shared_ptr<DiskBigImageInterface<Vec3b> > big_image = load_disk_image<Vec3b>(file_name); 
 	if(!big_image) {
 		cerr << "can't load image " << endl;
 		return false;

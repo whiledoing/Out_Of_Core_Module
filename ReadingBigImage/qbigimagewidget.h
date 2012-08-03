@@ -26,7 +26,7 @@ class QBigImageWidget : public QWidget
 
 public:
 	QBigImageWidget(QWidget *parent);
-	bool load_big_image(QString file_name) throw (const std::bad_alloc&);
+	bool load_image(QString file_name) throw (const std::bad_alloc&);
 
 protected:
 	virtual void	paintEvent(QPaintEvent *event);

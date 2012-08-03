@@ -37,8 +37,8 @@ void ReadingBigImage::on_open_file_name()
 
 		try {
 
-			/* if load_big_image failure */
-            if(!m_central_widget->load_big_image(file_name)) {
+			/* if load_image failure */
+            if(!m_central_widget->load_image(file_name)) {
                 QString err_info = QString::fromLocal8Bit("读取图像文件 ") + file_name + QString::fromLocal8Bit(" 失败\n")
                     + QString::fromLocal8Bit("可能读入了错误的图像文件，或者图像数据丢失有误，请您从新指定");
                 QMessageBox::warning(this, "ReadingBigImage", err_info);

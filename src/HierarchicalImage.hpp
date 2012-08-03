@@ -233,7 +233,7 @@ bool HierarchicalImage<T, memory_usage>::save_mini_image(const char* file_name)
 	/* since the image data has been write successfully, we can using the DiskBigImageInterface to access
 	 * the image data in the disk
 	 */
-	boost::shared_ptr<DiskBigImageInterface<T> > big_image = load_image<T>(file_name);
+	boost::shared_ptr<DiskBigImageInterface<T> > big_image = load_disk_image<T>(file_name);
 
 	/* now just read the highest level image to save as a jpg file */
 	big_image->set_current_level(big_image->get_max_image_level());
