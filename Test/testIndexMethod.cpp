@@ -229,4 +229,6 @@ bool test_zorder_index(int argc, char **argv)
 		else
 			cout << "the result is not correct" << endl;
 	}
+
+	return true;
 }

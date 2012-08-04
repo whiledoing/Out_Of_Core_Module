@@ -2,7 +2,6 @@
 
 #include <iostream>
 #include <string>
-#include <intsafe.h>
 
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
@@ -92,8 +91,8 @@ bool test_big_image_containter(int argc, char **argv)
 			<< "Para : memory usage (the maximum memory can be used)" << endl
 			<< "Para : show image (whether show the enlarged image, too large is forbidden)" << endl;
 
-		cout << "Usage : " << "[fileName] [enlarge number] [resRow] [resCol]"
-			"[show image(optional)] [memory usage(optional)]" << endl;
+		cout << "Usage : " << "[fileName] [enlarge number] [resRow] [resCol] "
+			"[memory usage(optional)] [show image(optional)]" << endl;
 		return false;
 	}
 
@@ -116,9 +115,9 @@ bool test_big_image_containter(int argc, char **argv)
 		std::vector<Vec3b> data;
 		try {
 
-            big_image.get_pixels(0, big_image.get_image_rows(), 0, big_image.get_image_cols(), data);
+            big_image.get_pixels(0, 0, big_image.get_image_rows(), big_image.get_image_cols(), data);
 
-            cout << "get the all data from zorder based container" << t.elapsed() << " s " << endl;
+            cout << "get the all data from zorder based container " << t.elapsed() << " s " << endl;
 
             cv::Mat result_image(large_rows, large_cols, CV_8UC3, data.data());
             cv::namedWindow("Enlarged Image");
@@ -154,9 +153,8 @@ bool test_big_image_containter(int argc, char **argv)
 				continue;
 
 			cv::Mat result_image(rows, cols, CV_8UC3, vec.data());
-			cv::cvtColor(result_image, result_image, CV_RGB2BGR);
-			cv::namedWindow("get pixels from out of core image container");
-			cv::imshow("get pixels from out of core image container", result_image);
+			cv::namedWindow("RangeArea");
+			cv::imshow("RangeArea", result_image);
 			cv::waitKey(2000);
 
 		} catch(std::exception &err) {
@@ -216,6 +214,7 @@ bool test_read_level_range_image(int argc, char **argv)
 			cv::namedWindow("get pixel by level image");
 			cv::imshow("get pixel by level image", result_image);
 			cv::waitKey(2000);
+
 		} catch(std::exception &err) {
 			cout << err.what() << endl;
 			return false;
