@@ -1,0 +1,46 @@
+Install:
+1） 使用到的第三方库：
+
+1. boost
+使用到了boost的下面相关子库：
+data_time iostreams filesystem system thread
+需要编译好上面的静态库
+
+2. stxxl 
+是一个提供了基于stl的容器接口，但是数据是放在硬盘中的库。
+website : http://stxxl.sourceforge.net/ 
+安装说明：
+（1） 将/Libary/stxxl/include 设置为头文件包含的地址
+（2）将/Libaray/stxxl/lib 设置为lib包含的地址 
+（3）在工程文件中设置下面的command line （前提配置好了boost, 在链接 stxxl的库的时候， 会自动去链接boost的相关库）
+
+Debug :
+
+C/C++ -- Command Line :
+-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_SECURE_SCL=0 /Od /MDd /ZI -D_RTLDLL -DBOOST_LIB_DIAGNOSTIC -DSTXXL_BOOST_TIMESTAMP -DSTXXL_BOOST_CONFIG -DSTXXL_BOOST_FILESYSTEM -DSTXXL_BOOST_THREADS -DSTXXL_BOOST_RANDOM /EHsc /EHs /wd4820 /wd4217 /wd4668 /wd4619 /wd4625 /wd4626 /wd4355 /wd4996 -D_SCL_SECURE_NO_DEPRECATE /F 16777216 /nologo /DSTXXL_LIBNAME=\"stxxl_debug\" 
+
+Linker -- Command Line :
+/STACK:16777216 /NOLOGO /DEBUG 
+
+Release :
+
+C/C++ -- Command Line :
+-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_SECURE_SCL=0 /O2 /Ob2 /MD /DNDEBUG -D_RTLDLL -DBOOST_LIB_DIAGNOSTIC -DSTXXL_BOOST_TIMESTAMP -DSTXXL_BOOST_CONFIG -DSTXXL_BOOST_FILESYSTEM -DSTXXL_BOOST_THREADS -DSTXXL_BOOST_RANDOM /EHsc /EHs /wd4820 /wd4217 /wd4668 /wd4619 /wd4625 /wd4626 /wd4355 /wd4996 -D_SCL_SECURE_NO_DEPRECATE /F 16777216 /nologo /DSTXXL_LIBNAME=\"stxxl_release\" 
+
+Linker -- Command Line :
+/STACK:16777216 /NOLOGO /OPT:REF 
+
+（4）stxxl的配置文件，在代码运行的目录下面新建文件config.stxxl
+For example : #config.stxxl
+disk=c:\stxxl,70000,wincall     
+disk=d:\stxxl,70000,wincall
+disk=e:\stxxl,70000,wincall
+#表示在在c，d，e中分别建立70000M大小的文件stxxl用来保存数据用。
+#对于Out_Of_Core模块而言，大小取决于图像的数据大小，比如一个102400*102400的图像而言，
+如果图像是RGB个格式，那么总大小为30G的图像。由于使用了zorder进行存储，存在数据冗余。
+保存为zorder格式，最多是为原来大小的4倍，一般为2倍左右，所以分配60G到120G比较合适。
+
+2） Out_Of_Core模块代码：
+所有代码都是模板类或者是放在.h文件中的inline函数，直接include到代码中即可。
+代码放在了./src/ 文件夹下
+
