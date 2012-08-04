@@ -16,11 +16,6 @@
 
 using namespace std;
 
-/*
- * 1) read a picture
- * 2) enlarge it (test the container ability)
- * 3) smaller it for seen
- */
 typedef GiantImageInterface<Vec3b> BigImageType;
 typedef boost::shared_ptr<BigImageType> BigImagePtr;
 typedef DiskBigImage<Vec3b> DiskImageType;
@@ -210,6 +205,8 @@ bool test_read_level_range_image(int argc, char **argv)
 				continue;
 
 			cv::Mat result_image(rows, cols, CV_8UC3, vec.data());
+
+			/* image data was wrote in the format of RGB, but opencv is BRG*/
 			cv::cvtColor(result_image, result_image, CV_RGB2BGR);
 			cv::namedWindow("get pixel by level image");
 			cv::imshow("get pixel by level image", result_image);
