@@ -61,6 +61,17 @@ public:
 	virtual bool get_pixels(int start_row, int start_col, int rows, int cols, std::vector<T> &data) const = 0;
 	virtual bool set_pixels(int start_row, int start_col, int rows, int cols, const std::vector<T> &data) = 0;
 
+	/**
+     * @brief set the range image data with a const value
+	* @param start_row The left-corner point row
+	* @param start_col The left-corner point col
+     * @param rows The row scope of the range, thus the rows get is [start_row, start_row + rows)
+     * @param cols The col scope of the range
+     * @param clear_value the value that with to fill the image range
+     * @return Whether set successfully
+     */
+	virtual bool set_pixels(int start_row, int start_col, int rows, int cols, const T clear_value) = 0;
+
 public:
 	size_t get_image_cols() const { return img_size.cols; }
 	size_t get_image_rows() const { return img_size.rows; }

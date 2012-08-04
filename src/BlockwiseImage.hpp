@@ -90,15 +90,17 @@ template<typename T, unsigned memory_usage>
 bool BlockwiseImage<T, memory_usage>::set_pixels(int start_row, int start_col, int rows, int cols, const std::vector<T> &data)
 {
 	if(start_row < 0 || start_col < 0 || start_row > (get_image_rows()-1) || start_col > (get_image_cols()-1)
-		|| rows < 0 || cols < 0 || (start_row+rows) > get_image_rows() || (start_col+cols) > get_image_cols())
-		return false;
+		|| rows <= 0 || cols <= 0 || (start_row+rows) > get_image_rows() || (start_col+cols) > get_image_cols()) {
+			std::cerr << "BlockwiseImage::set_pixels error : Invalid parameter" << std::endl;
+			return false;
+	}
 
 	if(data.size() < (rows*cols))	return false;
 
 	size_t count = 0;
 	for(IndexMethodInterface::RowMajorIndexType row = 0; row < rows; ++row) {
 		IndexMethodInterface::IndexType row_result = index_method->get_row_result(start_row+row);
-		for(IndexMethodInterface::RowMajorIndexType col = 0; col <= cols; ++col) {
+		for(IndexMethodInterface::RowMajorIndexType col = 0; col < cols; ++col) {
 			img_container[index_method->get_index_by_row_result(row_result, start_col+col)] = data[count++];
 		}
 	}
@@ -109,8 +111,10 @@ template<typename T, unsigned memory_usage>
 bool BlockwiseImage<T, memory_usage>::get_pixels(int start_row, int start_col, int rows, int cols, std::vector<T> &data) const
 {
 	if(start_row < 0 || start_col < 0 || start_row > (get_image_rows()-1) || start_col > (get_image_cols()-1)
-		|| rows < 0 || cols < 0 || (start_row+rows) > get_image_rows() || (start_col+cols) > get_image_cols())
-		return false;
+		|| rows <= 0 || cols <= 0 || (start_row+rows) > get_image_rows() || (start_col+cols) > get_image_cols()) {
+			std::cerr << "BlockwiseImage::get_pixels error : Invalid parameter" << std::endl;
+			return false;
+	}
 
 	data.resize(rows*cols);
 
@@ -118,8 +122,26 @@ bool BlockwiseImage<T, memory_usage>::get_pixels(int start_row, int start_col, i
 	size_t count = 0;
 	for(IndexMethodInterface::RowMajorIndexType row = 0; row < rows; ++row) {
 		IndexMethodInterface::IndexType row_result = index_method->get_row_result(start_row+row);
-		for(IndexMethodInterface::RowMajorIndexType col = 0; col <= cols; ++col) {
+		for(IndexMethodInterface::RowMajorIndexType col = 0; col < cols; ++col) {
 			data[count++] = c_img_container[index_method->get_index_by_row_result(row_result, start_col+col)];
+		}
+	}
+	return true;
+}
+
+template<typename T, unsigned memory_usage>
+bool BlockwiseImage<T, memory_usage>::set_pixels(int start_row, int start_col, int rows, int cols, const T clear_value)
+{
+	if(start_row < 0 || start_col < 0 || start_row > (get_image_rows()-1) || start_col > (get_image_cols()-1)
+		|| rows <= 0 || cols <= 0 || (start_row+rows) > get_image_rows() || (start_col+cols) > get_image_cols()) {
+			std::cerr << "BlockwiseImage::set_pixels error : Invalid parameter" << std::endl;
+			return false;
+	}
+
+	for(IndexMethodInterface::RowMajorIndexType row = 0; row < rows; ++row) {
+		IndexMethodInterface::IndexType row_result = index_method->get_row_result(start_row+row);
+		for(IndexMethodInterface::RowMajorIndexType col = 0; col < cols; ++col) {
+			img_container[index_method->get_index_by_row_result(row_result, start_col+col)] = clear_value;
 		}
 	}
 	return true;

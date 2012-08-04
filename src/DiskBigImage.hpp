@@ -1,6 +1,7 @@
 #ifndef _DISK_BIG_IMAGE_HPP
 #define _DISK_BIG_IMAGE_HPP
 #include "DiskBigImage.h"
+#include <limits>
 
 template<typename T>
 size_t DiskBigImage<T>::get_current_level_image_rows() const 
@@ -540,7 +541,7 @@ boost::shared_ptr<DiskBigImage<T> > load_disk_image(const char *file_name)
 
 	/* set the current level to be the max : let it different from the first level user will be 
 	 * set in the set_current_level() function */
-	dst_image->m_current_level = UINT_MAX;
+	dst_image->m_current_level = std::numeric_limits<size_t>::max();
 
 	/*
 	 * hierarchical image don't save specific level image data

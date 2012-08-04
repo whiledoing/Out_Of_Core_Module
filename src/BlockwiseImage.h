@@ -68,6 +68,8 @@ public:
 	virtual bool get_pixels(int start_row, int start_col, int rows, int cols, std::vector<T> &data) const;
 	virtual bool set_pixels(int start_row, int start_col, int rows, int cols, const std::vector<T> &data);
 
+	virtual bool set_pixels(int start_row, int start_col, int rows, int cols, const T clear_value);
+
 	virtual T& at(IndexMethodInterface::IndexType index);
 	virtual const T& at(IndexMethodInterface::IndexType index) const;
 
