@@ -56,6 +56,7 @@ public:
      * @param rows The row scope of the range, thus the rows get is [start_row, start_row + rows)
      * @param cols The col scope of the range
      * @param data [Out] Returns the image data vector
+	 * @note the data doesn't need to allocate any memory
      * @return Whether get the data successfully
      */
 	virtual bool get_pixels(int start_row, int start_col, int rows, int cols, std::vector<T> &data) const = 0;

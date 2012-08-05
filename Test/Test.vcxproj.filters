@@ -24,13 +24,8 @@
     <ClCompile Include="testIndexMethod.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="testImageContainter.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="testIndexMethod.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
+    <ClCompile Include="testReadingDiskImage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

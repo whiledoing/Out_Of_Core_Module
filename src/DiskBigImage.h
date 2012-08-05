@@ -199,4 +199,9 @@ inline size_t DiskBigImage<T>::get_image_cols() const
 	return img_size.cols;
 }
 
+/**
+ * @example testReadingDiskImage.cpp
+ * This an example of how to read the image data from the big image that stored in the file system. 
+ */
+
 #endif

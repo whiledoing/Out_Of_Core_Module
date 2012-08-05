@@ -84,10 +84,7 @@
     <ClCompile Include="testImageContainter.cpp" />
     <ClCompile Include="testIndexMethod.cpp" />
     <ClCompile Include="testMain.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="testImageContainter.h" />
-    <ClInclude Include="testIndexMethod.h" />
+    <ClCompile Include="testReadingDiskImage.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

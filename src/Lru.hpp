@@ -52,8 +52,8 @@ public:
 
 	/**
 	 *	@brief initialize the lru manager
-	 *	@para _file_cell_numbers the cell number in one file
-	 *	@para _file_cache_numbers the file cache number
+	 *	@param _file_cell_numbers the cell number in one file
+	 *	@param _file_cache_numbers the file cache number
 	 */
 	ImageFileLRU(int _file_cell_numbers = 0, int _file_cache_numbers = 16) {
 		init(_file_cell_numbers, _file_cache_numbers);

@@ -73,4 +73,9 @@ public:
 	virtual std::string get_index_method_name() const = 0;
 };
 
+/**
+ * @example testIndexMethod.cpp
+ * This an example of how to use the index method.
+ */
+
 #endif

@@ -1,5 +1,3 @@
-#include "testIndexMethod.h"
-
 #include <iostream>
 #include <iomanip>
 #include <algorithm>
@@ -11,6 +9,7 @@
 
 using namespace std;
 
+/* test the block index method, input the rows, cols, blockrows, blockcols for testing */
 bool test_block_index(int argc, char **argv)
 {
 	if(argc < 5) {
@@ -128,6 +127,7 @@ void printTwoArrayVector(T array, RowMajorType row, RowMajorType col, string arr
 	os << endl;
 }
 
+/* test zorder index, input the rows and cols for indexing */
 typedef ZOrderIndex ZOrderIndexType;
 bool test_zorder_index(int argc, char **argv)
 {

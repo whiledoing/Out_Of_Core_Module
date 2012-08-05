@@ -152,4 +152,9 @@ boost::shared_ptr<GiantImageInterface<T> > get_hierarchical_image_by_meomory_usa
 	}
 }
 
+/**
+ * @example WriteHierarchicalImage.cpp
+ * This an example of how to write the hierarchical image into the file system.
+ */
+
 #endif

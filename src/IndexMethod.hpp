@@ -28,10 +28,10 @@ private:
 public:
 
 	/**
-	 * @para row_size the row size of the image
-	 * @para col_size the col size of the image
-	 * @para block_row_size the row size of the block in the unit of 2^n,
-	 * @para block_col_size the col size of the block in the unit of 2^n. If n = 2, then the block size is 4
+	 * @param row_size the row size of the image
+	 * @param col_size the col size of the image
+	 * @param block_row_size the row size of the block in the unit of 2^n,
+	 * @param block_col_size the col size of the block in the unit of 2^n. If n = 2, then the block size is 4
 	 */
 	Block2DIndex(IndexType row_size, IndexType col_size, IndexType block_row_size, IndexType block_col_size = -1)
 		: m_row(row_size), m_col(col_size), m_blockRowSize(block_row_size),
@@ -121,8 +121,8 @@ private:
 
 public:
 	/**
-	 *	@para row_size the row size of the image
-	 *	@para col_size the col size of the image
+	 *	@param row_size the row size of the image
+	 *	@param col_size the col size of the image
 	 */
 	ZOrderIndexIntuition(RowMajorIndexType row_size, RowMajorIndexType col_size)
 		: ONE(1) , m_row(row_size), m_col(col_size)
@@ -246,8 +246,8 @@ private:
 
 public:
 	/**
-	 *	@para row_size the row size of the image
-	 *	@para col_size the col size of the image
+	 *	@param row_size the row size of the image
+	 *	@param col_size the col size of the image
 	 */
 	ZOrderIndex(RowMajorIndexType row_size, RowMajorIndexType col_size)
 		: ONE(1) , m_row(row_size), m_col(col_size)

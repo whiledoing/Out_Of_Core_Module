@@ -196,4 +196,14 @@ boost::shared_ptr<GiantImageInterface<T> > get_block_wise_image_by_meomory_usage
 	}
 }
 
+/**
+ * @example testImageContainter.cpp
+ * This an example of how to use the image processing interface in the BlockwiseImage class.
+ */
+
+/**
+ * @example WriteBlockWiseImage.cpp
+ * This an example of how to write the block wise image into the file system.
+ */
+
 #endif
