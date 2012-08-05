@@ -75,7 +75,7 @@ void BlockwiseImage<T, memory_usage>::set_minimal_resolution(int rows, int cols,
 	level_col = get_least_order_number(level_col);
 
 	/* ensure the smallest image (the max scale level) is not less than mini_rows or mini_cols which user specified */
-	m_max_level = std::min(level_row, level_col);
+	m_max_level = (level_row < level_col) ? level_row : level_col;
 
 	/* recalculate the mini_rows and mini_cols */
 	m_mini_rows = std::ceil((double)(rows) / (1 << m_max_level));

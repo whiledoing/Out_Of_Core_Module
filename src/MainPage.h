@@ -20,6 +20,7 @@
  * - Test 对BlockwiseImage的图像处理接口和DiskBigImage的读写接口进行了测试，还有一部分是关于不同索引方法的测试。
  * - WriteBlockWiseImage 使用BlockwiseImage写入图像数据
  * - WriteHierarchicalImage 使用HierarchicalImage写入图像数据
+ * - TimeConsumeTest 对DiskBigImage类的get_pixels_by_level_fast和get_pixels_by_level速度上进行的测试。
  * \n
  * 
  * @section setup_sec 安装
