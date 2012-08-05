@@ -10,6 +10,15 @@
 
 #include <boost/assert.hpp>
 
+/**
+ * @class ImageFileLRU Lru.hpp
+ *
+ * @brief Implement the saving the big image file cache in lru algorithm
+ * @see DiskBigImage
+ *
+ * @tparam T The type of the image cells
+ */
+
 template<typename T>
 class ImageFileLRU
 {
@@ -31,11 +40,7 @@ private:
 
 public:
 
-	/*
-	 *	@brief : initialize the lru manager
-	 *	@para _file_cell_numbers : the cell number in one file
-	 *	@para _file_cache_numbers : the file cache number
-	 */
+
 	void init(int _file_cell_numbers, int _file_cache_numbers)
 	{
 		BOOST_ASSERT(_file_cache_numbers > 0);
@@ -45,6 +50,11 @@ public:
 		b_data_dirty.resize(file_cache_numbers, false);
 	}
 
+	/**
+	 *	@brief initialize the lru manager
+	 *	@para _file_cell_numbers the cell number in one file
+	 *	@para _file_cache_numbers the file cache number
+	 */
 	ImageFileLRU(int _file_cell_numbers = 0, int _file_cache_numbers = 16) {
 		init(_file_cell_numbers, _file_cache_numbers);
 	}
@@ -57,8 +67,8 @@ public:
 		}
 	}
 
-	/*
-	 *	@brief : checks whether the file_name is in the file cache
+	/**
+	 *	@brief checks whether the file_name is in the file cache
 	 */
 	bool exists(const std::string &file_name) const {
 		for(DataType::const_iterator ite = lru_data.cbegin(); ite != lru_data.cend(); ++ite) {
@@ -68,8 +78,8 @@ public:
 		return false;
 	}
 
-	/*
-	 *	@brief : find the index of the file_name in the lru manager, if not exist, return npos
+	/**
+	 *	@brief find the index of the file_name in the lru manager, if not exist, return npos
 	 */
 	int find(const std::string &file_name) const {
 		for(DataType::const_iterator ite = lru_data.cbegin(); ite != lru_data.cend(); ++ite) {
@@ -79,9 +89,11 @@ public:
 		return npos;
 	}
 
-	/*
-	 *	@brief : put the file_name into the lru manager, and return the index of the specific file_name in the 
+	/**
+	 *	@brief put the file_name into the lru manager, and return the index of the specific file_name in the 
 	 *	lru manager.
+	 *	@return the index of the image file.
+	 *	@note if fails to put the file into lru manager, the return value is ImageFileLRU::npos
 	 */
 	int put_into_lru(const std::string &file_name) {
 		using namespace std;
@@ -134,8 +146,9 @@ public:
 		return index;
 	}
 
-	/*
-	 *	@brief : write the index data into the file system
+	/**
+	 *	@brief write the index data into the file system
+	 *	@return whether write successfully
 	 */
 	bool write_back_data(int index) 
 	{
@@ -156,8 +169,8 @@ public:
 		return true;
 	}
 
-	/*
-	 *	@brief : update the count of all the file cache count
+	/**
+	 *	@brief update the count of all the file cache count, the specific index is set to zero
 	 */
 	void update_count(int index) {
 		BOOST_ASSERT(index < lru_data.size() && index >= 0);
@@ -170,7 +183,7 @@ public:
 	}
 
 	/*
-	 *	@brief : get the index file cache's const data
+	 *	@brief get the index file cache's const data
 	 */
 	const std::vector<T>& get_const_data(int index) const {
 		BOOST_ASSERT(index < lru_data.size() && index >= 0);
@@ -178,7 +191,7 @@ public:
 	}
 
 	/*
-	 *	@brief : get the index file cache's data
+	 *	@brief get the index file cache's data
 	 */
 	std::vector<T>& get_data(int index) {
 		BOOST_ASSERT(index < lru_data.size() && index >= 0);
@@ -189,7 +202,7 @@ public:
 	}
 
 public:
-	/* the npos means invalid index */
+	/** the npos means invalid index */
 	static const int npos = -1;
 
 private:
