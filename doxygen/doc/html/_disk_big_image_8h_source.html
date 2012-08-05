@@ -1,0 +1,224 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<title>Out_Of_Core: D:/Out_Of_Core_Git/src/DiskBigImage.h 源文件</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript">
+  $(document).ready(function() { searchBox.OnSelectItem(0); });
+</script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td style="padding-left: 0.5em;">
+   <div id="projectname">Out_Of_Core
+   &#160;<span id="projectnumber">v1.0</span>
+   </div>
+   <div id="projectbrief">Image processing, support very large image</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.8.1.2 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search",false,'搜索');
+</script>
+  <div id="navrow1" class="tabs">
+    <ul class="tablist">
+      <li><a href="index.html"><span>首页</span></a></li>
+      <li><a href="annotated.html"><span>类</span></a></li>
+      <li class="current"><a href="files.html"><span>文件</span></a></li>
+      <li><a href="examples.html"><span>示例</span></a></li>
+      <li>
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <img id="MSearchSelect" src="search/mag_sel.png"
+               onmouseover="return searchBox.OnSearchSelectShow()"
+               onmouseout="return searchBox.OnSearchSelectHide()"
+               alt=""/>
+          <input type="text" id="MSearchField" value="搜索" accesskey="S"
+               onfocus="searchBox.OnSearchFieldFocus(true)" 
+               onblur="searchBox.OnSearchFieldFocus(false)" 
+               onkeyup="searchBox.OnSearchFieldChange(event)"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><img id="MSearchCloseImg" border="0" src="search/close.png" alt=""/></a>
+          </span>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div id="navrow2" class="tabs2">
+    <ul class="tablist">
+      <li><a href="files.html"><span>文件列表</span></a></li>
+    </ul>
+  </div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>全部</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>类</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>函数</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>变量</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>类型定义</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>友元</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>页</a></div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="headertitle">
+<div class="title">DiskBigImage.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef _DISK_BIG_IMAGE_H</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define _DISK_BIG_IMAGE_H</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &quot;BasicType.h&quot;</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &quot;DiskBigImageInterface.h&quot;</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &quot;Lru.hpp&quot;</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &quot;IndexMethod.hpp&quot;</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;</div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#define BOOST_FILESYSTEM_VERSION 3</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#include &lt;boost/filesystem.hpp&gt;</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &lt;boost/lexical_cast.hpp&gt;</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a name="l00030"></a><span class="lineno"><a class="code" href="class_disk_big_image.html">   30</a></span>&#160;<span class="keyword">class </span><a class="code" href="class_disk_big_image.html" title="Derived from DiskBigImageInterface, support for the reading and writing of the big image that was sav...">DiskBigImage</a> : <span class="keyword">public</span> <a class="code" href="class_disk_big_image_interface.html" title="The interface for accessing the big image files in the disk that were saved by BlockwiseImage and Hie...">DiskBigImageInterface</a>&lt;T&gt;</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;{</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        <span class="comment">/* Derived from DiskBigImageInterface */</span></div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="class_disk_big_image.html#a9b8062ca60135249493571a6f47da1ef" title="Get the the specific range area image data from the bigimage files, but first specific which level da...">get_pixels_by_level</a>(<span class="keywordtype">int</span> level, <span class="keywordtype">int</span> start_row, <span class="keywordtype">int</span> start_col, <span class="keywordtype">int</span> rows, <span class="keywordtype">int</span> cols, std::vector&lt;T&gt; &amp;vec);</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">bool</span> set_pixel_by_level(<span class="keywordtype">int</span> level, <span class="keywordtype">int</span> start_row, <span class="keywordtype">int</span> start_col, <span class="keywordtype">int</span> rows, <span class="keywordtype">int</span> cols, <span class="keyword">const</span> std::vector&lt;T&gt; &amp;vec);</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">bool</span> get_pixels_by_level_fast(<span class="keywordtype">int</span> level, <span class="keywordtype">int</span> &amp;start_row, <span class="keywordtype">int</span> &amp;start_col, <span class="keywordtype">int</span> &amp;rows, <span class="keywordtype">int</span> &amp;cols, std::vector&lt;T&gt; &amp;vec);</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="class_disk_big_image.html#a721b35955145235b188b54e964b9df7c" title="set the image current level before any access to the hierarchical image data">set_current_level</a>(<span class="keywordtype">int</span> level);</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">size_t</span> get_current_level() <span class="keyword">const</span>; </div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">size_t</span> <a class="code" href="class_disk_big_image.html#a0069752abef86aca7017c480fbd74f60" title="get the current level image rows after calling the set_current_level function">get_current_level_image_rows</a>() <span class="keyword">const</span>; </div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">size_t</span> <a class="code" href="class_disk_big_image.html#a2a81a18bdf3fe321125b780f02c8d3ef" title="get the current level image cols after calling the set_current_level function">get_current_level_image_cols</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="class_disk_big_image.html#a20d09cacae5a25b71c716563451c05aa" title="set the file cache number when loading image data since the image from disk is too large so when load...">set_file_cache_number</a>(<span class="keywordtype">int</span> _file_cache_number);</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">size_t</span> <a class="code" href="class_disk_big_image.html#a3d58d791486db6c65b56a46256ef2b36" title="get the maximum image level thus the minimal size image&#39;s scale level">get_max_image_level</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        <span class="keyword">inline</span> <span class="keywordtype">size_t</span> <a class="code" href="class_disk_big_image.html#ad89988c077d526505993a82477ccdc13" title="get the minimal_image size.">get_minimal_image_rows</a>() <span class="keyword">const</span>; </div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        <span class="keyword">inline</span> <span class="keywordtype">size_t</span> get_minimal_image_cols() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        <span class="keyword">inline</span> <span class="keywordtype">size_t</span> <a class="code" href="class_disk_big_image.html#a068e610d1db01a4d8ee93a1cbab0c99d" title="get the total image size.">get_image_rows</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;        <span class="keyword">inline</span> <span class="keywordtype">size_t</span> get_image_cols() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;<span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;</div>
+<div class="line"><a name="l00082"></a><span class="lineno"><a class="code" href="struct_disk_big_image_1_1_data_index_info.html">   82</a></span>&#160;        <span class="keyword">struct </span><a class="code" href="struct_disk_big_image_1_1_data_index_info.html" title="This structure is used in the get_pixels_by_level() function to sort the range data.">DataIndexInfo</a></div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        {</div>
+<div class="line"><a name="l00084"></a><span class="lineno"><a class="code" href="struct_disk_big_image_1_1_data_index_info.html#ad760985b453c8b1ade15c006e023598a">   84</a></span>&#160;                int64 <a class="code" href="struct_disk_big_image_1_1_data_index_info.html#ad760985b453c8b1ade15c006e023598a">index</a>;                    </div>
+<div class="line"><a name="l00085"></a><span class="lineno"><a class="code" href="struct_disk_big_image_1_1_data_index_info.html#a0d07c93d352f673fd9eda3447972875c">   85</a></span>&#160;                int64 <a class="code" href="struct_disk_big_image_1_1_data_index_info.html#a0d07c93d352f673fd9eda3447972875c">zorder_index</a>;     </div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;                <span class="keyword">friend</span> <span class="keyword">inline</span> <span class="keywordtype">bool</span> operator&lt; (<span class="keyword">const</span> <a class="code" href="struct_disk_big_image_1_1_data_index_info.html" title="This structure is used in the get_pixels_by_level() function to sort the range data.">DataIndexInfo</a>&amp; lhs, <span class="keyword">const</span> <a class="code" href="struct_disk_big_image_1_1_data_index_info.html" title="This structure is used in the get_pixels_by_level() function to sort the range data.">DataIndexInfo</a>&amp; rhs) </div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;                {</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;                        <span class="keywordflow">return</span> (lhs.<a class="code" href="struct_disk_big_image_1_1_data_index_info.html#a0d07c93d352f673fd9eda3447972875c">zorder_index</a> &lt; rhs.<a class="code" href="struct_disk_big_image_1_1_data_index_info.html#a0d07c93d352f673fd9eda3447972875c">zorder_index</a>);</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;                }</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;        };</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;<span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="class_disk_big_image.html#a23754f55994fd2e7761ad1c437a5642d" title="read out the [front, tail) range cells in the index_info_vector, write the data into the data_vector...">read_from_index_range</a>(<span class="keywordtype">size_t</span> front, <span class="keywordtype">size_t</span> tail, <a class="code" href="class_index_method_interface.html#ab7022c5b65707f1d10a71f45134b21ba">ZOrderIndex::IndexType</a> start_index, </div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;                <span class="keyword">const</span> std::vector&lt;DataIndexInfo&gt; &amp;index_info_vector, std::vector&lt;T&gt; &amp;data_vector);</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="class_disk_big_image.html#a2c98bd73bd9046c5b24a0a10cf318eb7" title="checks the parameter invalidation before calling the get_pixels_by_level() function">check_para_validation</a>(<span class="keywordtype">int</span> level, <span class="keywordtype">int</span> start_row, <span class="keywordtype">int</span> start_col, <span class="keywordtype">int</span> rows, <span class="keywordtype">int</span> cols);</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="class_disk_big_image.html#a69e29d2fca837ffb8c453b0630a6b988" title="load the image head file before load image">load_image_head_file</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *file_name);</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_disk_big_image.html#a7edcce6b2059844d395ef86ae241eb31" title="get he image data path form the file_name(*.bigimage)">set_image_data_path</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> * file_name);</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;<span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00125"></a><span class="lineno"><a class="code" href="class_disk_big_image.html#a9e922356e4dc2b5f8f15350b077a8bd3">  125</a></span>&#160;        <a class="code" href="class_disk_big_image.html#a9e922356e4dc2b5f8f15350b077a8bd3" title="DiskBigImage can only be constructed in the subclass or friend function. Main used in the load_disk_i...">DiskBigImage</a>() {}</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;        </div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;        <span class="keyword">friend</span> boost::shared_ptr&lt;DiskBigImage&lt;T&gt; &gt; <a class="code" href="class_disk_big_image.html#a290d5c0bf83af4cf17fe0b7eb1abd3bb" title="The main function to load a big image file from disk.">load_disk_image</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *file_name);</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;</div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;<span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00138"></a><span class="lineno"><a class="code" href="class_disk_big_image.html#adbef855945a2d4bf0d3f191930f7bafe">  138</a></span>&#160;        <a class="code" href="struct_size.html">Size</a> <a class="code" href="class_disk_big_image.html#adbef855945a2d4bf0d3f191930f7bafe">img_size</a>;</div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;</div>
+<div class="line"><a name="l00141"></a><span class="lineno"><a class="code" href="class_disk_big_image.html#a6cea55287b598387220c2de1372e8f1e">  141</a></span>&#160;        int64 <a class="code" href="class_disk_big_image.html#a6cea55287b598387220c2de1372e8f1e">file_node_size</a>;</div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;</div>
+<div class="line"><a name="l00144"></a><span class="lineno"><a class="code" href="class_disk_big_image.html#ab081b11ac1701d751c31a48388fd17d7">  144</a></span>&#160;        int64 <a class="code" href="class_disk_big_image.html#ab081b11ac1701d751c31a48388fd17d7">file_node_shift_num</a>;</div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;</div>
+<div class="line"><a name="l00147"></a><span class="lineno"><a class="code" href="class_disk_big_image.html#ab33f5cec593d48264ffd7ae50eb52c18">  147</a></span>&#160;        boost::shared_ptr&lt;IndexMethodInterface&gt; <a class="code" href="class_disk_big_image.html#ab33f5cec593d48264ffd7ae50eb52c18">index_method</a>;</div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;</div>
+<div class="line"><a name="l00150"></a><span class="lineno"><a class="code" href="class_disk_big_image.html#ab90ffbe6abf10151593240f789922693">  150</a></span>&#160;        <span class="keywordtype">size_t</span> <a class="code" href="class_disk_big_image.html#ab90ffbe6abf10151593240f789922693">m_mini_rows</a>, m_mini_cols;</div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;</div>
+<div class="line"><a name="l00157"></a><span class="lineno"><a class="code" href="class_disk_big_image.html#ae415c0b60a45c251dc3914595c0fce2a">  157</a></span>&#160;        <span class="keywordtype">size_t</span> <a class="code" href="class_disk_big_image.html#ae415c0b60a45c251dc3914595c0fce2a">m_max_level</a>;</div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;</div>
+<div class="line"><a name="l00160"></a><span class="lineno"><a class="code" href="class_disk_big_image.html#afdecdad1aa6fe0aef3532126a13c7bde">  160</a></span>&#160;        <a class="code" href="struct_size.html">Size</a> <a class="code" href="class_disk_big_image.html#afdecdad1aa6fe0aef3532126a13c7bde">img_current_level_size</a>;</div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;</div>
+<div class="line"><a name="l00163"></a><span class="lineno"><a class="code" href="class_disk_big_image.html#aafa946f7ccf8e4fe4f874137c391a938">  163</a></span>&#160;        <span class="keywordtype">size_t</span> <a class="code" href="class_disk_big_image.html#aafa946f7ccf8e4fe4f874137c391a938">m_current_level</a>;</div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;</div>
+<div class="line"><a name="l00166"></a><span class="lineno"><a class="code" href="class_disk_big_image.html#a3b1f866ae3a06ac5a54372d714bd66de">  166</a></span>&#160;        std::string <a class="code" href="class_disk_big_image.html#a3b1f866ae3a06ac5a54372d714bd66de">img_data_path</a>;</div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;</div>
+<div class="line"><a name="l00169"></a><span class="lineno"><a class="code" href="class_disk_big_image.html#a4cd979aed67cc7fe4cbd25ea8515426e">  169</a></span>&#160;        std::string <a class="code" href="class_disk_big_image.html#a4cd979aed67cc7fe4cbd25ea8515426e">img_level_data_path</a>;</div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;</div>
+<div class="line"><a name="l00172"></a><span class="lineno"><a class="code" href="class_disk_big_image.html#a993a1b7f4a08dcff802e0895c4cc0d9d">  172</a></span>&#160;        <span class="keywordtype">size_t</span> <a class="code" href="class_disk_big_image.html#a993a1b7f4a08dcff802e0895c4cc0d9d">file_cache_number</a>;</div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;</div>
+<div class="line"><a name="l00175"></a><span class="lineno"><a class="code" href="class_disk_big_image.html#a67a35f40b6b24062385ef6ea78d74128">  175</a></span>&#160;        <a class="code" href="class_image_file_l_r_u.html">ImageFileLRU&lt;Vec3b&gt;</a> <a class="code" href="class_disk_big_image.html#a67a35f40b6b24062385ef6ea78d74128">lru_image_files</a>;</div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;};</div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;</div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;<span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a name="l00179"></a><span class="lineno"><a class="code" href="class_disk_big_image.html#ad89988c077d526505993a82477ccdc13">  179</a></span>&#160;<span class="keyword">inline</span> <span class="keywordtype">size_t</span> <a class="code" href="class_disk_big_image.html#ad89988c077d526505993a82477ccdc13" title="get the minimal_image size.">DiskBigImage&lt;T&gt;::get_minimal_image_rows</a>()<span class="keyword"> const </span></div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;<span class="keyword"></span>{</div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;        <span class="keywordflow">return</span> m_mini_rows;</div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;}</div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;</div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;<span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;<span class="keyword">inline</span> <span class="keywordtype">size_t</span> <a class="code" href="class_disk_big_image.html" title="Derived from DiskBigImageInterface, support for the reading and writing of the big image that was sav...">DiskBigImage&lt;T&gt;::get_minimal_image_cols</a>()<span class="keyword"> const </span></div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;<span class="keyword"></span>{</div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;        <span class="keywordflow">return</span> m_mini_cols;</div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;}</div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;</div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;<span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a name="l00191"></a><span class="lineno"><a class="code" href="class_disk_big_image.html#a068e610d1db01a4d8ee93a1cbab0c99d">  191</a></span>&#160;<span class="keyword">inline</span> <span class="keywordtype">size_t</span> <a class="code" href="class_disk_big_image.html#a068e610d1db01a4d8ee93a1cbab0c99d" title="get the total image size.">DiskBigImage&lt;T&gt;::get_image_rows</a>()<span class="keyword"> const</span></div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;<span class="keyword"></span>{</div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;        <span class="keywordflow">return</span> img_size.rows;</div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;}</div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;</div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;<span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;<span class="keyword">inline</span> <span class="keywordtype">size_t</span> <a class="code" href="class_disk_big_image.html" title="Derived from DiskBigImageInterface, support for the reading and writing of the big image that was sav...">DiskBigImage&lt;T&gt;::get_image_cols</a>()<span class="keyword"> const</span></div>
+<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;<span class="keyword"></span>{</div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;        <span class="keywordflow">return</span> img_size.cols;</div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;}</div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;</div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;<span class="preprocessor">#endif</span></div>
+</div><!-- fragment --></div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+制作者 &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.1.2
+</small></address>
+</body>
+</html>

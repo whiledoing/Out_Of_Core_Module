@@ -1,0 +1,203 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<title>Out_Of_Core: D:/Out_Of_Core_Git/src/HierarchicalImage.h 源文件</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript">
+  $(document).ready(function() { searchBox.OnSelectItem(0); });
+</script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td style="padding-left: 0.5em;">
+   <div id="projectname">Out_Of_Core
+   &#160;<span id="projectnumber">v1.0</span>
+   </div>
+   <div id="projectbrief">Image processing, support very large image</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.8.1.2 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search",false,'搜索');
+</script>
+  <div id="navrow1" class="tabs">
+    <ul class="tablist">
+      <li><a href="index.html"><span>首页</span></a></li>
+      <li><a href="annotated.html"><span>类</span></a></li>
+      <li class="current"><a href="files.html"><span>文件</span></a></li>
+      <li><a href="examples.html"><span>示例</span></a></li>
+      <li>
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <img id="MSearchSelect" src="search/mag_sel.png"
+               onmouseover="return searchBox.OnSearchSelectShow()"
+               onmouseout="return searchBox.OnSearchSelectHide()"
+               alt=""/>
+          <input type="text" id="MSearchField" value="搜索" accesskey="S"
+               onfocus="searchBox.OnSearchFieldFocus(true)" 
+               onblur="searchBox.OnSearchFieldFocus(false)" 
+               onkeyup="searchBox.OnSearchFieldChange(event)"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><img id="MSearchCloseImg" border="0" src="search/close.png" alt=""/></a>
+          </span>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div id="navrow2" class="tabs2">
+    <ul class="tablist">
+      <li><a href="files.html"><span>文件列表</span></a></li>
+    </ul>
+  </div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>全部</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>类</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>函数</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>变量</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>类型定义</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>友元</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>页</a></div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="headertitle">
+<div class="title">HierarchicalImage.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef _HIERARCHICAL_IMAGE_H</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define _HIERARCHICAL_IMAGE_H</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &lt;string&gt;</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;</div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &quot;BlockwiseImage.h&quot;</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="keyword">template</span>&lt;<span class="keyword">typename</span> T, <span class="keywordtype">size_t</span> memory_usage = 64&gt;</div>
+<div class="line"><a name="l00022"></a><span class="lineno"><a class="code" href="class_hierarchical_image.html">   22</a></span>&#160;<span class="keyword">class </span><a class="code" href="class_hierarchical_image.html" title="Derived from BlockwiseImage, support the big image operation, can save the image data in a hierarchic...">HierarchicalImage</a>: <span class="keyword">public</span> <a class="code" href="class_blockwise_image.html" title="Derived from GiantImageInterface, support the big image operation, and saves the whole image into dis...">BlockwiseImage</a>&lt;T, memory_usage&gt;</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;{</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;        <a class="code" href="class_hierarchical_image.html#a10037544868f5d2efc66993f8ddc23b0">HierarchicalImage</a>(<span class="keywordtype">size_t</span> rows, <span class="keywordtype">size_t</span> cols, <span class="keywordtype">size_t</span> mini_rows, <span class="keywordtype">size_t</span> mini_cols,</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;                boost::shared_ptr&lt;IndexMethodInterface&gt; method = boost::shared_ptr&lt;IndexMethodInterface&gt;());</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        <span class="keyword">virtual</span> ~<a class="code" href="class_hierarchical_image.html" title="Derived from BlockwiseImage, support the big image operation, can save the image data in a hierarchic...">HierarchicalImage</a>();</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="comment">/* Derived from BlockwiseImage */</span></div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="class_hierarchical_image.html#a6ade13ae295516b5a899498c6800451d">write_image</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* file_name);</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="class_hierarchical_image.html#a6ade13ae295516b5a899498c6800451d">write_image</a>(<span class="keyword">const</span> std::string &amp;file_name);</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="class_hierarchical_image.html#ad4c49535e55585ed7726856d8c65ef6e" title="save the mini size image as a jpg file for observation">save_mini_image</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* file_name);</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="comment">/* specific method */</span></div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="class_hierarchical_image.html#a2f5b6691db32f8af8fff11a4982e88b9" title="set the number for writing image files concurrently">set_mutliply_ways_writing_number</a>(<span class="keywordtype">size_t</span> number);</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="class_hierarchical_image.html#ae827b72365d1e8b65af0bf5c10a197d0" title="set the image data path from the big image file name.">set_image_data_path</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *file_name); </div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="class_hierarchical_image.html#a4b34e191a90baabf547bc899a2822b0d" title="write the image head file">write_image_head_file</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *file_name);</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="class_hierarchical_image.html#a2c2c982991f2f28cbf54f15266f507e5" title="write the start_level image data in the write image inner loop">write_image_inner_loop</a>(<span class="keywordtype">size_t</span> start_level, <span class="keywordtype">size_t</span> merge_number, <span class="keyword">const</span> boost::filesystem3::path &amp;data_path, <span class="keyword">const</span> int64 &amp;file_number);</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;<span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00079"></a><span class="lineno"><a class="code" href="class_hierarchical_image.html#a83791665a03876e2e0927035edb35823">   79</a></span>&#160;        <span class="keywordtype">size_t</span> <a class="code" href="class_hierarchical_image.html#a83791665a03876e2e0927035edb35823">concurrent_number</a>;</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;</div>
+<div class="line"><a name="l00082"></a><span class="lineno"><a class="code" href="class_hierarchical_image.html#a79a42b409bae6f95caeddfe9bd20d3bf">   82</a></span>&#160;        std::string <a class="code" href="class_hierarchical_image.html#a79a42b409bae6f95caeddfe9bd20d3bf">img_data_path</a>;</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;</div>
+<div class="line"><a name="l00085"></a><span class="lineno"><a class="code" href="class_hierarchical_image.html#a9a595586f85d45a1964600eb7ec4559f">   85</a></span>&#160;        <a class="code" href="struct_size.html">Size</a> <a class="code" href="class_hierarchical_image.html#a9a595586f85d45a1964600eb7ec4559f">img_current_level_size</a>;</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;};</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;<span class="keyword">template</span>&lt;<span class="keyword">typename</span> T, <span class="keywordtype">size_t</span> memory_usage&gt;</div>
+<div class="line"><a name="l00089"></a><span class="lineno"><a class="code" href="class_hierarchical_image.html#a2f5b6691db32f8af8fff11a4982e88b9">   89</a></span>&#160;<span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="class_hierarchical_image.html#a2f5b6691db32f8af8fff11a4982e88b9" title="set the number for writing image files concurrently">HierarchicalImage&lt;T, memory_usage&gt;::set_mutliply_ways_writing_number</a>(<span class="keywordtype">size_t</span> number) {</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;        <span class="keywordtype">size_t</span> max_number = get_max_image_level() + 1;</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;        concurrent_number = (number &gt; max_number) ? max_number : number;</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;} </div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;<span class="keyword">template</span>&lt;<span class="keyword">typename</span> T, <span class="keywordtype">size_t</span> memory_usage&gt;</div>
+<div class="line"><a name="l00095"></a><span class="lineno"><a class="code" href="class_hierarchical_image.html#ae827b72365d1e8b65af0bf5c10a197d0">   95</a></span>&#160;<span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="class_hierarchical_image.html#ae827b72365d1e8b65af0bf5c10a197d0" title="set the image data path from the big image file name.">HierarchicalImage&lt;T, memory_usage&gt;::set_image_data_path</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> * file_name) </div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;{</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;        <span class="keyword">namespace </span>bf = boost::filesystem3;</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;        <span class="comment">/* save the img_data_path */</span></div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;        bf::path file_path = file_name;</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;        img_data_path = (file_path.parent_path() / file_path.stem()).generic_string();</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;}</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;<span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a name="l00116"></a><span class="lineno"><a class="code" href="class_hierarchical_image.html#a743b80da5ae98d79af3fd143a3a7fb18">  116</a></span>&#160;boost::shared_ptr&lt;GiantImageInterface&lt;T&gt; &gt; <a class="code" href="class_hierarchical_image.html#a743b80da5ae98d79af3fd143a3a7fb18" title="return the hierarchical image by memroy_usage, maximum support 4G">get_hierarchical_image_by_meomory_usage</a>(<span class="keywordtype">unsigned</span> memory_usage,</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;        <span class="keywordtype">size_t</span> rows, <span class="keywordtype">size_t</span> cols, <span class="keywordtype">size_t</span> mini_rows, <span class="keywordtype">size_t</span> mini_cols,</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;        boost::shared_ptr&lt;IndexMethodInterface&gt; method = boost::shared_ptr&lt;IndexMethodInterface&gt;())</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;{</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;        <span class="comment">/* ensure memory_usage is bigger than 8 */</span></div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;        memory_usage = (memory_usage &lt; 8) ? 8 : memory_usage;</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;        <span class="comment">/* make memory_usage = 2^order (order &gt;=3 &amp;&amp; order &lt;= 12) */</span></div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;        <span class="keywordflow">while</span>(memory_usage &amp; (memory_usage - 1)) {</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;                memory_usage &amp;= (memory_usage - 1);</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;        }</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;        <span class="keywordflow">switch</span>(memory_usage)</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;        {</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;        <span class="keywordflow">case</span> 8:</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;                <span class="keywordflow">return</span> boost::make_shared&lt;HierarchicalImage&lt;T, 8&gt; &gt;(rows, cols, mini_rows, mini_cols, method);</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;        <span class="keywordflow">case</span> 16:</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;                <span class="keywordflow">return</span> boost::make_shared&lt;HierarchicalImage&lt;T, 16&gt; &gt;(rows, cols, mini_rows, mini_cols, method);</div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;        <span class="keywordflow">case</span> 32:</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;                <span class="keywordflow">return</span> boost::make_shared&lt;HierarchicalImage&lt;T, 32&gt; &gt;(rows, cols, mini_rows, mini_cols, method);</div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;        <span class="keywordflow">case</span> 64:</div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;                <span class="keywordflow">return</span> boost::make_shared&lt;HierarchicalImage&lt;T, 64&gt; &gt;(rows, cols, mini_rows, mini_cols, method);</div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;        <span class="keywordflow">case</span> 128:</div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;                <span class="keywordflow">return</span> boost::make_shared&lt;HierarchicalImage&lt;T, 128&gt; &gt;(rows, cols, mini_rows, mini_cols, method);</div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;        <span class="keywordflow">case</span> 256:</div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;                <span class="keywordflow">return</span> boost::make_shared&lt;HierarchicalImage&lt;T, 256&gt; &gt;(rows, cols, mini_rows, mini_cols, method);</div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;        <span class="keywordflow">case</span> 512:</div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;                <span class="keywordflow">return</span> boost::make_shared&lt;HierarchicalImage&lt;T, 512&gt; &gt;(rows, cols, mini_rows, mini_cols, method);</div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;        <span class="keywordflow">case</span> 1024:</div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;                <span class="keywordflow">return</span> boost::make_shared&lt;HierarchicalImage&lt;T, 1024&gt; &gt;(rows, cols, mini_rows, mini_cols, method);</div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;        <span class="keywordflow">case</span> 2048:</div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;                <span class="keywordflow">return</span> boost::make_shared&lt;HierarchicalImage&lt;T, 2048&gt; &gt;(rows, cols, mini_rows, mini_cols, method);</div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;        <span class="keywordflow">case</span> 4096:</div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;                <span class="keywordflow">return</span> boost::make_shared&lt;HierarchicalImage&lt;T, 4096&gt; &gt;(rows, cols, mini_rows, mini_cols, method);</div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;        <span class="keywordflow">default</span>:</div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;                <span class="keywordflow">return</span> boost::make_shared&lt;HierarchicalImage&lt;T, 64&gt; &gt;(rows, cols, mini_rows, mini_cols, method);</div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;        }</div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;}</div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;</div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;<span class="preprocessor">#endif</span></div>
+</div><!-- fragment --></div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+制作者 &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.1.2
+</small></address>
+</body>
+</html>

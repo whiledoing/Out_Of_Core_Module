@@ -1,0 +1,433 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<title>Out_Of_Core: ImageInterface&lt; T &gt; 模板类 参考</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript">
+  $(document).ready(function() { searchBox.OnSelectItem(0); });
+</script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td style="padding-left: 0.5em;">
+   <div id="projectname">Out_Of_Core
+   &#160;<span id="projectnumber">v1.0</span>
+   </div>
+   <div id="projectbrief">Image processing, support very large image</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.8.1.2 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search",false,'搜索');
+</script>
+  <div id="navrow1" class="tabs">
+    <ul class="tablist">
+      <li><a href="index.html"><span>首页</span></a></li>
+      <li class="current"><a href="annotated.html"><span>类</span></a></li>
+      <li><a href="files.html"><span>文件</span></a></li>
+      <li><a href="examples.html"><span>示例</span></a></li>
+      <li>
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <img id="MSearchSelect" src="search/mag_sel.png"
+               onmouseover="return searchBox.OnSearchSelectShow()"
+               onmouseout="return searchBox.OnSearchSelectHide()"
+               alt=""/>
+          <input type="text" id="MSearchField" value="搜索" accesskey="S"
+               onfocus="searchBox.OnSearchFieldFocus(true)" 
+               onblur="searchBox.OnSearchFieldFocus(false)" 
+               onkeyup="searchBox.OnSearchFieldChange(event)"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><img id="MSearchCloseImg" border="0" src="search/close.png" alt=""/></a>
+          </span>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div id="navrow2" class="tabs2">
+    <ul class="tablist">
+      <li><a href="annotated.html"><span>类列表</span></a></li>
+      <li><a href="classes.html"><span>类索引</span></a></li>
+      <li><a href="inherits.html"><span>类继承关系</span></a></li>
+      <li><a href="functions.html"><span>类成员</span></a></li>
+    </ul>
+  </div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>全部</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>类</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>函数</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>变量</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>类型定义</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>友元</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>页</a></div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">Public 成员函数</a> &#124;
+<a href="#pro-attribs">Protected 属性</a> &#124;
+<a href="class_image_interface-members.html">所有成员列表</a>  </div>
+  <div class="headertitle">
+<div class="title">ImageInterface&lt; T &gt; 模板类 参考</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>The Basic Image Interface contains of several basic image processing functions.  
+ <a href="class_image_interface.html#details">更多...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_image_interface_8h_source.html">ImageInterface.h</a>&gt;</code></p>
+<div class="dynheader">
+类 ImageInterface&lt; T &gt; 继承关系图:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_image_interface__inherit__graph.png" border="0" usemap="#_image_interface_3_01_t_01_4_inherit__map" alt="Inheritance graph"/></div>
+<map name="_image_interface_3_01_t_01_4_inherit__map" id="_image_interface_3_01_t_01_4_inherit__map">
+<area shape="rect" id="node3" href="class_giant_image_interface.html" title="Derived form the ImageInterface, and defines the basic operations that restricted to the big image fi..." alt="" coords="5,80,173,107"/><area shape="rect" id="node5" href="class_blockwise_image.html" title="Derived from GiantImageInterface, support the big image operation, and saves the whole image into dis..." alt="" coords="16,155,163,181"/><area shape="rect" id="node7" href="class_hierarchical_image.html" title="Derived from BlockwiseImage, support the big image operation, can save the image data in a hierarchic..." alt="" coords="18,230,160,271"/></map>
+<center><span class="legend">[<a href="graph_legend.html">图例</a>]</span></center></div>
+<div class="dynheader">
+ImageInterface&lt; T &gt; 的协作图:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_image_interface__coll__graph.png" border="0" usemap="#_image_interface_3_01_t_01_4_coll__map" alt="Collaboration graph"/></div>
+<map name="_image_interface_3_01_t_01_4_coll__map" id="_image_interface_3_01_t_01_4_coll__map">
+<area shape="rect" id="node2" href="struct_size.html" title="Size" alt="" coords="49,5,97,32"/></map>
+<center><span class="legend">[<a href="graph_legend.html">图例</a>]</span></center></div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2><a name="pub-methods"></a>
+Public 成员函数</h2></td></tr>
+<tr class="memitem:a6f59d1e81ab88e0ca2c5d4b6a2e98ae5"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_image_interface.html#a6f59d1e81ab88e0ca2c5d4b6a2e98ae5">init</a> (int rows, int cols)=0</td></tr>
+<tr class="memdesc:a6f59d1e81ab88e0ca2c5d4b6a2e98ae5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize the image size, and allocate the memory for saving the image.  <a href="#a6f59d1e81ab88e0ca2c5d4b6a2e98ae5"></a><br/></td></tr>
+<tr class="memitem:a7c46834fca2a54671129e51035e4da82"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7c46834fca2a54671129e51035e4da82"></a>
+virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_image_interface.html#a7c46834fca2a54671129e51035e4da82">reset</a> ()=0</td></tr>
+<tr class="memdesc:a7c46834fca2a54671129e51035e4da82"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clear the image data. <br/></td></tr>
+<tr class="memitem:ad5c2431a4b31bcb600ba996858efa620"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_image_interface.html#ad5c2431a4b31bcb600ba996858efa620">write_image</a> (const char *file_name)=0</td></tr>
+<tr class="memdesc:ad5c2431a4b31bcb600ba996858efa620"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write the image to the disk.  <a href="#ad5c2431a4b31bcb600ba996858efa620"></a><br/></td></tr>
+<tr class="memitem:ad15d73a867929d830d66db206f418779"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad15d73a867929d830d66db206f418779"></a>
+virtual bool&#160;</td><td class="memItemRight" valign="bottom"><b>write_image</b> (const std::string &amp;file_name)=0</td></tr>
+<tr class="memitem:af5fc491e3c7bb401a3591de26049bc7d"><td class="memItemLeft" align="right" valign="top">virtual T &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_image_interface.html#af5fc491e3c7bb401a3591de26049bc7d">get_pixel</a> (int row, int col)=0</td></tr>
+<tr class="memdesc:af5fc491e3c7bb401a3591de26049bc7d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the pixel of the point (row, col), or just write code like image(row, col) to get the image pixel.  <a href="#af5fc491e3c7bb401a3591de26049bc7d"></a><br/></td></tr>
+<tr class="memitem:afde188c9465ecf66e7b736e03fb625c6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afde188c9465ecf66e7b736e03fb625c6"></a>
+virtual const T &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>get_pixel</b> (int row, int col) const =0</td></tr>
+<tr class="memitem:a15e127520b9b598db90f68453b18c678"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a15e127520b9b598db90f68453b18c678"></a>
+virtual T &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator()</b> (int row, int col)=0</td></tr>
+<tr class="memitem:abd4e6863efd75d01793072296cb59476"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abd4e6863efd75d01793072296cb59476"></a>
+virtual const T &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator()</b> (int row, int col) const =0</td></tr>
+<tr class="memitem:a2a2254be220b4a4bb6effed70d61c6df"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_image_interface.html#a2a2254be220b4a4bb6effed70d61c6df">get_pixels</a> (int start_row, int start_col, int rows, int cols, std::vector&lt; T &gt; &amp;data) const =0</td></tr>
+<tr class="memdesc:a2a2254be220b4a4bb6effed70d61c6df"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the range image data.  <a href="#a2a2254be220b4a4bb6effed70d61c6df"></a><br/></td></tr>
+<tr class="memitem:ae7af79229968b890b8e02431ccc7e9bb"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae7af79229968b890b8e02431ccc7e9bb"></a>
+virtual bool&#160;</td><td class="memItemRight" valign="bottom"><b>set_pixels</b> (int start_row, int start_col, int rows, int cols, const std::vector&lt; T &gt; &amp;data)=0</td></tr>
+<tr class="memitem:aa35f6a2c062df7a9796fc672b16cafc8"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_image_interface.html#aa35f6a2c062df7a9796fc672b16cafc8">set_pixels</a> (int start_row, int start_col, int rows, int cols, const T clear_value)=0</td></tr>
+<tr class="memdesc:aa35f6a2c062df7a9796fc672b16cafc8"><td class="mdescLeft">&#160;</td><td class="mdescRight">set the range image data with a const value  <a href="#aa35f6a2c062df7a9796fc672b16cafc8"></a><br/></td></tr>
+<tr class="memitem:a32131143cea03bf8717221d111107744"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a32131143cea03bf8717221d111107744"></a>
+size_t&#160;</td><td class="memItemRight" valign="bottom"><b>get_image_cols</b> () const </td></tr>
+<tr class="memitem:ac23652bfec86e2b16e645243e2f2de76"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac23652bfec86e2b16e645243e2f2de76"></a>
+size_t&#160;</td><td class="memItemRight" valign="bottom"><b>get_image_rows</b> () const </td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2><a name="pro-attribs"></a>
+Protected 属性</h2></td></tr>
+<tr class="memitem:a2a9ef3aa0859982b8eb2b8e8f73ab8ed"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2a9ef3aa0859982b8eb2b8e8f73ab8ed"></a>
+<a class="el" href="struct_size.html">Size</a>&#160;</td><td class="memItemRight" valign="bottom"><b>img_size</b></td></tr>
+</table>
+<a name="details" id="details"></a><h2>详细描述</h2>
+<div class="textblock"><h3>template&lt;typename T&gt;<br/>
+class ImageInterface&lt; T &gt;</h3>
+
+<p>The Basic Image Interface contains of several basic image processing functions. </p>
+<dl class="tparams"><dt>模板参数</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td>The type of the image cells </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>在文件 <a class="el" href="_image_interface_8h_source.html">ImageInterface.h</a> 第 <a class="el" href="_image_interface_8h_source.html#l00018">18</a> 行定义.</p>
+</div><h2>成员函数说明</h2>
+<a class="anchor" id="af5fc491e3c7bb401a3591de26049bc7d"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual T&amp; <a class="el" href="class_image_interface.html">ImageInterface</a>&lt; T &gt;::get_pixel </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>row</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>col</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get the pixel of the point (row, col), or just write code like image(row, col) to get the image pixel. </p>
+<dl class="section return"><dt>返回</dt><dd>The reference of the image pixel </dd></dl>
+<dl class="section warning"><dt>警告</dt><dd>In release mode, the row and col param must be valid, otherwise there will be an exception </dd></dl>
+
+<p>在 <a class="el" href="class_blockwise_image.html#a110d2b1c0d6ac08cb8e66f74b32bd72d">BlockwiseImage&lt; T, memory_usage &gt;</a> 内被实现.</p>
+
+</div>
+</div>
+<a class="anchor" id="a2a2254be220b4a4bb6effed70d61c6df"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual bool <a class="el" href="class_image_interface.html">ImageInterface</a>&lt; T &gt;::get_pixels </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>start_row</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>start_col</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>rows</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>cols</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; T &gt; &amp;&#160;</td>
+          <td class="paramname"><em>data</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get the range image data. </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">start_row</td><td>The left-corner point row </td></tr>
+    <tr><td class="paramname">start_col</td><td>The left-corner point col </td></tr>
+    <tr><td class="paramname">rows</td><td>The row scope of the range, thus the rows get is [start_row, start_row + rows) </td></tr>
+    <tr><td class="paramname">cols</td><td>The col scope of the range </td></tr>
+    <tr><td class="paramname">data</td><td>[Out] Returns the image data vector </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section note"><dt>注解</dt><dd>the data doesn't need to allocate any memory </dd></dl>
+<dl class="section return"><dt>返回</dt><dd>Whether get the data successfully </dd></dl>
+
+<p>在 <a class="el" href="class_blockwise_image.html#a91c1d0be2ef9ab54f1a5f9e706e13174">BlockwiseImage&lt; T, memory_usage &gt;</a> 内被实现.</p>
+
+</div>
+</div>
+<a class="anchor" id="a6f59d1e81ab88e0ca2c5d4b6a2e98ae5"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual bool <a class="el" href="class_image_interface.html">ImageInterface</a>&lt; T &gt;::init </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>rows</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>cols</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Initialize the image size, and allocate the memory for saving the image. </p>
+<dl class="section return"><dt>返回</dt><dd>Whether initialize successfully </dd></dl>
+
+<p>在 <a class="el" href="class_blockwise_image.html#a9bbeb6df0a51caf818d100c3e869f45b">BlockwiseImage&lt; T, memory_usage &gt;</a> 内被实现.</p>
+
+</div>
+</div>
+<a class="anchor" id="aa35f6a2c062df7a9796fc672b16cafc8"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual bool <a class="el" href="class_image_interface.html">ImageInterface</a>&lt; T &gt;::set_pixels </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>start_row</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>start_col</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>rows</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>cols</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const T&#160;</td>
+          <td class="paramname"><em>clear_value</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>set the range image data with a const value </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">start_row</td><td>The left-corner point row </td></tr>
+    <tr><td class="paramname">start_col</td><td>The left-corner point col </td></tr>
+    <tr><td class="paramname">rows</td><td>The row scope of the range, thus the rows get is [start_row, start_row + rows) </td></tr>
+    <tr><td class="paramname">cols</td><td>The col scope of the range </td></tr>
+    <tr><td class="paramname">clear_value</td><td>the value that with to fill the image range </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>Whether set successfully </dd></dl>
+
+<p>在 <a class="el" href="class_blockwise_image.html#ac4da5390aa20631c1f0e88b6a93cfead">BlockwiseImage&lt; T, memory_usage &gt;</a> 内被实现.</p>
+
+</div>
+</div>
+<a class="anchor" id="ad5c2431a4b31bcb600ba996858efa620"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual bool <a class="el" href="class_image_interface.html">ImageInterface</a>&lt; T &gt;::write_image </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>file_name</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Write the image to the disk. </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">file_name</td><td>The name of the image file </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>Whether write successfully </dd></dl>
+
+<p>在 <a class="el" href="class_blockwise_image.html#a64f3e966d516c8b039bd9f4c8685055c">BlockwiseImage&lt; T, memory_usage &gt;</a> , 以及 <a class="el" href="class_hierarchical_image.html#a6ade13ae295516b5a899498c6800451d">HierarchicalImage&lt; T, memory_usage &gt;</a> 内被实现.</p>
+
+</div>
+</div>
+<hr/>该类的文档由以下文件生成:<ul>
+<li>D:/Out_Of_Core_Git/src/<a class="el" href="_image_interface_8h_source.html">ImageInterface.h</a></li>
+</ul>
+</div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+制作者 &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.1.2
+</small></address>
+</body>
+</html>

@@ -1,0 +1,255 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<title>Out_Of_Core: testImageContainter.cpp</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript">
+  $(document).ready(function() { searchBox.OnSelectItem(0); });
+</script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td style="padding-left: 0.5em;">
+   <div id="projectname">Out_Of_Core
+   &#160;<span id="projectnumber">v1.0</span>
+   </div>
+   <div id="projectbrief">Image processing, support very large image</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.8.1.2 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search",false,'搜索');
+</script>
+  <div id="navrow1" class="tabs">
+    <ul class="tablist">
+      <li><a href="index.html"><span>首页</span></a></li>
+      <li><a href="annotated.html"><span>类</span></a></li>
+      <li><a href="files.html"><span>文件</span></a></li>
+      <li><a href="examples.html"><span>示例</span></a></li>
+      <li>
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <img id="MSearchSelect" src="search/mag_sel.png"
+               onmouseover="return searchBox.OnSearchSelectShow()"
+               onmouseout="return searchBox.OnSearchSelectHide()"
+               alt=""/>
+          <input type="text" id="MSearchField" value="搜索" accesskey="S"
+               onfocus="searchBox.OnSearchFieldFocus(true)" 
+               onblur="searchBox.OnSearchFieldFocus(false)" 
+               onkeyup="searchBox.OnSearchFieldChange(event)"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><img id="MSearchCloseImg" border="0" src="search/close.png" alt=""/></a>
+          </span>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div><!-- top -->
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>全部</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>类</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>函数</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>变量</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>类型定义</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>友元</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>页</a></div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div class="header">
+  <div class="headertitle">
+<div class="title">testImageContainter.cpp</div>  </div>
+</div><!--header-->
+<div class="contents">
+<p>This an example of how to use the image processing interface in the <a class="el" href="class_blockwise_image.html" title="Derived from GiantImageInterface, support the big image operation, and saves the whole image into dis...">BlockwiseImage</a> class.</p>
+<div class="fragment"><div class="line"><span class="preprocessor">#include &lt;iostream&gt;</span></div>
+<div class="line"><span class="preprocessor">#include &lt;string&gt;</span></div>
+<div class="line"></div>
+<div class="line"><span class="preprocessor">#include &lt;opencv2/core/core.hpp&gt;</span></div>
+<div class="line"><span class="preprocessor">#include &lt;opencv2/imgproc/imgproc.hpp&gt;</span></div>
+<div class="line"><span class="preprocessor">#include &lt;opencv2/highgui/highgui.hpp&gt;</span></div>
+<div class="line"></div>
+<div class="line"><span class="preprocessor">#include &quot;../src/HierarchicalImage.hpp&quot;</span></div>
+<div class="line"></div>
+<div class="line"><span class="preprocessor">#include &lt;boost/assert.hpp&gt;</span></div>
+<div class="line"><span class="preprocessor">#include &lt;boost/progress.hpp&gt;</span></div>
+<div class="line"><span class="preprocessor">#include &lt;boost/timer.hpp&gt;</span></div>
+<div class="line"></div>
+<div class="line"><span class="keyword">using namespace </span>std;</div>
+<div class="line"></div>
+<div class="line"><span class="keyword">typedef</span> <a name="_a0"></a><a class="code" href="class_giant_image_interface.html" title="Derived form the ImageInterface, and defines the basic operations that restricted to the big image fi...">GiantImageInterface&lt;Vec3b&gt;</a> BigImageType;</div>
+<div class="line"><span class="keyword">typedef</span> boost::shared_ptr&lt;BigImageType&gt; BigImagePtr;</div>
+<div class="line"><span class="keyword">typedef</span> <a name="_a1"></a><a class="code" href="class_disk_big_image.html" title="Derived from DiskBigImageInterface, support for the reading and writing of the big image that was sav...">DiskBigImage&lt;Vec3b&gt;</a> DiskImageType;</div>
+<div class="line"><span class="keyword">typedef</span> boost::shared_ptr&lt;DiskImageType&gt; DiskImagePtr;</div>
+<div class="line"><span class="keyword">typedef</span> <a name="_a2"></a><a class="code" href="class_z_order_index.html">ZOrderIndex</a> ZOrderIndexType;</div>
+<div class="line"></div>
+<div class="line"><span class="keyword">static</span> BigImagePtr build_enlarged_image(<span class="keyword">const</span> <span class="keywordtype">char</span> *file_name, <span class="keywordtype">size_t</span> enlarge_number, <span class="keywordtype">size_t</span> memory_usage);</div>
+<div class="line"></div>
+<div class="line">BigImagePtr build_enlarged_image(<span class="keyword">const</span> <span class="keywordtype">char</span> *file_name, <span class="keywordtype">size_t</span> enlarge_number, <span class="keywordtype">size_t</span> memory_usage)</div>
+<div class="line">{</div>
+<div class="line">        cv::Mat original_img = cv::imread(file_name);</div>
+<div class="line">        <span class="keywordflow">if</span>(original_img.empty()) {</div>
+<div class="line">                cerr &lt;&lt; <span class="stringliteral">&quot;Load image error&quot;</span> &lt;&lt; endl;</div>
+<div class="line">                <span class="keywordflow">return</span> BigImagePtr();</div>
+<div class="line">        }</div>
+<div class="line"></div>
+<div class="line">        BOOST_ASSERT_MSG(original_img.depth() == CV_8U, <span class="stringliteral">&quot;image depth not correct&quot;</span>);</div>
+<div class="line">        BOOST_ASSERT_MSG(original_img.channels() == 3, <span class="stringliteral">&quot;image channels not correct&quot;</span>);</div>
+<div class="line"></div>
+<div class="line">        <span class="keywordtype">size_t</span> rows = original_img.rows, cols = original_img.cols;</div>
+<div class="line">        <span class="keywordtype">size_t</span> large_rows = rows * enlarge_number, large_cols = cols * enlarge_number;</div>
+<div class="line"></div>
+<div class="line">        boost::shared_ptr&lt;IndexMethodInterface&gt; index_method = boost::make_shared&lt;ZOrderIndex&gt;(large_rows, large_cols);</div>
+<div class="line">        <span class="comment">//init the config file</span></div>
+<div class="line">        {</div>
+<div class="line">                <span class="keywordtype">size_t</span> imageBytes = (double)(index_method-&gt;get_max_index() * <span class="keyword">sizeof</span>(<a name="_a3"></a><a class="code" href="struct_pixel_element.html">Vec3b</a>)) / (1024*1024);</div>
+<div class="line">                fstream fout(<span class="stringliteral">&quot;config.stxxl&quot;</span>, ios::out | ios::trunc);</div>
+<div class="line">                fout &lt;&lt; <span class="stringliteral">&quot;disk=d:\\stxxl,&quot;</span> &lt;&lt; (imageBytes * 2) &lt;&lt;<span class="stringliteral">&quot;,wincall&quot;</span> &lt;&lt; endl;</div>
+<div class="line">                fout.close();</div>
+<div class="line">        }</div>
+<div class="line"></div>
+<div class="line">        <span class="comment">//the container to store the enlarged image</span></div>
+<div class="line">        BigImagePtr p_big_image = get_block_wise_image_by_meomory_usage&lt;Vec3b&gt;(memory_usage, large_rows, large_cols, 1, 1, index_method);</div>
+<div class="line">        BigImageType &amp;big_image = *p_big_image;</div>
+<div class="line">        big_image.set_file_node_size(1024*1024);</div>
+<div class="line"></div>
+<div class="line">        <span class="comment">//time related</span></div>
+<div class="line">        boost::progress_display pd(enlarge_number*enlarge_number);</div>
+<div class="line">        boost::timer t;</div>
+<div class="line">        t.restart();</div>
+<div class="line"></div>
+<div class="line">        <span class="comment">//the ZOrder part</span></div>
+<div class="line">        <span class="keyword">typedef</span> ZOrderIndexType::IndexType IndexType;</div>
+<div class="line">        <span class="keywordflow">for</span>(IndexType outI = 0; outI &lt; enlarge_number; ++outI) {</div>
+<div class="line">                <span class="keywordflow">for</span>(IndexType outJ = 0; outJ &lt; enlarge_number; ++outJ) {</div>
+<div class="line">                        IndexType startI = outI * rows;</div>
+<div class="line">                        IndexType startJ = outJ * cols;</div>
+<div class="line">                        <span class="keywordflow">for</span>(IndexType i = 0; i &lt; rows; ++i) {</div>
+<div class="line">                                IndexType I = startI + i;</div>
+<div class="line">                                <span class="keywordflow">for</span>(IndexType j = 0; j &lt; cols; ++j) {</div>
+<div class="line">                                        IndexType J = startJ + j;</div>
+<div class="line">                                        big_image(I, J) = *(<a class="code" href="struct_pixel_element.html">Vec3b</a>*)(original_img.data + i*original_img.step[0] + j*original_img.step[1]);</div>
+<div class="line">                                }</div>
+<div class="line">                        }</div>
+<div class="line">                        ++pd;</div>
+<div class="line">                }</div>
+<div class="line">        }</div>
+<div class="line">        cout &lt;&lt; <span class="stringliteral">&quot;Build Enlarged Image Cost Time : &quot;</span> &lt;&lt; t.elapsed() &lt;&lt; <span class="stringliteral">&quot; s &quot;</span> &lt;&lt; endl;</div>
+<div class="line"></div>
+<div class="line">        <span class="keywordflow">return</span> p_big_image;</div>
+<div class="line">}</div>
+<div class="line"></div>
+<div class="line"><span class="comment">/*</span></div>
+<div class="line"><span class="comment"> * 1) read a picture</span></div>
+<div class="line"><span class="comment"> * 2) enlarge it to get a big image (test the container ability)</span></div>
+<div class="line"><span class="comment"> * 3) input the range information to get the image range data </span></div>
+<div class="line"><span class="comment"> */</span></div>
+<div class="line"><span class="keywordtype">bool</span> test_big_image_containter(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span> **argv)</div>
+<div class="line">{</div>
+<div class="line">        <span class="keywordflow">if</span>(argc &lt; 5) {</div>
+<div class="line">                cout &lt;&lt; <span class="stringliteral">&quot;Read a image file first, just enlarge the image in both hierarchical and vertical &quot;</span> &lt;&lt; endl</div>
+<div class="line">                        &lt;&lt; <span class="stringliteral">&quot;Para : enlarge number (the enlarge number of image in both hierarchical and vertical)&quot;</span> &lt;&lt; endl</div>
+<div class="line">                        &lt;&lt; <span class="stringliteral">&quot;Para : memory usage (the maximum memory can be used)&quot;</span> &lt;&lt; endl</div>
+<div class="line">                        &lt;&lt; <span class="stringliteral">&quot;Para : show image (whether show the enlarged image, too large is forbidden)&quot;</span> &lt;&lt; endl;</div>
+<div class="line"></div>
+<div class="line">                cout &lt;&lt; <span class="stringliteral">&quot;Usage : &quot;</span> &lt;&lt; <span class="stringliteral">&quot;[fileName] [enlarge number] [resRow] [resCol] &quot;</span></div>
+<div class="line">                        <span class="stringliteral">&quot;[memory usage(optional)] [show image(optional)]&quot;</span> &lt;&lt; endl;</div>
+<div class="line">                <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line">        }</div>
+<div class="line"></div>
+<div class="line">        <span class="keyword">const</span> <span class="keywordtype">char</span> *file_name = argv[1];</div>
+<div class="line">        <span class="keywordtype">size_t</span> enlarge_number = atoi(argv[2]);</div>
+<div class="line">        <span class="keyword">const</span> <span class="keywordtype">int</span> res_row = atoi(argv[3]);</div>
+<div class="line">        <span class="keyword">const</span> <span class="keywordtype">int</span> res_col = atoi(argv[4]);</div>
+<div class="line">        <span class="keywordtype">size_t</span> memory_usage = (argc &gt;= 6) ? (atoi(argv[5])) : 64;</div>
+<div class="line">        <span class="keywordtype">bool</span> bShowImg = (argc &gt;= 7 &amp;&amp; (string(argv[6]) == <span class="stringliteral">&quot;1&quot;</span> || string(argv[6]) == <span class="stringliteral">&quot;true&quot;</span>)) ? <span class="keyword">true</span> : <span class="keyword">false</span>;</div>
+<div class="line"></div>
+<div class="line">        BigImagePtr p_big_image = build_enlarged_image(file_name, enlarge_number, memory_usage);</div>
+<div class="line">        <span class="keywordflow">if</span>(!p_big_image) <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line">        BigImageType &amp;big_image = *p_big_image;</div>
+<div class="line"></div>
+<div class="line">        <span class="keywordtype">size_t</span> large_rows = big_image.get_image_rows(), large_cols = big_image.get_image_cols();</div>
+<div class="line">        <span class="keywordflow">if</span>(bShowImg)</div>
+<div class="line">        {</div>
+<div class="line">                boost::timer t;</div>
+<div class="line"></div>
+<div class="line">                std::vector&lt;Vec3b&gt; data;</div>
+<div class="line">                <span class="keywordflow">try</span> {</div>
+<div class="line"></div>
+<div class="line">            big_image.get_pixels(0, 0, big_image.get_image_rows(), big_image.get_image_cols(), data);</div>
+<div class="line"></div>
+<div class="line">            cout &lt;&lt; <span class="stringliteral">&quot;get the all data from zorder based container &quot;</span> &lt;&lt; t.elapsed() &lt;&lt; <span class="stringliteral">&quot; s &quot;</span> &lt;&lt; endl;</div>
+<div class="line"></div>
+<div class="line">            cv::Mat result_image(large_rows, large_cols, CV_8UC3, data.data());</div>
+<div class="line">            cv::namedWindow(<span class="stringliteral">&quot;Enlarged Image&quot;</span>);</div>
+<div class="line">            cv::imshow(<span class="stringliteral">&quot;Enlarged Image&quot;</span>, result_image);</div>
+<div class="line">            cv::waitKey(0);</div>
+<div class="line"></div>
+<div class="line">                } <span class="keywordflow">catch</span> (std::exception &amp;err) {</div>
+<div class="line">                        cerr &lt;&lt; err.what() &lt;&lt; endl;</div>
+<div class="line">                        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line">                }</div>
+<div class="line">        }</div>
+<div class="line"></div>
+<div class="line">        cout &lt;&lt; <span class="stringliteral">&quot;Large Image Size Is : (&quot;</span> &lt;&lt; large_rows &lt;&lt; <span class="stringliteral">&quot;,&quot;</span> &lt;&lt; large_cols &lt;&lt; <span class="stringliteral">&quot;)&quot;</span> &lt;&lt; endl;</div>
+<div class="line"></div>
+<div class="line">        <span class="comment">/* save the input para */</span></div>
+<div class="line">        std::string str_array[4];</div>
+<div class="line">        <span class="keywordflow">while</span>(1) {</div>
+<div class="line">                cout &lt;&lt; <span class="stringliteral">&quot;Input (quit to exit) : [start_row] [start_col] [rows] [cols]&quot;</span> &lt;&lt; endl;</div>
+<div class="line"></div>
+<div class="line">                cin &gt;&gt; str_array[0];</div>
+<div class="line">                <span class="keywordflow">if</span>(str_array[0] == <span class="stringliteral">&quot;quit&quot;</span>)      <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"></div>
+<div class="line">                cin &gt;&gt; str_array[1] &gt;&gt; str_array[2] &gt;&gt; str_array[3];</div>
+<div class="line"></div>
+<div class="line">                <span class="keywordtype">int</span> start_row = atoi(str_array[0].c_str());</div>
+<div class="line">                <span class="keywordtype">int</span> start_col = atoi(str_array[1].c_str());</div>
+<div class="line">                <span class="keywordtype">int</span> rows = atoi(str_array[2].c_str());</div>
+<div class="line">                <span class="keywordtype">int</span> cols = atoi(str_array[3].c_str());</div>
+<div class="line"></div>
+<div class="line">                <span class="keywordflow">try</span>{</div>
+<div class="line">                        std::vector&lt;Vec3b&gt; vec;</div>
+<div class="line">                        <span class="keywordflow">if</span>(!big_image.get_pixels(start_row, start_col, rows, cols, vec))</div>
+<div class="line">                                <span class="keywordflow">continue</span>;</div>
+<div class="line"></div>
+<div class="line">                        cv::Mat result_image(rows, cols, CV_8UC3, vec.data());</div>
+<div class="line">                        cv::namedWindow(<span class="stringliteral">&quot;RangeArea&quot;</span>);</div>
+<div class="line">                        cv::imshow(<span class="stringliteral">&quot;RangeArea&quot;</span>, result_image);</div>
+<div class="line">                        cv::waitKey(2000);</div>
+<div class="line"></div>
+<div class="line">                } <span class="keywordflow">catch</span>(std::exception &amp;err) {</div>
+<div class="line">                        cout &lt;&lt; err.what() &lt;&lt; endl;</div>
+<div class="line">                        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line">                }</div>
+<div class="line">        }</div>
+<div class="line"></div>
+<div class="line">        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line">}</div>
+</div><!-- fragment --> </div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+制作者 &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.1.2
+</small></address>
+</body>
+</html>
