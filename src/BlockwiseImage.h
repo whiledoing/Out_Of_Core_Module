@@ -110,6 +110,7 @@ protected:
 	/**
 	 *	@brief save the mini size image as a jpg file for observation
 	 *	@param file_name the bigimage file name (*.bigimage)
+	 *	@note if not defined the SAVE_MINI_IMAGE macro, this function will do nothing
 	 */
 	virtual bool save_mini_image(const char* file_name);
 
