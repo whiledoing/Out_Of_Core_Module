@@ -69,6 +69,9 @@
     <ClInclude Include="src\DiskBigImageInterface.h">
       <Filter>image_lab\interface</Filter>
     </ClInclude>
+    <ClInclude Include="src\MainPage.h">
+      <Filter>源文件\头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\MainApp.cpp">

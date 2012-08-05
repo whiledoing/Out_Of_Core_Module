@@ -111,6 +111,7 @@
     <ClInclude Include="src\Lru.hpp" />
     <ClInclude Include="src\BlockwiseImage.h" />
     <ClInclude Include="src\HierarchicalImage.h" />
+    <ClInclude Include="src\MainPage.h" />
     <ClInclude Include="Src\UtlityFunc.h" />
   </ItemGroup>
   <ItemGroup>

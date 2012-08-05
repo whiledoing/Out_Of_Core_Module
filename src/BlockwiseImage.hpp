@@ -11,6 +11,7 @@
 #include <fstream>
 #include <strstream>
 
+#ifdef SAVE_MINI_IMAGE
 /*---------------------------------------------*/
 /* opencv part */
 #include <opencv2/core/core.hpp>
@@ -27,6 +28,7 @@
 #pragma comment(lib, "opencv_imgproc240d.lib")
 #endif
 /*---------------------------------------------*/
+#endif
 
 template<typename T, unsigned memory_usage>
 BlockwiseImage<T, memory_usage>::BlockwiseImage(int rows, int cols, int mini_rows, int mini_cols, 
@@ -314,6 +316,8 @@ T& BlockwiseImage<T, memory_usage>::at(IndexMethodInterface::IndexType index)
 template<typename T, unsigned memory_usage>
 bool BlockwiseImage<T, memory_usage>::save_mini_image(const char *file_name) 
 {
+
+#ifdef SAVE_MINI_IMAGE
 	const ContainerType &c_img_container = img_container;
 
 	/* total_size is the total cell size of the minimum size image
@@ -350,6 +354,8 @@ bool BlockwiseImage<T, memory_usage>::save_mini_image(const char *file_name)
 	/* convert the RGB format to opencv BGR format */
 	cv::cvtColor(result_image, result_image, CV_RGB2BGR);
     cv::imwrite(mini_image_name.c_str(), result_image);
+#endif
+
 	return true;
 }
 

@@ -230,6 +230,8 @@ bool HierarchicalImage<T, memory_usage>::write_image(const std::string &file_nam
 template<typename T, size_t memory_usage>
 bool HierarchicalImage<T, memory_usage>::save_mini_image(const char* file_name)
 {
+
+#ifdef SAVE_MINI_IMAGE
 	/* since the image data has been write successfully, we can using the DiskBigImageInterface to access
 	 * the image data in the disk
 	 */
@@ -255,6 +257,7 @@ bool HierarchicalImage<T, memory_usage>::save_mini_image(const char* file_name)
 	boost::filesystem3::path file_path(file_name);
 	std::string result_image_name = (file_path.parent_path() / (file_path.stem().generic_string() + ".jpg")).generic_string();
 	cv::imwrite(result_image_name, result_image);
+#endif
 
 	return true;
 }

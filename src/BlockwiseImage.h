@@ -57,6 +57,9 @@ public:
 	virtual bool init(int rows, int cols);
 	virtual bool reset();
 
+	/**
+	 * @note file_name must has the extension ".bigimage"
+	 */
 	virtual bool write_image(const char *file_name);
 	virtual bool write_image(const std::string &file_name);
 
