@@ -36,7 +36,7 @@ public:
      */
 	void set_file_node_size(int64 size)
 	{
-		/** make size the multiple of image cell's type */
+		/* make size the multiple of image cell's type */
 		size = int64(std::ceil((double)(size) / sizeof(T)));
 		while(size & (size - 1)) {
 			size &= (size - 1);
@@ -50,7 +50,7 @@ public:
 			size >>= 1;
 		}
 
-		/** shift number : size == 2^(file_node_shift_num) */
+		/* shift number : size == 2^(file_node_shift_num) */
 		file_node_shift_num = count - 1;
 		file_node_shift_num = (file_node_shift_num < 0) ? 0 : file_node_shift_num;
 	}

@@ -90,7 +90,8 @@ private:
 			try {
 
 				/* get the new image data */
-				if(!big_image->get_pixels_by_level_fast(img_current_level, start_row, start_col, img_rows, img_cols, img_data)) {
+				if(!big_image->get_pixels_by_level_fast(img_current_level, start_row, 
+					start_col, img_rows, img_cols, img_data)) {
 					init_para();
 					if(QMessageBox::Abort == QMessageBox::critical(this, "ReadingBigImage", 
 						QString::fromLocal8Bit("¶ÁÈ¡Í¼ÏñÊý¾ÝÊ§°Ü"), QMessageBox::Ok | QMessageBox::Abort, QMessageBox::Ok)) {

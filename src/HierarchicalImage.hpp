@@ -7,6 +7,9 @@
 #include "HierarchicalImage.h"
 #include "BlockwiseImage.hpp"
 
+/* for compress and uncompress */
+#include <snappy-c.h>
+
 #include <boost/lexical_cast.hpp>
 #include <algorithm>
 
@@ -127,6 +130,19 @@ bool HierarchicalImage<T, memory_usage>::write_image_inner_loop(size_t start_lev
 	std::vector<bf::path> fout_level_path(merge_number);
 	std::vector<size_t> mask(merge_number, 0);
 
+	/* saving different image data before compress */
+	std::vector<std::vector<T> > file_uncompressed_data(merge_number);
+	/* saving different image data index position in the loop */
+	std::vector<int64> file_uncompressed_data_index_count(merge_number);
+	for(size_t i = 0; i < merge_number; ++i) {
+		file_uncompressed_data[i].resize(file_node_size);
+		file_uncompressed_data_index_count[i] = -1;
+	}
+
+	size_t max_compressed_size = snappy_max_compressed_length(file_node_size*sizeof(T));
+	size_t compressed_size = max_compressed_size;
+	char *compressed_data = new char[max_compressed_size];
+
 	/* initialization */
 	for(size_t k = 0; k < merge_number; ++k) {
 		fout_level_path[k] = data_path / (string("level_") + lexical_cast<std::string>(k+start_level));
@@ -166,11 +182,13 @@ bool HierarchicalImage<T, memory_usage>::write_image_inner_loop(size_t start_lev
 
 		/* write one file data */
 		start_index = file_loop << file_node_shift_num;
-		for(int64 i = 0; i < file_node_size; ++i) {
+		T temp_data;
+		for(int64 i = start_index; i < start_index + file_node_size; ++i) {
+			temp_data = c_img_container[i];
 			for(size_t k = 0; k < merge_number; ++k) {
 				/* if index i is the multiply of 2^k, then write the data into the fout_array[k] */
 				if((i & mask[k]) == 0)
-					fout_array[k].write(reinterpret_cast<const char*>(&c_img_container[start_index + i]), sizeof(T));
+					file_uncompressed_data[k][++file_uncompressed_data_index_count[k]] = temp_data;
 			}
 		}
 
@@ -179,9 +197,20 @@ bool HierarchicalImage<T, memory_usage>::write_image_inner_loop(size_t start_lev
 			/* attention : using file_loop+1, because the file is counted from 1 */
 			/* if just using file_loop, when file_loop is 0, all the ofstream will be closed that's certainly not correct */
 			if(((file_loop+1) & mask[k]) == 0) {
+				BOOST_ASSERT(file_uncompressed_data[k].size() == file_node_size);
+
+				/* compress the data into compressed_data */
+				compressed_size = max_compressed_size;
+				if(SNAPPY_OK != snappy_compress(reinterpret_cast<const char*>(file_uncompressed_data[k].data()),
+					file_node_size*sizeof(T), compressed_data, &compressed_size)) {
+						cerr << "compress error" << endl;
+						return false;
+				}
+				fout_array[k].write(compressed_data, compressed_size);
 				fout_array[k].close();
 
 				/* prepare for next file writing */
+				file_uncompressed_data_index_count[k] = -1;
 				fout_file_level_number[k]++;
 				fout_complete[k] = true;
 			}
@@ -205,18 +234,32 @@ bool HierarchicalImage<T, memory_usage>::write_image_inner_loop(size_t start_lev
 
 	/* write the file data */
 	start_index = file_loop << file_node_shift_num;
+	T temp_data;
 	for(int64 last_index = start_index; last_index < c_img_container.size(); ++last_index) {
+		temp_data = c_img_container[last_index];
 		for(size_t k = 0; k < merge_number; ++k) {
 			/* if index last_index is the multiply of 2^k, then write the data into the fout_array[k] */
 			if((last_index & mask[k]) == 0)
-				fout_array[k].write(reinterpret_cast<const char*>(&c_img_container[last_index]), sizeof(T));
+				file_uncompressed_data[k][++file_uncompressed_data_index_count[k]] = temp_data;
 		}
 	}
 
-	/* now just close all the files */
-	for(size_t k = 0; k < merge_number; ++k)
-		fout_array[k].close();
+	/* compressed the image file and write it back */
+	for(size_t k = 0; k < merge_number; ++k) {
+		compressed_size = max_compressed_size;
+		if(SNAPPY_OK != snappy_compress(reinterpret_cast<const char*>(file_uncompressed_data[k].data()),
+			(file_uncompressed_data_index_count[k]+1)*sizeof(T),
+			compressed_data, &compressed_size)) {
+				cerr << "compressed error" << endl;
+				return false;
+		}
+		fout_array[k].write(compressed_data, compressed_size);
 
+        /* now just close all the files */
+		fout_array[k].close();
+	}
+
+	delete []compressed_data;
 	return true;
 }
 

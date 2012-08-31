@@ -26,7 +26,7 @@ bool test_writing_hierarchical(int argc, char ** argv)
 
 	if(argc < 7) {
 		cout << "Usage : [file name] [res row] [res col] [write image file name] [multiply ways number] [enlarge number]"
-			" [optinal (show image)] " << endl;
+			"[optional (set file size by M unit)] [optinal (show image)]" << endl;
 		return false;
 	}
 
@@ -36,7 +36,8 @@ bool test_writing_hierarchical(int argc, char ** argv)
 	const char *write_image_name = argv[4];
 	size_t merge_number = atoi(argv[5]);
 	size_t enlarge_number = atoi(argv[6]);
-	bool show_image = (argc >= 8) ? atoi(argv[7]) : false;
+	int64 file_size = (argc >= 8) ? atoi(argv[7]) : false;
+	bool show_image = (argc >= 9) ? atoi(argv[8]) : false;
 
 	cv::Mat original_img = cv::imread(file_name);
 	if(original_img.empty()) {
@@ -93,7 +94,7 @@ bool test_writing_hierarchical(int argc, char ** argv)
 	t.restart();
 
 	/* 6M per file */
-	big_image.set_file_node_size(6*1024*1024);
+	big_image.set_file_node_size(file_size*1024*1024);
 
 	if(!big_image.write_image(write_image_name)) return false;
 	cout << "Write Hierarchical Image Cost : " << t.elapsed() << " s " << endl;
