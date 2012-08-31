@@ -7,6 +7,9 @@
 #include <boost/assert.hpp>
 #include <boost/lexical_cast.hpp>
 
+/* for compression and decompression */
+#include <snappy-c.h>
+
 #include <string>
 #include <fstream>
 #include <strstream>
@@ -14,6 +17,7 @@
 #ifdef SAVE_MINI_IMAGE
 /*---------------------------------------------*/
 /* opencv part */
+
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
@@ -251,6 +255,14 @@ bool BlockwiseImage<T, memory_usage>::write_image(const char* file_name)
 
 		/* first write the full one file context */
 		int64 start_index = 0, file_loop = 0;
+
+		/* save the before compressed data */
+		T *input_data = new T[file_node_size];
+
+		/* save the compressed data */
+		size_t output_max_size = snappy_max_compressed_length(sizeof(T)*file_node_size);
+		char *output_data = new char[output_max_size];
+
 		for(; file_loop < file_number - 1; ++file_loop) {
 			std::ostrstream strstream;
 			strstream << data_path.generic_string() << "/" << file_loop << '\0';
@@ -261,9 +273,20 @@ bool BlockwiseImage<T, memory_usage>::write_image(const char* file_name)
 			}
 
 			start_index = (int64)(file_loop) << file_node_shift_num;
-			for(int64 i = 0; i < file_node_size; ++i) {
-				file_out.write(reinterpret_cast<const char*>(&c_img_container[start_index + i]), sizeof(T));
+
+			/* get the data from container */
+			for(int64 i = 0; i < file_node_size; ++i)
+				input_data[i] = c_img_container[start_index + i];
+
+			/* compress the data into output_data */
+			size_t output_size = output_max_size;
+			if(SNAPPY_OK != snappy_compress(reinterpret_cast<const char*>(input_data), 
+				sizeof(T)*file_node_size, output_data, &output_size)) {
+				cerr << "compress error" << endl;
+				return false;
 			}
+
+			file_out.write(output_data, sizeof(char)*output_size);
 			file_out.close();
 		}
 
@@ -277,10 +300,23 @@ bool BlockwiseImage<T, memory_usage>::write_image(const char* file_name)
 			return false;
 		}
 
-		for(int64 last_index = start_index; last_index < c_img_container.size(); ++last_index) {
-			file_out.write(reinterpret_cast<const char*>(&c_img_container[last_index]), sizeof(T));
+		/* the last file node size is from start_index until last cell of the containter */
+		int64 last_file_node_size = c_img_container.size() - start_index;
+		for(int64 i = 0; i < last_file_node_size; ++i) 
+			input_data[i] = c_img_container[start_index + i];
+
+		size_t output_size = output_max_size;
+		if(SNAPPY_OK != snappy_compress(reinterpret_cast<const char*>(input_data), 
+			sizeof(T)*last_file_node_size, output_data, &output_size)) {
+				cerr << "compress error" << endl;
+				return false;
 		}
+
+		file_out.write(output_data, sizeof(char)*output_size);
 		file_out.close();
+
+		delete []output_data;
+		delete []input_data;
 		
 		if(!save_mini_image(file_name)) return false;
 

@@ -8,6 +8,9 @@
 #include <fstream>
 #include <string>
 
+/* for compression and decompression */
+#include <snappy-c.h>
+
 #include <boost/assert.hpp>
 
 /**
@@ -38,9 +41,10 @@ private:
 
 	typedef std::vector<ValueType> DataType;
 
+	/* save the compressed_data load from the image small file */
+	std::vector<char> comprssed_data;
+
 public:
-
-
 	void init(int _file_cell_numbers, int _file_cache_numbers)
 	{
 		BOOST_ASSERT(_file_cache_numbers > 0);
@@ -48,6 +52,8 @@ public:
 		file_cache_numbers = _file_cache_numbers;
 		current_used = 0;
 		b_data_dirty.resize(file_cache_numbers, false);
+
+		comprssed_data.resize(file_cell_numbers*sizeof(T));
 	}
 
 	/**
@@ -135,10 +141,29 @@ public:
 
 		/* read the data into cache */
 		std::vector<T> &data = lru_data[index].image_data;
-		fin.read(reinterpret_cast<char*>(&data[0]), file_cell_numbers*sizeof(T));
+
+		/* first get the file size */
+		fin.seekg(0, ios::end);
+		size_t file_size = fin.tellg();
+		fin.seekg(0, ios::beg);
+
+		/* read the compressed data */
+		fin.read(reinterpret_cast<char*>(comprssed_data.data()), file_size);
+
 		if(!fin.eof() && fin.fail()) {
 			cerr << "read image file " << lru_data[index].image_file_name << " fails" << endl;
+			fin.close();
 			return npos;
+		}
+
+		/* now uncompress data */
+		size_t uncompressed_length = file_cell_numbers*sizeof(T);
+		if(SNAPPY_OK != snappy_uncompress(reinterpret_cast<char*>(comprssed_data.data()), 
+			file_size, 
+			reinterpret_cast<char*>(lru_data[index].image_data.data()), 
+			&uncompressed_length)) {
+				cerr << "uncompress error" << endl;
+				return npos;
 		}
 
 		fin.close();
