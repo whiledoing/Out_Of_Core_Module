@@ -227,6 +227,7 @@ bool BlockwiseImage<T, memory_usage>::write_image(const char* file_name)
 {
 	using namespace std;
 	namespace bf=boost::filesystem3;
+	cout << "using mew writing method" << endl;
 
 	try {
 		if(!write_image_head_file(file_name))	return false;
@@ -249,6 +250,8 @@ bool BlockwiseImage<T, memory_usage>::write_image(const char* file_name)
 		static const ContainerType &c_img_container = img_container;
 		int64 file_number = std::ceil((double)(c_img_container.size()) / file_node_size);
 
+		T *temp_file_data = new T[file_node_size];
+
 		/* first write the full one file context */
 		int64 start_index = 0, file_loop = 0;
 		for(; file_loop < file_number - 1; ++file_loop) {
@@ -261,9 +264,12 @@ bool BlockwiseImage<T, memory_usage>::write_image(const char* file_name)
 			}
 
 			start_index = (int64)(file_loop) << file_node_shift_num;
+
 			for(int64 i = 0; i < file_node_size; ++i) {
-				file_out.write(reinterpret_cast<const char*>(&c_img_container[start_index + i]), sizeof(T));
+				temp_file_data[i] = c_img_container[start_index + i];
 			}
+
+			file_out.write(reinterpret_cast<const char*>(temp_file_data), sizeof(T)*file_node_size);
 			file_out.close();
 		}
 
@@ -277,10 +283,15 @@ bool BlockwiseImage<T, memory_usage>::write_image(const char* file_name)
 			return false;
 		}
 
-		for(int64 last_index = start_index; last_index < c_img_container.size(); ++last_index) {
-			file_out.write(reinterpret_cast<const char*>(&c_img_container[last_index]), sizeof(T));
+		int64 last_file_size = c_img_container.size() - start_index;
+		for(int64 i = 0; i < last_file_size; ++i) {
+			temp_file_data[i] = c_img_container[start_index + i];
 		}
+
+		file_out.write(reinterpret_cast<const char*>(temp_file_data), sizeof(T)*last_file_size);
 		file_out.close();
+
+		delete []temp_file_data;
 		
 		if(!save_mini_image(file_name)) return false;
 
