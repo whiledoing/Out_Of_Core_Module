@@ -227,7 +227,6 @@ bool BlockwiseImage<T, memory_usage>::write_image(const char* file_name)
 {
 	using namespace std;
 	namespace bf=boost::filesystem3;
-	cout << "using mew writing method" << endl;
 
 	try {
 		if(!write_image_head_file(file_name))	return false;

@@ -127,6 +127,15 @@ bool HierarchicalImage<T, memory_usage>::write_image_inner_loop(size_t start_lev
 	std::vector<bf::path> fout_level_path(merge_number);
 	std::vector<size_t> mask(merge_number, 0);
 
+	/* saving different image data before compress */
+	std::vector<std::vector<T> > file_temp_data(merge_number);
+	/* saving different image data index position in the loop */
+	std::vector<int64> file_temp_data_index(merge_number);
+	for(size_t i = 0; i < merge_number; ++i) {
+		file_temp_data[i].resize(file_node_size);
+		file_temp_data_index[i] = -1;
+	}
+
 	/* initialization */
 	for(size_t k = 0; k < merge_number; ++k) {
 		fout_level_path[k] = data_path / (string("level_") + lexical_cast<std::string>(k+start_level));
@@ -166,22 +175,31 @@ bool HierarchicalImage<T, memory_usage>::write_image_inner_loop(size_t start_lev
 
 		/* write one file data */
 		start_index = file_loop << file_node_shift_num;
-		for(int64 i = 0; i < file_node_size; ++i) {
+		T temp_data;
+		for(int64 i = start_index; i < start_index + file_node_size; ++i) {
+			temp_data = c_img_container[i];
 			for(size_t k = 0; k < merge_number; ++k) {
 				/* if index i is the multiply of 2^k, then write the data into the fout_array[k] */
 				if((i & mask[k]) == 0)
-					fout_array[k].write(reinterpret_cast<const char*>(&c_img_container[start_index + i]), sizeof(T));
+					file_temp_data[k][++file_temp_data_index[k]] = temp_data;
 			}
 		}
 
 		/* check ofstream status again to decide whether to close a file for writing */
 		for(size_t k = 0; k < merge_number; ++k) {
-			/* attention : using file_loop+1, because the file is counted from 1 */
-			/* if just using file_loop, when file_loop is 0, all the ofstream will be closed that's certainly not correct */
+			/* attention : using file_loop+1, because the file is counted from 1 
+			 * if just using file_loop, when file_loop is 0, all the ofstream 
+			 * will be closed that's certainly not correct 
+			 */
+
 			if(((file_loop+1) & mask[k]) == 0) {
+				BOOST_ASSERT(file_temp_data[k].size() == file_node_size);
+
+				fout_array[k].write(reinterpret_cast<const char*>(file_temp_data[k].data()), file_node_size*sizeof(T));
 				fout_array[k].close();
 
 				/* prepare for next file writing */
+				file_temp_data_index[k] = -1;
 				fout_file_level_number[k]++;
 				fout_complete[k] = true;
 			}
@@ -193,9 +211,10 @@ bool HierarchicalImage<T, memory_usage>::write_image_inner_loop(size_t start_lev
 	/* still first checks whether to open a new file for each ofstream */
 	for(size_t k = 0; k < merge_number; ++k) {
 		if(fout_complete[k]) {
-			string level_file_name = (fout_level_path[k] / lexical_cast<string>(fout_file_level_number[k])).generic_string();
-			fout_array[k].open(level_file_name, ios::out | ios::binary);
+			string level_file_name = 
+				(fout_level_path[k] / lexical_cast<string>(fout_file_level_number[k])).generic_string();
 
+			fout_array[k].open(level_file_name, ios::out | ios::binary);
 			if(!fout_array[k].is_open()) {
 				cerr << "open file " << level_file_name << " failure" << endl;
 				return false;
@@ -205,17 +224,24 @@ bool HierarchicalImage<T, memory_usage>::write_image_inner_loop(size_t start_lev
 
 	/* write the file data */
 	start_index = file_loop << file_node_shift_num;
+	T temp_data;
 	for(int64 last_index = start_index; last_index < c_img_container.size(); ++last_index) {
+		temp_data = c_img_container[last_index];
 		for(size_t k = 0; k < merge_number; ++k) {
 			/* if index last_index is the multiply of 2^k, then write the data into the fout_array[k] */
 			if((last_index & mask[k]) == 0)
-				fout_array[k].write(reinterpret_cast<const char*>(&c_img_container[last_index]), sizeof(T));
+				file_temp_data[k][++file_temp_data_index[k]] = temp_data;
 		}
 	}
 
-	/* now just close all the files */
-	for(size_t k = 0; k < merge_number; ++k)
+	/* write back all the last file image data */
+	for(size_t k = 0; k < merge_number; ++k) {
+		fout_array[k].write(reinterpret_cast<const char*>(file_temp_data[k].data()), 
+			(file_temp_data_index[k]+1)*sizeof(T));
+
+        /* now just close all the files */
 		fout_array[k].close();
+	}
 
 	return true;
 }
