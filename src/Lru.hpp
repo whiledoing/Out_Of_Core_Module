@@ -139,10 +139,6 @@ public:
 		size_t file_size = fin.tellg();
 		fin.seekg(0, ios::beg);
 
-		cout << "file node size is : " << file_cell_numbers << endl;
-		cout << "file name : " << file_name << endl;
-		cout << "file size is : " << (double)(file_size) / (1024*1024) << endl;
-
 		/* read the compressed data */
 		char *compressed_data = new char[file_size];
 		fin.read(compressed_data, file_size);
