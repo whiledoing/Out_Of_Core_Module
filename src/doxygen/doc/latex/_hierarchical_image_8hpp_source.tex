@@ -1,0 +1,315 @@
+\section{Hierarchical\-Image.\-hpp}
+\label{_hierarchical_image_8hpp}\index{D\-:/\-Out\-\_\-\-Of\-\_\-\-Core\-\_\-\-Git/src/\-Hierarchical\-Image.\-hpp@{D\-:/\-Out\-\_\-\-Of\-\_\-\-Core\-\_\-\-Git/src/\-Hierarchical\-Image.\-hpp}}
+
+\begin{DoxyCode}
+00001 \textcolor{preprocessor}{#ifndef \_HIERARCHICAL\_IMAGE\_HPP}
+00002 \textcolor{preprocessor}{}\textcolor{preprocessor}{#define \_HIERARCHICAL\_IMAGE\_HPP}
+00003 \textcolor{preprocessor}{}
+00004 \textcolor{preprocessor}{#undef min}
+00005 \textcolor{preprocessor}{}\textcolor{preprocessor}{#undef max}
+00006 \textcolor{preprocessor}{}
+00007 \textcolor{preprocessor}{#include "HierarchicalImage.h"}
+00008 \textcolor{preprocessor}{#include "BlockwiseImage.hpp"}
+00009 
+00010 \textcolor{preprocessor}{#include <boost/lexical\_cast.hpp>}
+00011 \textcolor{preprocessor}{#include <algorithm>}
+00012 
+00013 \textcolor{keyword}{template}<\textcolor{keyword}{typename} T, \textcolor{keywordtype}{size\_t} memory\_usage>
+00014 HierarchicalImage<T, memory_usage>::HierarchicalImage(\textcolor{keywordtype}{size\_t} rows, \textcolor{keywordtype}{size\_t} cols,
+       \textcolor{keywordtype}{size\_t} mini\_rows, \textcolor{keywordtype}{size\_t} mini\_cols,
+00015         boost::shared\_ptr<IndexMethodInterface> method)
+00016         : BlockwiseImage<T, memory\_usage>(rows, cols, mini\_rows, mini\_cols, 
+      method)
+00017 \{
+00018         \textcolor{comment}{/* default is maximum way concurrent writing */}
+00019         set_mutliply_ways_writing_number(get_max_image_level() + 1);
+00020 \}
+00021 
+00022 \textcolor{keyword}{template}<\textcolor{keyword}{typename} T, \textcolor{keywordtype}{size\_t} memory\_usage>
+00023 HierarchicalImage<T, memory_usage>::~HierarchicalImage()
+00024 \{
+00025 \}
+00026 
+00027 \textcolor{keyword}{template}<\textcolor{keyword}{typename} T, \textcolor{keywordtype}{size\_t} memory\_usage>
+00028 \textcolor{keywordtype}{bool} HierarchicalImage<T, memory_usage>::write_image_head_file(\textcolor{keyword}{const} \textcolor{keywordtype}{char} *
+      file\_name)
+00029 \{
+00030         \textcolor{comment}{/* write the block wise image head info */}
+00031         \textcolor{keywordflow}{if}(!BlockwiseImage::write_image_head_file(file\_name))   \textcolor{keywordflow}{return} \textcolor{keyword}{false};
+00032 
+00033         \textcolor{comment}{/* append the specific hierarchical image head info */}
+00034         \{
+00035                 std::ofstream fout(file\_name, std::ios::out | std::ios::app);
+00036                 \textcolor{keywordflow}{if}(!fout.is\_open()) \{
+00037                         std::cerr << \textcolor{stringliteral}{"open "} << file\_name << \textcolor{stringliteral}{" failure"} << 
+      std::endl;
+00038                         \textcolor{keywordflow}{return} \textcolor{keyword}{false};
+00039                 \}
+00040 
+00041                 \textcolor{comment}{/* just write the max level para */}
+00042                 fout << \textcolor{stringliteral}{"maxlevel="} << m\_max\_level << std::endl;
+00043                 fout.close();
+00044         \}
+00045 
+00046         \textcolor{keywordflow}{return} \textcolor{keyword}{true};
+00047 \}
+00048 
+00049 \textcolor{keyword}{template}<\textcolor{keyword}{typename} T, \textcolor{keywordtype}{size\_t} memory\_usage>
+00050 \textcolor{keywordtype}{bool} HierarchicalImage<T, memory_usage>::write_image(\textcolor{keyword}{const} \textcolor{keywordtype}{char} *file\_name)
+00051 \{
+00052         \textcolor{keyword}{using namespace }std;
+00053         \textcolor{keyword}{namespace }bf = boost::filesystem3;
+00054 
+00055         \textcolor{keywordflow}{try} \{
+00056                 \textcolor{keywordflow}{if}(!write\_image\_head\_file(file\_name))   \textcolor{keywordflow}{return} \textcolor{keyword}{false};
+00057 
+00058                 \textcolor{comment}{/* set the img\_data\_path */}
+00059                 set\_image\_data\_path(file\_name);
+00060 
+00061                 \textcolor{comment}{/* check the validation of img\_data\_path */}
+00062                 bf::path data\_path(img\_data\_path);
+00063                 \textcolor{keywordflow}{if}(bf::exists(data\_path)) \{
+00064                         bf::remove\_all(data\_path);
+00065                         cout << \textcolor{stringliteral}{"[Warning] : "} << data\_path.generic\_string() 
+00066                                 << \textcolor{stringliteral}{" is existing, and the original directory
+       will be removed"} << endl;
+00067                 \}
+00068                 \textcolor{keywordflow}{if}(!bf::create\_directory(data\_path)) \{
+00069                         cerr << \textcolor{stringliteral}{"create directory "} << data\_path.generic\_string
+      () << \textcolor{stringliteral}{" failure"} << endl;
+00070                         \textcolor{keywordflow}{return} \textcolor{keyword}{false};
+00071                 \}
+00072 
+00073                 \textcolor{keyword}{const} int64 file\_number = std::ceil((\textcolor{keywordtype}{double})(img\_container.size
+      ()) / file\_node\_size);
+00074 
+00075                 \textcolor{comment}{/* now write the code for multiply ways concurrently writing
+       image data */}
+00076                 \textcolor{keywordtype}{size\_t} max\_concurrent\_loop = (get\_max\_image\_level() + 1) / 
+      concurrent\_number;
+00077                 \textcolor{keywordflow}{for}(\textcolor{keywordtype}{size\_t} concurrent\_loop = 0; concurrent\_loop < 
+      max\_concurrent\_loop; ++concurrent\_loop) \{
+00078                         \textcolor{keywordtype}{size\_t} start\_level = concurrent\_loop*concurrent\_number;
+00079 
+00080                         \textcolor{comment}{/* write concurrent\_number level in concurrent begging
+       from the start\_level */}
+00081                         \textcolor{keywordflow}{if}(!write\_image\_inner\_loop(start\_level, 
+      concurrent\_number, data\_path, file\_number))
+00082                                 \textcolor{keywordflow}{return} \textcolor{keyword}{false};
+00083                 \} \textcolor{comment}{// end for concurrent loop}
+00084 
+00085                 \textcolor{comment}{/* write the residual concurrent\_loop */}
+00086                 \textcolor{keywordtype}{size\_t} start\_level = max\_concurrent\_loop * concurrent\_number;
+00087                 \textcolor{keywordflow}{if}(!write\_image\_inner\_loop(start\_level, get\_max\_image\_level() -
+       start\_level + 1, data\_path, file\_number))
+00088                         \textcolor{keywordflow}{return} \textcolor{keyword}{false};
+00089 
+00090                 \textcolor{comment}{/* save the mini image as a jpg format */}
+00091                 \textcolor{keywordflow}{if}(!save\_mini\_image(file\_name)) \textcolor{keywordflow}{return} \textcolor{keyword}{false};
+00092 
+00093         \} \textcolor{keywordflow}{catch}(bf::filesystem\_error &err) \{
+00094                 cerr << err.what() << endl;
+00095                 \textcolor{keywordflow}{return} \textcolor{keyword}{false};
+00096         \}
+00097 
+00098         \textcolor{keywordflow}{return} \textcolor{keyword}{true};
+00099 \}
+00100 
+00101 
+00102 \textcolor{keyword}{template}<\textcolor{keyword}{typename} T, \textcolor{keywordtype}{size\_t} memory\_usage>
+00103 \textcolor{keywordtype}{bool} HierarchicalImage<T, memory_usage>::write_image_inner_loop(\textcolor{keywordtype}{size\_t} 
+      start\_level, \textcolor{keywordtype}{size\_t} merge\_number,
+00104         \textcolor{keyword}{const} boost::filesystem3::path &data\_path, \textcolor{keyword}{const} int64 &file\_number)
+00105 \{
+00106         \textcolor{comment}{/*}
+00107 \textcolor{comment}{        *       fout\_array : different ofstream for multiply ways writing into
+       files}
+00108 \textcolor{comment}{        *       fout\_complete : tells whether the ofstream of a file has
+       complete the writing}
+00109 \textcolor{comment}{        *       the file name of ofstream is decided by fout\_file\_level\_number
+       and fout\_level\_path}
+00110 \textcolor{comment}{        *       for example :}
+00111 \textcolor{comment}{        *       write file into ./some image}
+00112 \textcolor{comment}{        *       then fout\_level\_path saves like ./some image/level\_0 ./some
+       image/level\_1        etc}
+00113 \textcolor{comment}{        *       fout\_file\_level\_number saves the current number of each level}
+00114 \textcolor{comment}{        *       the entire file name is like:}
+00115 \textcolor{comment}{        *       ./some image/level\_0/fout\_file\_level\_number;}
+00116 \textcolor{comment}{        */}
+00117 
+00118         \textcolor{keyword}{using} boost::lexical\_cast;
+00119         \textcolor{keyword}{using namespace }std;
+00120         \textcolor{keyword}{namespace }bf = boost::filesystem3;
+00121 
+00122         \textcolor{keyword}{static} \textcolor{keyword}{const} ContainerType &c\_img\_container = img\_container;
+00123 
+00124         std::vector<ofstream> fout\_array(merge\_number);
+00125         std::vector<bool> fout\_complete(merge\_number, \textcolor{keyword}{true});
+00126         std::vector<size\_t> fout\_file\_level\_number(merge\_number, 0);
+00127         std::vector<bf::path> fout\_level\_path(merge\_number);
+00128         std::vector<size\_t> mask(merge\_number, 0);
+00129 
+00130         \textcolor{comment}{/* initialization */}
+00131         \textcolor{keywordflow}{for}(\textcolor{keywordtype}{size\_t} k = 0; k < merge\_number; ++k) \{
+00132                 fout\_level\_path[k] = data\_path / (string(\textcolor{stringliteral}{"level\_"}) + 
+      lexical\_cast<std::string>(k+start\_level));
+00133 
+00134                 \textcolor{comment}{/* mask is 4^n - 1, start\_level is the level delta from last
+       loop */}
+00135                 mask[k] = (1 << (2*(k + start\_level))) - 1;
+00136         \}
+00137 
+00138         \textcolor{comment}{/* Before writing, first create the needed directories */}
+00139         \textcolor{keywordflow}{for}(\textcolor{keywordtype}{size\_t} k = 0; k < merge\_number; ++k) \{
+00140                 \textcolor{keywordflow}{if}(!bf::create\_directory(fout\_level\_path[k])) \{
+00141                         cerr << \textcolor{stringliteral}{"create directory "} << fout\_level\_path[k].
+      generic\_string() << \textcolor{stringliteral}{" failure"} << endl;
+00142                         \textcolor{keywordflow}{return} \textcolor{keyword}{false};
+00143                 \}
+00144         \}
+00145 
+00146         \textcolor{comment}{/* writing the first (file\_number - 1) data files */}
+00147         int64 file\_loop = 0, start\_index = 0;
+00148         \textcolor{keywordflow}{for}(; file\_loop < (file\_number - 1); ++file\_loop) \{
+00149                 \textcolor{comment}{/* check ofstream status to decide to whether to open a new
+       file for writing */}
+00150                 \textcolor{keywordflow}{for}(\textcolor{keywordtype}{size\_t} k = 0; k < merge\_number; ++k) \{
+00151                         \textcolor{keywordflow}{if}(fout\_complete[k]) \{
+00152                                 \textcolor{keywordtype}{string} level\_file\_name =
+00153                                         (fout\_level\_path[k] / lexical\_cast<\textcolor{keywordtype}{
+      string}>(fout\_file\_level\_number[k])).generic\_string();
+00154 
+00155                                 \textcolor{comment}{/* open file for writing */}
+00156                                 fout\_array[k].open(level\_file\_name, ios::out | 
+      ios::binary);
+00157                                 \textcolor{keywordflow}{if}(!fout\_array[k].is\_open()) \{
+00158                                         cerr << \textcolor{stringliteral}{"open file "} << level\_file\_name
+       << \textcolor{stringliteral}{" failure"} << endl;
+00159                                         \textcolor{keywordflow}{return} \textcolor{keyword}{false};
+00160                                 \}
+00161 
+00162                                 \textcolor{comment}{/* tells the ofstream is in using, thus not
+       complete for creating a new file */}
+00163                                 fout\_complete[k] = \textcolor{keyword}{false};
+00164                         \}
+00165                 \}
+00166 
+00167                 \textcolor{comment}{/* write one file data */}
+00168                 start\_index = file\_loop << file\_node\_shift\_num;
+00169                 \textcolor{keywordflow}{for}(int64 i = 0; i < file\_node\_size; ++i) \{
+00170                         \textcolor{keywordflow}{for}(\textcolor{keywordtype}{size\_t} k = 0; k < merge\_number; ++k) \{
+00171                                 \textcolor{comment}{/* if index i is the multiply of 2^k, then
+       write the data into the fout\_array[k] */}
+00172                                 \textcolor{keywordflow}{if}((i & mask[k]) == 0)
+00173                                         fout\_array[k].write(
+      reinterpret\_cast<const char*>(&c\_img\_container[start\_index + i]), \textcolor{keyword}{sizeof}(T));
+00174                         \}
+00175                 \}
+00176 
+00177                 \textcolor{comment}{/* check ofstream status again to decide whether to close a
+       file for writing */}
+00178                 \textcolor{keywordflow}{for}(\textcolor{keywordtype}{size\_t} k = 0; k < merge\_number; ++k) \{
+00179                         \textcolor{comment}{/* attention : using file\_loop+1, because the file is
+       counted from 1 */}
+00180                         \textcolor{comment}{/* if just using file\_loop, when file\_loop is 0, all
+       the ofstream will be closed that's certainly not correct */}
+00181                         \textcolor{keywordflow}{if}(((file\_loop+1) & mask[k]) == 0) \{
+00182                                 fout\_array[k].close();
+00183 
+00184                                 \textcolor{comment}{/* prepare for next file writing */}
+00185                                 fout\_file\_level\_number[k]++;
+00186                                 fout\_complete[k] = \textcolor{keyword}{true};
+00187                         \}
+00188                 \}
+00189         \} \textcolor{comment}{// end loop for writing of first (file\_number - 1) files}
+00190 
+00191         \textcolor{comment}{/* now just has left one file for writing */}
+00192 
+00193         \textcolor{comment}{/* still first checks whether to open a new file for each ofstream */}
+00194         \textcolor{keywordflow}{for}(\textcolor{keywordtype}{size\_t} k = 0; k < merge\_number; ++k) \{
+00195                 \textcolor{keywordflow}{if}(fout\_complete[k]) \{
+00196                         \textcolor{keywordtype}{string} level\_file\_name = (fout\_level\_path[k] / 
+      lexical\_cast<\textcolor{keywordtype}{string}>(fout\_file\_level\_number[k])).generic\_string();
+00197                         fout\_array[k].open(level\_file\_name, ios::out | 
+      ios::binary);
+00198 
+00199                         \textcolor{keywordflow}{if}(!fout\_array[k].is\_open()) \{
+00200                                 cerr << \textcolor{stringliteral}{"open file "} << level\_file\_name << \textcolor{stringliteral}{"
+       failure"} << endl;
+00201                                 \textcolor{keywordflow}{return} \textcolor{keyword}{false};
+00202                         \}
+00203                 \}
+00204         \}
+00205 
+00206         \textcolor{comment}{/* write the file data */}
+00207         start\_index = file\_loop << file\_node\_shift\_num;
+00208         \textcolor{keywordflow}{for}(int64 last\_index = start\_index; last\_index < c\_img\_container.size()
+      ; ++last\_index) \{
+00209                 \textcolor{keywordflow}{for}(\textcolor{keywordtype}{size\_t} k = 0; k < merge\_number; ++k) \{
+00210                         \textcolor{comment}{/* if index last\_index is the multiply of 2^k, then
+       write the data into the fout\_array[k] */}
+00211                         \textcolor{keywordflow}{if}((last\_index & mask[k]) == 0)
+00212                                 fout\_array[k].write(reinterpret\_cast<const
+       char*>(&c\_img\_container[last\_index]), \textcolor{keyword}{sizeof}(T));
+00213                 \}
+00214         \}
+00215 
+00216         \textcolor{comment}{/* now just close all the files */}
+00217         \textcolor{keywordflow}{for}(\textcolor{keywordtype}{size\_t} k = 0; k < merge\_number; ++k)
+00218                 fout\_array[k].close();
+00219 
+00220         \textcolor{keywordflow}{return} \textcolor{keyword}{true};
+00221 \}
+00222 
+00223 \textcolor{keyword}{template}<\textcolor{keyword}{typename} T, \textcolor{keywordtype}{size\_t} memory\_usage>
+00224 \textcolor{keywordtype}{bool} HierarchicalImage<T, memory_usage>::write_image(\textcolor{keyword}{const} std::string &
+      file\_name)
+00225 \{
+00226         \textcolor{keywordflow}{return} write\_image(file\_name.c\_str());
+00227 \}
+00228 
+00229 \textcolor{preprocessor}{#include "DiskBigImage.hpp"}
+00230 \textcolor{keyword}{template}<\textcolor{keyword}{typename} T, \textcolor{keywordtype}{size\_t} memory\_usage>
+00231 \textcolor{keywordtype}{bool} HierarchicalImage<T, memory_usage>::save_mini_image(\textcolor{keyword}{const} \textcolor{keywordtype}{char}* file\_name)
+00232 \{
+00233 
+00234 \textcolor{preprocessor}{#ifdef SAVE\_MINI\_IMAGE}
+00235 \textcolor{preprocessor}{}        \textcolor{comment}{/* since the image data has been write successfully, we can using the
+       DiskBigImageInterface to access}
+00236 \textcolor{comment}{         * the image data in the disk}
+00237 \textcolor{comment}{         */}
+00238         boost::shared\_ptr<DiskBigImageInterface<T> > big\_image = 
+      load\_disk\_image<T>(file\_name);
+00239 
+00240         \textcolor{comment}{/* now just read the highest level image to save as a jpg file */}
+00241         big\_image->set\_current\_level(big\_image->get\_max\_image\_level());
+00242 
+00243         \textcolor{keywordtype}{int} start\_rows = 0, start\_cols = 0;
+00244         \textcolor{keywordtype}{int} rows = big\_image->get\_current\_level\_image\_rows();
+00245         \textcolor{keywordtype}{int} cols = big\_image->get\_current\_level\_image\_cols();
+00246 
+00247         std::vector<T> img\_data;
+00248         \textcolor{keywordflow}{if}(!big\_image->get\_pixels\_by\_level(m\_max\_level, start\_rows, start\_cols,
+       rows, cols, img\_data)) \{
+00249                 std::cerr << \textcolor{stringliteral}{"get the maximum image failure"} << std::endl;
+00250                 \textcolor{keywordflow}{return} \textcolor{keyword}{false};
+00251         \}
+00252 
+00253         cv::Mat result\_image(rows, cols, CV\_8UC3, img\_data.data());
+00254 
+00255         \textcolor{comment}{/* convert the RGB format to opencv BGR format */}
+00256         cv::cvtColor(result\_image, result\_image, CV\_RGB2BGR);
+00257         boost::filesystem3::path file\_path(file\_name);
+00258         std::string result\_image\_name = (file\_path.parent\_path() / (file\_path.
+      stem().generic\_string() + \textcolor{stringliteral}{".jpg"})).generic\_string();
+00259         cv::imwrite(result\_image\_name, result\_image);
+00260 \textcolor{preprocessor}{#endif}
+00261 \textcolor{preprocessor}{}
+00262         \textcolor{keywordflow}{return} \textcolor{keyword}{true};
+00263 \}
+00264 
+00265 \textcolor{preprocessor}{#endif}
+00266 \textcolor{preprocessor}{}
+00267 
+00268 
+\end{DoxyCode}

@@ -1,0 +1,88 @@
+\section{介绍}\label{index_intro_sec}
+通常的图像处理是基于内存进行的，但在图像数据非常大导致无法将数据全部装入内存处理的时候，基于内存的处理方法就会失效。\par
+ Out Of Core技术就是用来解决这个问题。当数据很大的时候，实际的数据存放在硬盘上，在需要获取或者处理数据的时候， 再动态的从磁盘中加载数据到内存进行处理。\par
+
+
+主要实现了下面几个类：
+\begin{DoxyItemize}
+\item \doxyref{Blockwise\-Image}{p.}{class_blockwise_image} 可以容纳大型的数据数据储存，提供对图像处理的通用性接口，同时可以将图像数据写入到磁盘中以备后续处理。
+\item \doxyref{Hierarchical\-Image}{p.}{class_hierarchical_image} 继承自\-Blockwise\-Image，提供一致的图像处理接口，但在保存到磁盘时，将提取不同的层级的图像数据并写入磁盘，这样方便以后提取 不同分辨率下的图像数据。
+\item \doxyref{Disk\-Big\-Image}{p.}{class_disk_big_image} 用来对由\-Blockwise\-Image和\-Hierarchical\-Image写入到磁盘中的图像数据进行动态的读写操作。
+\end{DoxyItemize}
+
+几个工程文件说明：
+\begin{DoxyItemize}
+\item Reading\-Big\-Image 图像浏览器的初步实现。
+\item Test 对\-Blockwise\-Image的图像处理接口和\-Disk\-Big\-Image的读写接口进行了测试，还有一部分是关于不同索引方法的测试。
+\item Write\-Block\-Wise\-Image 使用\-Blockwise\-Image写入图像数据
+\item Write\-Hierarchical\-Image 使用\-Hierarchical\-Image写入图像数据
+\item Time\-Consume\-Test 对\-Disk\-Big\-Image类的get\-\_\-pixels\-\_\-by\-\_\-level\-\_\-fast和get\-\_\-pixels\-\_\-by\-\_\-level速度上进行的测试。 \par
+
+\end{DoxyItemize}\section{安装}\label{index_setup_sec}
+\subsection{相关库}\label{index_libary_sec}
+
+\begin{DoxyPre}
+ {\bfseries 1. boost}
+ 使用到了boost的下面相关子库：
+ data\_time iostreams filesystem system thread
+ 需要编译好上面的静态库\end{DoxyPre}
+
+
+
+\begin{DoxyPre} {\bfseries 2. stxxl}
+ 是一个提供了基于stl的容器接口，同时将容器数据存放在硬盘中的库。
+ Website : {\tt http://stxxl.sourceforge.net/} 
+ 安装说明：
+ （1）将/SharedLibrary/stxxl/include 设置为头文件包含的地址
+ （2）将/SharedLibrary/stxxl/lib 设置为lib包含的地址 
+ （3）在工程文件中设置下面的command line （前提配置好了boost, 在链接 stxxl的库的时候， 会自动去链接boost的相关库）\end{DoxyPre}
+
+
+
+\begin{DoxyPre} {\bfseries Debug :}
+ C/C++ -- Command Line :
+ -D\_FILE\_OFFSET\_BITS=64 -D\_LARGEFILE\_SOURCE -D\_LARGEFILE64\_SOURCE -D\_SECURE\_SCL=0 /Od /MDd /ZI -D\_RTLDLL -DBOOST\_LIB\_DIAGNOSTIC -DSTXXL\_BOOST\_TIMESTAMP -DSTXXL\_BOOST\_CONFIG -DSTXXL\_BOOST\_FILESYSTEM -DSTXXL\_BOOST\_THREADS -DSTXXL\_BOOST\_RANDOM /EHsc /EHs /wd4820 /wd4217 /wd4668 /wd4619 /wd4625 /wd4626 /wd4355 /wd4996 -D\_SCL\_SECURE\_NO\_DEPRECATE /F 16777216 /nologo /DSTXXL\_LIBNAME="stxxl\_debug"\end{DoxyPre}
+
+
+
+\begin{DoxyPre} Linker -- Command Line :
+ /STACK:16777216 /NOLOGO /DEBUG\end{DoxyPre}
+
+
+
+\begin{DoxyPre} {\bfseries Release :}
+ C/C++ -- Command Line :
+ -D\_FILE\_OFFSET\_BITS=64 -D\_LARGEFILE\_SOURCE -D\_LARGEFILE64\_SOURCE -D\_SECURE\_SCL=0 /O2 /Ob2 /MD /DNDEBUG -D\_RTLDLL -DBOOST\_LIB\_DIAGNOSTIC -DSTXXL\_BOOST\_TIMESTAMP -DSTXXL\_BOOST\_CONFIG -DSTXXL\_BOOST\_FILESYSTEM -DSTXXL\_BOOST\_THREADS -DSTXXL\_BOOST\_RANDOM /EHsc /EHs /wd4820 /wd4217 /wd4668 /wd4619 /wd4625 /wd4626 /wd4355 /wd4996 -D\_SCL\_SECURE\_NO\_DEPRECATE /F 16777216 /nologo /DSTXXL\_LIBNAME="stxxl\_release"\end{DoxyPre}
+
+
+
+\begin{DoxyPre} Linker -- Command Line :
+ /STACK:16777216 /NOLOGO /OPT:REF\end{DoxyPre}
+
+
+
+\begin{DoxyPre} （4）stxxl的配置文件，在代码运行的目录下面新建文件config.stxxl
+ For example : #config.stxxl
+ disk=c:,70000,wincall     
+ disk=d:,70000,wincall
+ disk=e:,70000,wincall
+ #表示在在c，d，e中分别建立70000M大小的文件stxxl用来保存数据用。
+ #对于Out\_Of\_Core模块而言，大小取决于图像的数据大小，比如一个102400*102400的图像而言，
+ 如果图像是RGB个格式，那么总大小为30G的图像。由于使用了zorder进行存储，存在数据冗余。
+ 使用zorder作为索引格式的话，最多是为原来大小的4倍，一般为2倍左右，所以分配60G到120G比较合适。\end{DoxyPre}
+
+
+
+\begin{DoxyPre} {\bfseries 3. OpenCV}
+ 如果定义了宏 SAVE\_MINI\_IMAGE
+ 在将图像写入到磁盘中的时候，同时也会产生一张由用户指定分辨率大小的jpg格式图像文件，该文件是图像的缩略图用来方便得到显示效果
+ 将使用到了OpenCV的下面模块
+ core highgui imgproc
+ \end{DoxyPre}
+ \begin{DoxyNote}{注解}
+默认是没有定义\-S\-A\-V\-E\-\_\-\-M\-I\-N\-I\-\_\-\-I\-M\-A\-G\-E \par
+
+\end{DoxyNote}
+\section{Out Of Core模块代码}\label{index_src_sec}
+所有代码都是模板类或者是放在.\-h文件中的inline函数，直接include到代码中编译即可。\par
+ 代码放在了/\-Platform/\-Out\-Of\-Core/include/ 文件夹下 

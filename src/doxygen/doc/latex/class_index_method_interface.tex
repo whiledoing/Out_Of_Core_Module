@@ -1,0 +1,179 @@
+\section{Index\-Method\-Interface类 参考}
+\label{class_index_method_interface}\index{Index\-Method\-Interface@{Index\-Method\-Interface}}
+
+
+The basic functions of the indexing method.  
+
+
+
+
+{\ttfamily \#include $<$Index\-Method\-Interface.\-h$>$}
+
+
+
+类 Index\-Method\-Interface 继承关系图\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_index_method_interface__inherit__graph}
+\end{center}
+\end{figure}
+\subsection*{Public 类型}
+\begin{DoxyCompactItemize}
+\item 
+typedef int64 {\bf Index\-Type}
+\item 
+typedef size\-\_\-t {\bf Row\-Major\-Index\-Type}
+\end{DoxyCompactItemize}
+\subsection*{Public 成员函数}
+\begin{DoxyCompactItemize}
+\item 
+virtual {\bf Index\-Type} {\bf get\-\_\-index} ({\bf Row\-Major\-Index\-Type} row, {\bf Row\-Major\-Index\-Type} col) const =0\label{class_index_method_interface_ac711b80e04bd6fdf4cd5365ed8c9525b}
+
+\begin{DoxyCompactList}\small\item\em get the index of row-\/major index (row, col) \end{DoxyCompactList}\item 
+virtual {\bf Row\-Major\-Point} {\bf get\-\_\-origin\-\_\-index} ({\bf Index\-Type} index) const =0
+\begin{DoxyCompactList}\small\item\em get the original row-\/major index \end{DoxyCompactList}\item 
+virtual {\bf Index\-Type} {\bf get\-\_\-row\-\_\-result} ({\bf Row\-Major\-Index\-Type} row\-\_\-index) const =0
+\begin{DoxyCompactList}\small\item\em get the row result from just the row index (for using row-\/major like loop). \end{DoxyCompactList}\item 
+virtual {\bf Index\-Type} {\bf get\-\_\-index\-\_\-by\-\_\-row\-\_\-result} ({\bf Index\-Type} row\-\_\-result, {\bf Row\-Major\-Index\-Type} col\-\_\-index) const =0
+\begin{DoxyCompactList}\small\item\em get the index from row result and col index \end{DoxyCompactList}\item 
+virtual {\bf Index\-Type} {\bf get\-\_\-max\-\_\-index} () const =0
+\begin{DoxyCompactList}\small\item\em get the maximum index, often used to ensure the size of the container \end{DoxyCompactList}\item 
+virtual std\-::string {\bf get\-\_\-index\-\_\-method\-\_\-name} () const =0\label{class_index_method_interface_a020f398f97b2bdc041101c44e71cbcbf}
+
+\begin{DoxyCompactList}\small\item\em get the index method name for identify different method \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{详细描述}
+The basic functions of the indexing method. 
+
+在文件 {\bf Index\-Method\-Interface.\-h} 第  行定义.
+
+
+
+\subsection{成员类型定义说明}
+\index{Index\-Method\-Interface@{Index\-Method\-Interface}!Index\-Type@{Index\-Type}}
+\index{Index\-Type@{Index\-Type}!IndexMethodInterface@{Index\-Method\-Interface}}
+\subsubsection[{Index\-Type}]{\setlength{\rightskip}{0pt plus 5cm}typedef int64 {\bf Index\-Method\-Interface\-::\-Index\-Type}}\label{class_index_method_interface_ab7022c5b65707f1d10a71f45134b21ba}
+the type of all the index 
+
+在文件 {\bf Index\-Method\-Interface.\-h} 第  行定义.
+
+\index{Index\-Method\-Interface@{Index\-Method\-Interface}!Row\-Major\-Index\-Type@{Row\-Major\-Index\-Type}}
+\index{Row\-Major\-Index\-Type@{Row\-Major\-Index\-Type}!IndexMethodInterface@{Index\-Method\-Interface}}
+\subsubsection[{Row\-Major\-Index\-Type}]{\setlength{\rightskip}{0pt plus 5cm}typedef size\-\_\-t {\bf Index\-Method\-Interface\-::\-Row\-Major\-Index\-Type}}\label{class_index_method_interface_ab8dd67018f74893f816260b05a5246b3}
+the type of row-\/major like index 
+
+在文件 {\bf Index\-Method\-Interface.\-h} 第  行定义.
+
+
+
+\subsection{成员函数说明}
+\index{Index\-Method\-Interface@{Index\-Method\-Interface}!get\-\_\-index\-\_\-by\-\_\-row\-\_\-result@{get\-\_\-index\-\_\-by\-\_\-row\-\_\-result}}
+\index{get\-\_\-index\-\_\-by\-\_\-row\-\_\-result@{get\-\_\-index\-\_\-by\-\_\-row\-\_\-result}!IndexMethodInterface@{Index\-Method\-Interface}}
+\subsubsection[{get\-\_\-index\-\_\-by\-\_\-row\-\_\-result}]{\setlength{\rightskip}{0pt plus 5cm}virtual {\bf Index\-Type} Index\-Method\-Interface\-::get\-\_\-index\-\_\-by\-\_\-row\-\_\-result (
+\begin{DoxyParamCaption}
+\item[{{\bf Index\-Type}}]{row\-\_\-result, }
+\item[{{\bf Row\-Major\-Index\-Type}}]{col\-\_\-index}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [pure virtual]}}\label{class_index_method_interface_af6fda6db139d00aa3e722fcd20945322}
+
+
+get the index from row result and col index 
+
+
+\begin{DoxyParams}{参数}
+{\em row\-\_\-result} & the result get from the \doxyref{get\-\_\-row\-\_\-result()}{p.}{class_index_method_interface_aab87157a6dcd40f8d249616829f7ec97} method \\
+\hline
+{\em col\-\_\-index} & the index of col in the row-\/major format \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{返回}
+the index result combined both the row and col 
+\end{DoxyReturn}
+
+
+在 {\bf Z\-Order\-Index} \doxyref{}{p.}{class_z_order_index_a62ee0e4943a2c13f47eb9065ec056c00},{\bf Z\-Order\-Index\-Intuition} \doxyref{}{p.}{class_z_order_index_intuition_a260c382c65f156a14993c3035adff46c} , 以及 {\bf Block2\-D\-Index} \doxyref{}{p.}{class_block2_d_index_a3ead3723b1619b13e20a4ed14469a32d} 内被实现.
+
+\index{Index\-Method\-Interface@{Index\-Method\-Interface}!get\-\_\-max\-\_\-index@{get\-\_\-max\-\_\-index}}
+\index{get\-\_\-max\-\_\-index@{get\-\_\-max\-\_\-index}!IndexMethodInterface@{Index\-Method\-Interface}}
+\subsubsection[{get\-\_\-max\-\_\-index}]{\setlength{\rightskip}{0pt plus 5cm}virtual {\bf Index\-Type} Index\-Method\-Interface\-::get\-\_\-max\-\_\-index (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [pure virtual]}}\label{class_index_method_interface_ad2e684fc1ef5ea505ccbc23278977478}
+
+
+get the maximum index, often used to ensure the size of the container 
+
+\begin{DoxyReturn}{返回}
+the maximum index get from the this indexing method 
+\end{DoxyReturn}
+
+
+在 {\bf Z\-Order\-Index} \doxyref{}{p.}{class_z_order_index_ac9eacf3a0481b0b26e2b98216c04689e},{\bf Z\-Order\-Index\-Intuition} \doxyref{}{p.}{class_z_order_index_intuition_aaf09fc4e8668b254e8d8fb0abcc26719} , 以及 {\bf Block2\-D\-Index} \doxyref{}{p.}{class_block2_d_index_a1cdb7f2f1ca93be4e14cee70f4038160} 内被实现.
+
+\index{Index\-Method\-Interface@{Index\-Method\-Interface}!get\-\_\-origin\-\_\-index@{get\-\_\-origin\-\_\-index}}
+\index{get\-\_\-origin\-\_\-index@{get\-\_\-origin\-\_\-index}!IndexMethodInterface@{Index\-Method\-Interface}}
+\subsubsection[{get\-\_\-origin\-\_\-index}]{\setlength{\rightskip}{0pt plus 5cm}virtual {\bf Row\-Major\-Point} Index\-Method\-Interface\-::get\-\_\-origin\-\_\-index (
+\begin{DoxyParamCaption}
+\item[{{\bf Index\-Type}}]{index}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [pure virtual]}}\label{class_index_method_interface_a44f4553bd06c787d4523c37a9a15fdd3}
+
+
+get the original row-\/major index 
+
+
+\begin{DoxyParams}{参数}
+{\em index} & the index calculated from \doxyref{get\-\_\-index()}{p.}{class_index_method_interface_ac711b80e04bd6fdf4cd5365ed8c9525b} method \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{返回}
+the row-\/major index (row, col) format 
+\end{DoxyReturn}
+
+
+在 {\bf Z\-Order\-Index} \doxyref{}{p.}{class_z_order_index_a90fb65a322a8b1f28f3a7e3b0ba5fe27},{\bf Z\-Order\-Index\-Intuition} \doxyref{}{p.}{class_z_order_index_intuition_a2cec2d33763c814a1aa638fc755eea68} , 以及 {\bf Block2\-D\-Index} \doxyref{}{p.}{class_block2_d_index_a95e1c7406cabbcf2decde099128a6fa5} 内被实现.
+
+\index{Index\-Method\-Interface@{Index\-Method\-Interface}!get\-\_\-row\-\_\-result@{get\-\_\-row\-\_\-result}}
+\index{get\-\_\-row\-\_\-result@{get\-\_\-row\-\_\-result}!IndexMethodInterface@{Index\-Method\-Interface}}
+\subsubsection[{get\-\_\-row\-\_\-result}]{\setlength{\rightskip}{0pt plus 5cm}virtual {\bf Index\-Type} Index\-Method\-Interface\-::get\-\_\-row\-\_\-result (
+\begin{DoxyParamCaption}
+\item[{{\bf Row\-Major\-Index\-Type}}]{row\-\_\-index}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [pure virtual]}}\label{class_index_method_interface_aab87157a6dcd40f8d249616829f7ec97}
+
+
+get the row result from just the row index (for using row-\/major like loop). 
+
+
+\begin{DoxyPre}
+Using this method for some kind of optimization when using row-major like loop 
+for example:    
+for(size\_t row = 0; row < rows; ++row) \{ 
+        IndexType row\_result = get\_row\_result(row);
+        for(size\_t col = 0; col < cols; ++col) \{ 
+                IndexType index = get\_index\_by\_row\_result(row\_result, col); 
+        \} 
+\} 
+\end{DoxyPre}
+
+
+
+\begin{DoxyParams}{参数}
+{\em row\-\_\-index} & the index of row in the row-\/major format \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{返回}
+the row result 
+\end{DoxyReturn}
+
+
+在 {\bf Z\-Order\-Index} \doxyref{}{p.}{class_z_order_index_ae6448044c3c190826a85c29eac950b86},{\bf Z\-Order\-Index\-Intuition} \doxyref{}{p.}{class_z_order_index_intuition_a681922974bbe3800d01345c9a357238e} , 以及 {\bf Block2\-D\-Index} \doxyref{}{p.}{class_block2_d_index_a96c5893d835bf952463cef1398654361} 内被实现.
+
+
+
+该类的文档由以下文件生成\-:\begin{DoxyCompactItemize}
+\item 
+D\-:/\-Out\-\_\-\-Of\-\_\-\-Core\-\_\-\-Git/src/Index\-Method\-Interface.\-h\end{DoxyCompactItemize}

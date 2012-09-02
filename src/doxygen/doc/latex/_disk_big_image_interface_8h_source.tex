@@ -1,0 +1,39 @@
+\section{Disk\-Big\-Image\-Interface.\-h}
+\label{_disk_big_image_interface_8h}\index{D\-:/\-Out\-\_\-\-Of\-\_\-\-Core\-\_\-\-Git/src/\-Disk\-Big\-Image\-Interface.\-h@{D\-:/\-Out\-\_\-\-Of\-\_\-\-Core\-\_\-\-Git/src/\-Disk\-Big\-Image\-Interface.\-h}}
+
+\begin{DoxyCode}
+00001 \textcolor{preprocessor}{#ifndef \_DISK\_BIG\_IMAGE\_INTERFACE\_H}
+00002 \textcolor{preprocessor}{}\textcolor{preprocessor}{#define \_DISK\_BIG\_IMAGE\_INTERFACE\_H}
+00003 \textcolor{preprocessor}{}
+00004 \textcolor{preprocessor}{#include "GiantImageInterface.h"}
+00005 \textcolor{preprocessor}{#include "UtlityFunc.h"}
+00006 
+00016 \textcolor{keyword}{template}<\textcolor{keyword}{typename} T>
+00017 \textcolor{keyword}{class }DiskBigImageInterface
+00018 \{
+00019 \textcolor{keyword}{public}:
+00020 
+00033         \textcolor{keyword}{virtual} \textcolor{keywordtype}{bool} get_pixels_by_level(\textcolor{keywordtype}{int} level, \textcolor{keywordtype}{int} start\_row, \textcolor{keywordtype}{int} 
+      start\_col,
+00034                 \textcolor{keywordtype}{int} rows, \textcolor{keywordtype}{int} cols, std::vector<T> &vec) = 0;
+00035         \textcolor{keyword}{virtual} \textcolor{keywordtype}{bool} set\_pixel\_by\_level(\textcolor{keywordtype}{int} level, \textcolor{keywordtype}{int} start\_row, \textcolor{keywordtype}{int} start\_col
+      , \textcolor{keywordtype}{int} rows, \textcolor{keywordtype}{int} cols, \textcolor{keyword}{const} std::vector<T> &vec) = 0;
+00036 
+00037         \textcolor{keyword}{virtual} \textcolor{keywordtype}{bool} get\_pixels\_by\_level\_fast(\textcolor{keywordtype}{int} level, \textcolor{keywordtype}{int} &start\_row, \textcolor{keywordtype}{int} &
+      start\_col,
+00038                 \textcolor{keywordtype}{int} &rows, \textcolor{keywordtype}{int} &cols, std::vector<T> &vec) = 0;
+00039 
+00043         \textcolor{keyword}{virtual} \textcolor{keywordtype}{size\_t} get_current_level_image_rows() \textcolor{keyword}{const} = 0;
+00044 
+00048         \textcolor{keyword}{virtual} \textcolor{keywordtype}{size\_t} get_current_level_image_cols() \textcolor{keyword}{const} = 0;
+00049 
+00053         \textcolor{keyword}{virtual} \textcolor{keywordtype}{bool} set_current_level(\textcolor{keywordtype}{int} level) = 0;
+00054         \textcolor{keyword}{virtual} \textcolor{keywordtype}{size\_t} get\_current\_level() \textcolor{keyword}{const} = 0;
+00055 
+00061         \textcolor{keyword}{virtual} \textcolor{keywordtype}{bool} set_file_cache_number(\textcolor{keywordtype}{int} \_file\_cache\_number) = 0;
+00062 
+00066         \textcolor{keyword}{virtual} \textcolor{keywordtype}{size\_t} get_max_image_level() \textcolor{keyword}{const} = 0;
+00067 \};
+00068 
+00069 \textcolor{preprocessor}{#endif}
+\end{DoxyCode}

@@ -1,0 +1,38 @@
+\section{Index\-Method\-Interface.\-h}
+\label{_index_method_interface_8h}\index{D\-:/\-Out\-\_\-\-Of\-\_\-\-Core\-\_\-\-Git/src/\-Index\-Method\-Interface.\-h@{D\-:/\-Out\-\_\-\-Of\-\_\-\-Core\-\_\-\-Git/src/\-Index\-Method\-Interface.\-h}}
+
+\begin{DoxyCode}
+00001 \textcolor{preprocessor}{#ifndef \_INDEX\_METHOD\_INTERFACE\_H}
+00002 \textcolor{preprocessor}{}\textcolor{preprocessor}{#define \_INDEX\_METHOD\_INTERFACE\_H}
+00003 \textcolor{preprocessor}{}
+00004 \textcolor{preprocessor}{#include "BasicType.h"}
+00005 \textcolor{preprocessor}{#include <string>}
+00006 
+00013 \textcolor{keyword}{class }IndexMethodInterface
+00014 \{
+00015 \textcolor{keyword}{public}:
+00016 
+00018         \textcolor{keyword}{typedef} int64 IndexType;
+00019 
+00021         \textcolor{keyword}{typedef} \textcolor{keywordtype}{size\_t} RowMajorIndexType;
+00022 
+00023 \textcolor{keyword}{public}:
+00024 
+00028         \textcolor{keyword}{virtual} IndexType get_index(RowMajorIndexType row, RowMajorIndexType 
+      col) \textcolor{keyword}{const} = 0;
+00029 
+00035         \textcolor{keyword}{virtual} RowMajorPoint get_origin_index(IndexType index) \textcolor{keyword}{const} = 0;
+00036 
+00054         \textcolor{keyword}{virtual} IndexType get_row_result(RowMajorIndexType row\_index) \textcolor{keyword}{const} = 0
+      ;
+00055 
+00062         \textcolor{keyword}{virtual} IndexType get_index_by_row_result(IndexType row\_result, 
+      RowMajorIndexType col\_index) \textcolor{keyword}{const} = 0;
+00063 
+00068         \textcolor{keyword}{virtual} IndexType get_max_index() \textcolor{keyword}{const} = 0;
+00069 
+00073         \textcolor{keyword}{virtual} std::string get_index_method_name() \textcolor{keyword}{const} = 0;
+00074 \};
+00075 
+00081 \textcolor{preprocessor}{#endif}
+\end{DoxyCode}

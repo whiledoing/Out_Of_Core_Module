@@ -1,0 +1,47 @@
+\section{Image\-Interface.\-h}
+\label{_image_interface_8h}\index{D\-:/\-Out\-\_\-\-Of\-\_\-\-Core\-\_\-\-Git/src/\-Image\-Interface.\-h@{D\-:/\-Out\-\_\-\-Of\-\_\-\-Core\-\_\-\-Git/src/\-Image\-Interface.\-h}}
+
+\begin{DoxyCode}
+00001 \textcolor{preprocessor}{#ifndef \_IMAGE\_INTERFACE\_H}
+00002 \textcolor{preprocessor}{}\textcolor{preprocessor}{#define \_IMAGE\_INTERFACE\_H}
+00003 \textcolor{preprocessor}{}
+00004 \textcolor{preprocessor}{#include <string>}
+00005 \textcolor{preprocessor}{#include <vector>}
+00006 
+00007 \textcolor{preprocessor}{#include "BasicType.h"}
+00008 
+00017 \textcolor{keyword}{template}<\textcolor{keyword}{typename} T>
+00018 \textcolor{keyword}{class }ImageInterface
+00019 \{
+00020 \textcolor{keyword}{public}:
+00021 
+00026         \textcolor{keyword}{virtual} \textcolor{keywordtype}{bool} init(\textcolor{keywordtype}{int} rows, \textcolor{keywordtype}{int} cols) = 0;
+00027 
+00031         \textcolor{keyword}{virtual} \textcolor{keywordtype}{bool} reset() = 0;
+00032 
+00038         \textcolor{keyword}{virtual} \textcolor{keywordtype}{bool} write_image(\textcolor{keyword}{const} \textcolor{keywordtype}{char}* file\_name) = 0;
+00039         \textcolor{keyword}{virtual} \textcolor{keywordtype}{bool} write_image(\textcolor{keyword}{const} std::string &file\_name) = 0;
+00040 
+00047         \textcolor{keyword}{virtual} T& get_pixel(\textcolor{keywordtype}{int} row, \textcolor{keywordtype}{int} col) = 0;
+00048         \textcolor{keyword}{virtual} \textcolor{keyword}{const} T& get_pixel(\textcolor{keywordtype}{int} row, \textcolor{keywordtype}{int} col) \textcolor{keyword}{const} = 0;
+00049         \textcolor{keyword}{virtual} T& operator() (\textcolor{keywordtype}{int} row, \textcolor{keywordtype}{int} col) = 0;
+00050         \textcolor{keyword}{virtual} \textcolor{keyword}{const} T& operator() (\textcolor{keywordtype}{int} row, \textcolor{keywordtype}{int} col) \textcolor{keyword}{const} = 0;
+00051 
+00062         \textcolor{keyword}{virtual} \textcolor{keywordtype}{bool} get_pixels(\textcolor{keywordtype}{int} start\_row, \textcolor{keywordtype}{int} start\_col, \textcolor{keywordtype}{int} rows, \textcolor{keywordtype}{int} 
+      cols, std::vector<T> &data) \textcolor{keyword}{const} = 0;
+00063         \textcolor{keyword}{virtual} \textcolor{keywordtype}{bool} set\_pixels(\textcolor{keywordtype}{int} start\_row, \textcolor{keywordtype}{int} start\_col, \textcolor{keywordtype}{int} rows, \textcolor{keywordtype}{int} 
+      cols, \textcolor{keyword}{const} std::vector<T> &data) = 0;
+00064 
+00074         \textcolor{keyword}{virtual} \textcolor{keywordtype}{bool} set\_pixels(\textcolor{keywordtype}{int} start\_row, \textcolor{keywordtype}{int} start\_col, \textcolor{keywordtype}{int} rows, \textcolor{keywordtype}{int} 
+      cols, \textcolor{keyword}{const} T clear\_value) = 0;
+00075 
+00076 \textcolor{keyword}{public}:
+00077         \textcolor{keywordtype}{size\_t} get\_image\_cols()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} img\_size.cols; \}
+00078         \textcolor{keywordtype}{size\_t} get\_image\_rows()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} img\_size.rows; \}
+00079 
+00080 \textcolor{keyword}{protected}:
+00081         Size img\_size;
+00082 \};
+00083 
+00084 \textcolor{preprocessor}{#endif}
+\end{DoxyCode}

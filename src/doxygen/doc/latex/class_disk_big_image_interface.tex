@@ -1,0 +1,111 @@
+\section{Disk\-Big\-Image\-Interface$<$ T $>$ 模板类 参考}
+\label{class_disk_big_image_interface}\index{Disk\-Big\-Image\-Interface$<$ T $>$@{Disk\-Big\-Image\-Interface$<$ T $>$}}
+
+
+The interface for accessing the big image files in the disk that were saved by \doxyref{Blockwise\-Image}{p.}{class_blockwise_image} and \doxyref{Hierarchical\-Image}{p.}{class_hierarchical_image} classes.  
+
+
+
+
+{\ttfamily \#include $<$Disk\-Big\-Image\-Interface.\-h$>$}
+
+
+
+类 Disk\-Big\-Image\-Interface$<$ T $>$ 继承关系图\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=216pt]{class_disk_big_image_interface__inherit__graph}
+\end{center}
+\end{figure}
+\subsection*{Public 成员函数}
+\begin{DoxyCompactItemize}
+\item 
+virtual bool {\bf get\-\_\-pixels\-\_\-by\-\_\-level} (int level, int start\-\_\-row, int start\-\_\-col, int rows, int cols, std\-::vector$<$ T $>$ \&vec)=0
+\begin{DoxyCompactList}\small\item\em Get the the specific range area image data from the bigimage files, but first specific which level data you want to get. \end{DoxyCompactList}\item 
+virtual bool {\bfseries set\-\_\-pixel\-\_\-by\-\_\-level} (int level, int start\-\_\-row, int start\-\_\-col, int rows, int cols, const std\-::vector$<$ T $>$ \&vec)=0\label{class_disk_big_image_interface_a8b119a9f7e1a73bb70f972e611579bec}
+
+\item 
+virtual bool {\bfseries get\-\_\-pixels\-\_\-by\-\_\-level\-\_\-fast} (int level, int \&start\-\_\-row, int \&start\-\_\-col, int \&rows, int \&cols, std\-::vector$<$ T $>$ \&vec)=0\label{class_disk_big_image_interface_a5ae50afa549df2025b0c0e8f2d9068cc}
+
+\item 
+virtual size\-\_\-t {\bf get\-\_\-current\-\_\-level\-\_\-image\-\_\-rows} () const =0\label{class_disk_big_image_interface_a908a572de60515e185b73d31baa5c48a}
+
+\begin{DoxyCompactList}\small\item\em get the current level image rows after calling the set\-\_\-current\-\_\-level function \end{DoxyCompactList}\item 
+virtual size\-\_\-t {\bf get\-\_\-current\-\_\-level\-\_\-image\-\_\-cols} () const =0\label{class_disk_big_image_interface_a05575b463c8d540eae947a70a1fa4101}
+
+\begin{DoxyCompactList}\small\item\em get the current level image cols after calling the set\-\_\-current\-\_\-level function \end{DoxyCompactList}\item 
+virtual bool {\bf set\-\_\-current\-\_\-level} (int level)=0\label{class_disk_big_image_interface_a81f77d04f54038b375fc4a9966db2223}
+
+\begin{DoxyCompactList}\small\item\em set the image current level before any access to the hierarchical image data \end{DoxyCompactList}\item 
+virtual size\-\_\-t {\bfseries get\-\_\-current\-\_\-level} () const =0\label{class_disk_big_image_interface_ac9c4da53d9e1d3b252bd48b4ba09516e}
+
+\item 
+virtual bool {\bf set\-\_\-file\-\_\-cache\-\_\-number} (int \-\_\-file\-\_\-cache\-\_\-number)=0\label{class_disk_big_image_interface_a56acf6b10340ce229a47044947409966}
+
+\begin{DoxyCompactList}\small\item\em set the file cache number when loading image data since the image from disk is too large so when load data from disk, using several file caches to save the image data for improving I/\-O. \end{DoxyCompactList}\item 
+virtual size\-\_\-t {\bf get\-\_\-max\-\_\-image\-\_\-level} () const =0\label{class_disk_big_image_interface_a120ee4945cf3fc38c21dad526128afc5}
+
+\begin{DoxyCompactList}\small\item\em get the maximum image level thus the minimal size image's scale level \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{详细描述}
+\subsubsection*{template$<$typename T$>$class Disk\-Big\-Image\-Interface$<$ T $>$}
+
+The interface for accessing the big image files in the disk that were saved by \doxyref{Blockwise\-Image}{p.}{class_blockwise_image} and \doxyref{Hierarchical\-Image}{p.}{class_hierarchical_image} classes. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & The type of the image cells \\
+\hline
+\end{DoxyTemplParams}
+
+
+在文件 {\bf Disk\-Big\-Image\-Interface.\-h} 第  行定义.
+
+
+
+\subsection{成员函数说明}
+\index{Disk\-Big\-Image\-Interface@{Disk\-Big\-Image\-Interface}!get\-\_\-pixels\-\_\-by\-\_\-level@{get\-\_\-pixels\-\_\-by\-\_\-level}}
+\index{get\-\_\-pixels\-\_\-by\-\_\-level@{get\-\_\-pixels\-\_\-by\-\_\-level}!DiskBigImageInterface@{Disk\-Big\-Image\-Interface}}
+\subsubsection[{get\-\_\-pixels\-\_\-by\-\_\-level}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T $>$ virtual bool {\bf Disk\-Big\-Image\-Interface}$<$ T $>$\-::get\-\_\-pixels\-\_\-by\-\_\-level (
+\begin{DoxyParamCaption}
+\item[{int}]{level, }
+\item[{int}]{start\-\_\-row, }
+\item[{int}]{start\-\_\-col, }
+\item[{int}]{rows, }
+\item[{int}]{cols, }
+\item[{std\-::vector$<$ T $>$ \&}]{vec}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [pure virtual]}}\label{class_disk_big_image_interface_a1f9a1750bc7f2da534310958e89c64b5}
+
+
+Get the the specific range area image data from the bigimage files, but first specific which level data you want to get. 
+
+
+\begin{DoxyParams}{参数}
+{\em level} & The specific level \\
+\hline
+{\em start\-\_\-row} & The left-\/corner point row \\
+\hline
+{\em start\-\_\-col} & The left-\/corner point col \\
+\hline
+{\em rows} & The row scope of the range, thus the rows get is [start\-\_\-row, start\-\_\-row + rows) \\
+\hline
+{\em cols} & The col scope of the range \\
+\hline
+{\em vec} & [Out] Saves the image data get from the bigimage files \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{返回}
+whether get the data successfully 
+\end{DoxyReturn}
+
+
+在 {\bf Disk\-Big\-Image$<$ T $>$} \doxyref{}{p.}{class_disk_big_image_a9b8062ca60135249493571a6f47da1ef} 内被实现.
+
+
+
+该类的文档由以下文件生成\-:\begin{DoxyCompactItemize}
+\item 
+D\-:/\-Out\-\_\-\-Of\-\_\-\-Core\-\_\-\-Git/src/Disk\-Big\-Image\-Interface.\-h\end{DoxyCompactItemize}

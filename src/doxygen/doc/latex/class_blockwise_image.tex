@@ -1,0 +1,505 @@
+\section{Blockwise\-Image$<$ T, memory\-\_\-usage $>$ 模板类 参考}
+\label{class_blockwise_image}\index{Blockwise\-Image$<$ T, memory\-\_\-usage $>$@{Blockwise\-Image$<$ T, memory\-\_\-usage $>$}}
+
+
+Derived from \doxyref{Giant\-Image\-Interface}{p.}{class_giant_image_interface}, support the big image operation, and saves the whole image into disk.  
+
+
+
+
+{\ttfamily \#include $<$Blockwise\-Image.\-h$>$}
+
+
+
+类 Blockwise\-Image$<$ T, memory\-\_\-usage $>$ 继承关系图\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=206pt]{class_blockwise_image__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Blockwise\-Image$<$ T, memory\-\_\-usage $>$ 的协作图\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=206pt]{class_blockwise_image__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public 成员函数}
+\begin{DoxyCompactItemize}
+\item 
+{\bf Blockwise\-Image} (int rows, int cols, int mini\-\_\-rows, int mini\-\_\-cols, boost\-::shared\-\_\-ptr$<$ {\bf Index\-Method\-Interface} $>$ method=boost\-::shared\-\_\-ptr$<$ {\bf Index\-Method\-Interface} $>$())
+\begin{DoxyCompactList}\small\item\em get the blockwise image container according to the image size. \end{DoxyCompactList}\item 
+virtual bool {\bf init} (int rows, int cols)
+\begin{DoxyCompactList}\small\item\em Initialize the image size, and allocate the memory for saving the image. \end{DoxyCompactList}\item 
+virtual bool {\bf reset} ()\label{class_blockwise_image_ac83f27ff25be2a0c5ba9b1e8c5494846}
+
+\begin{DoxyCompactList}\small\item\em Clear the image data. \end{DoxyCompactList}\item 
+virtual bool {\bf write\-\_\-image} (const char $\ast$file\-\_\-name)
+\item 
+virtual bool {\bfseries write\-\_\-image} (const std\-::string \&file\-\_\-name)\label{class_blockwise_image_a6f0b01bdb2ed0bd2db958a64a789c037}
+
+\item 
+virtual T \& {\bf get\-\_\-pixel} (int row, int col)
+\begin{DoxyCompactList}\small\item\em Get the pixel of the point (row, col), or just write code like image(row, col) to get the image pixel. \end{DoxyCompactList}\item 
+virtual const T \& {\bfseries get\-\_\-pixel} (int row, int col) const \label{class_blockwise_image_a045e63f79945bb116b30a8b5af7f7f9f}
+
+\item 
+virtual T \& {\bfseries operator()} (int row, int col)\label{class_blockwise_image_a36d10d899536d963b826458e01220aba}
+
+\item 
+virtual const T \& {\bfseries operator()} (int row, int col) const \label{class_blockwise_image_ad244c3ec3b36090f3ec51b350c792b79}
+
+\item 
+virtual bool {\bf get\-\_\-pixels} (int start\-\_\-row, int start\-\_\-col, int rows, int cols, std\-::vector$<$ T $>$ \&data) const 
+\begin{DoxyCompactList}\small\item\em Get the range image data. \end{DoxyCompactList}\item 
+virtual bool {\bfseries set\-\_\-pixels} (int start\-\_\-row, int start\-\_\-col, int rows, int cols, const std\-::vector$<$ T $>$ \&data)\label{class_blockwise_image_a70d170f7869795a2453504ddc07a6e1b}
+
+\item 
+virtual bool {\bf set\-\_\-pixels} (int start\-\_\-row, int start\-\_\-col, int rows, int cols, const T clear\-\_\-value)
+\begin{DoxyCompactList}\small\item\em set the range image data with a const value \end{DoxyCompactList}\item 
+virtual T \& {\bf at} ({\bf Index\-Method\-Interface\-::\-Index\-Type} index)
+\begin{DoxyCompactList}\small\item\em get the element by the one dimension index \end{DoxyCompactList}\item 
+virtual const T \& {\bfseries at} ({\bf Index\-Method\-Interface\-::\-Index\-Type} index) const \label{class_blockwise_image_a4c30fa98f972a78b6d36c3960b6dc286}
+
+\item 
+size\-\_\-t {\bf get\-\_\-minimal\-\_\-image\-\_\-rows} () const \label{class_blockwise_image_ad9853076b2ab7449a6084e4816d1dad0}
+
+\begin{DoxyCompactList}\small\item\em \-: get the minimum image size \end{DoxyCompactList}\item 
+size\-\_\-t {\bfseries get\-\_\-minimal\-\_\-image\-\_\-cols} () const \label{class_blockwise_image_a2bf6dda12d1b1dafd5ee347ba42e35a3}
+
+\item 
+size\-\_\-t {\bf get\-\_\-max\-\_\-image\-\_\-level} () const \label{class_blockwise_image_aeb1827b1d6fb7df33b52ca25e3707a18}
+
+\begin{DoxyCompactList}\small\item\em \-: get the maximum image level \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Protected 类型}
+\begin{DoxyCompactItemize}
+\item 
+typedef stxxl\-::vector$<$ T, \\*
+4, stxxl\-::lru\-\_\-pager\\*
+$<$(memory\-\_\-usage $>$$>$ 3)$>$ $>$ {\bf Container\-Type}
+\begin{DoxyCompactList}\small\item\em saves the image data in the disk. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Protected 成员函数}
+\begin{DoxyCompactItemize}
+\item 
+bool {\bf write\-\_\-image\-\_\-head\-\_\-file} (const char $\ast$file\-\_\-name)\label{class_blockwise_image_ad77dc700826b65cb0d4b3ca0ea586b2a}
+
+\begin{DoxyCompactList}\small\item\em \-: write the image head info before write the actual image data \end{DoxyCompactList}\item 
+void {\bf set\-\_\-minimal\-\_\-resolution} (int rows, int cols, int mini\-\_\-rows, int mini\-\_\-cols)
+\begin{DoxyCompactList}\small\item\em \-: set the minimum image size according to the image size (rows, cols). \end{DoxyCompactList}\item 
+virtual bool {\bf save\-\_\-mini\-\_\-image} (const char $\ast$file\-\_\-name)
+\begin{DoxyCompactList}\small\item\em save the mini size image as a jpg file for observation \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Protected 属性}
+\begin{DoxyCompactItemize}
+\item 
+{\bf Container\-Type} {\bfseries img\-\_\-container}\label{class_blockwise_image_aec3ffc3c2e93dd905001c396de5a0631}
+
+\item 
+size\-\_\-t {\bfseries m\-\_\-mini\-\_\-rows}\label{class_blockwise_image_a5dfb1d1e5a4f25973024064eaef2b30b}
+
+\item 
+size\-\_\-t {\bfseries m\-\_\-mini\-\_\-cols}\label{class_blockwise_image_a7759da621d38319d1135acc5bfb1d37a}
+
+\item 
+size\-\_\-t {\bfseries m\-\_\-max\-\_\-level}\label{class_blockwise_image_a0d45e5ad80f47684727df0d8021b7050}
+
+\end{DoxyCompactItemize}
+\subsection*{相关函数}
+(请注意\-: 这些不是成员函数.) \begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$typename T $>$ }\\boost\-::shared\-\_\-ptr\\*
+$<$ {\bf Giant\-Image\-Interface}$<$ T $>$ $>$ {\bf get\-\_\-block\-\_\-wise\-\_\-image\-\_\-by\-\_\-meomory\-\_\-usage} (unsigned memory\-\_\-usage, size\-\_\-t rows, size\-\_\-t cols, size\-\_\-t mini\-\_\-rows, size\-\_\-t mini\-\_\-cols, boost\-::shared\-\_\-ptr$<$ {\bf Index\-Method\-Interface} $>$ method=boost\-::shared\-\_\-ptr$<$ {\bf Index\-Method\-Interface} $>$())
+\begin{DoxyCompactList}\small\item\em return the block wise image by memroy\-\_\-usage, maximum support 4\-G. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{详细描述}
+\subsubsection*{template$<$typename T, unsigned memory\-\_\-usage = 64$>$class Blockwise\-Image$<$ T, memory\-\_\-usage $>$}
+
+Derived from \doxyref{Giant\-Image\-Interface}{p.}{class_giant_image_interface}, support the big image operation, and saves the whole image into disk. 
+
+\doxyref{Blockwise\-Image}{p.}{class_blockwise_image} can support very big image processing and storing, and can be wrote into the disk in a non compressed way.
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & The type of the image cell \\
+\hline
+{\em memory\-\_\-usage} & The memory usage used as a I/\-O cache in the main memory, and it must be bigger than 8 (in the unit of M). By default, memory\-\_\-usage is set to 64\-M \\
+\hline
+\end{DoxyTemplParams}
+\begin{Desc}
+\item[示例\-: ]\par
+{\bf Write\-Block\-Wise\-Image.\-cpp}.\end{Desc}
+
+
+在文件 {\bf Blockwise\-Image.\-h} 第  行定义.
+
+
+
+\subsection{成员类型定义说明}
+\index{Blockwise\-Image@{Blockwise\-Image}!Container\-Type@{Container\-Type}}
+\index{Container\-Type@{Container\-Type}!BlockwiseImage@{Blockwise\-Image}}
+\subsubsection[{Container\-Type}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T , unsigned memory\-\_\-usage = 64$>$ typedef stxxl\-::vector$<$T, 4, stxxl\-::lru\-\_\-pager$<$(memory\-\_\-usage $>$$>$ 3)$>$ $>$ {\bf Blockwise\-Image}$<$ T, memory\-\_\-usage $>$\-::{\bf Container\-Type}\hspace{0.3cm}{\ttfamily [protected]}}\label{class_blockwise_image_a3bc3cd5a61a801c45fa6523f2865d056}
+
+
+saves the image data in the disk. 
+
+4 means a page has 4 blocks lru\-\_\-pages$<$n$>$ \-: n means the number of pages in memory each block is 2\-M , thus total memroy usage = 8\-M $\ast$ (number of pages) , thus why right shift 3 bit 
+
+在文件 {\bf Blockwise\-Image.\-h} 第  行定义.
+
+
+
+\subsection{构造及析构函数说明}
+\index{Blockwise\-Image@{Blockwise\-Image}!Blockwise\-Image@{Blockwise\-Image}}
+\index{Blockwise\-Image@{Blockwise\-Image}!BlockwiseImage@{Blockwise\-Image}}
+\subsubsection[{Blockwise\-Image}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T , unsigned memory\-\_\-usage$>$ {\bf Blockwise\-Image}$<$ T, memory\-\_\-usage $>$\-::{\bf Blockwise\-Image} (
+\begin{DoxyParamCaption}
+\item[{int}]{rows, }
+\item[{int}]{cols, }
+\item[{int}]{mini\-\_\-rows, }
+\item[{int}]{mini\-\_\-cols, }
+\item[{boost\-::shared\-\_\-ptr$<$ {\bf Index\-Method\-Interface} $>$}]{method = {\ttfamily boost\-:\-:shared\-\_\-ptr$<${\bf Index\-Method\-Interface}$>$()}}
+\end{DoxyParamCaption}
+)}\label{class_blockwise_image_a47d9836eb6f1544d5557234f2616c757}
+
+
+get the blockwise image container according to the image size. 
+
+After write the image into the filesystem, a minimum size image will be saved in the disk as a jpg file format, so the constructor needs the minimum image size information
+
+
+\begin{DoxyParams}{参数}
+{\em rows} & the image rows \\
+\hline
+{\em cols} & the image cols \\
+\hline
+{\em mini\-\_\-rows} & the minimum rows of the image \\
+\hline
+{\em mini\-\_\-cols} & the minimum cols of the image \\
+\hline
+{\em method} & the index method shared\-\_\-ptr object(default is zorder index method) \\
+\hline
+\end{DoxyParams}
+
+
+在文件 {\bf Blockwise\-Image.\-hpp} 第  行定义.
+
+
+
+函数调用图\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_blockwise_image_a47d9836eb6f1544d5557234f2616c757_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+\subsection{成员函数说明}
+\index{Blockwise\-Image@{Blockwise\-Image}!at@{at}}
+\index{at@{at}!BlockwiseImage@{Blockwise\-Image}}
+\subsubsection[{at}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T , unsigned memory\-\_\-usage$>$ T \& {\bf Blockwise\-Image}$<$ T, memory\-\_\-usage $>$\-::at (
+\begin{DoxyParamCaption}
+\item[{{\bf Index\-Method\-Interface\-::\-Index\-Type}}]{index}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [virtual]}}\label{class_blockwise_image_ab0cf952a4b988f8735dc770d9b0c787b}
+
+
+get the element by the one dimension index 
+
+
+\begin{DoxyParams}{参数}
+{\em index} & one dimension index \\
+\hline
+\end{DoxyParams}
+
+
+实现了 {\bf Giant\-Image\-Interface$<$ T $>$} \doxyref{}{p.}{class_giant_image_interface_a1f98aece25249d626e60ebb9b0f05111}.
+
+
+
+在文件 {\bf Blockwise\-Image.\-hpp} 第  行定义.
+
+\index{Blockwise\-Image@{Blockwise\-Image}!get\-\_\-pixel@{get\-\_\-pixel}}
+\index{get\-\_\-pixel@{get\-\_\-pixel}!BlockwiseImage@{Blockwise\-Image}}
+\subsubsection[{get\-\_\-pixel}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T , unsigned memory\-\_\-usage$>$ T \& {\bf Blockwise\-Image}$<$ T, memory\-\_\-usage $>$\-::get\-\_\-pixel (
+\begin{DoxyParamCaption}
+\item[{int}]{row, }
+\item[{int}]{col}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [virtual]}}\label{class_blockwise_image_a110d2b1c0d6ac08cb8e66f74b32bd72d}
+
+
+Get the pixel of the point (row, col), or just write code like image(row, col) to get the image pixel. 
+
+\begin{DoxyReturn}{返回}
+The reference of the image pixel 
+\end{DoxyReturn}
+\begin{DoxyWarning}{警告}
+In release mode, the row and col param must be valid, otherwise there will be an exception 
+\end{DoxyWarning}
+
+
+实现了 {\bf Image\-Interface$<$ T $>$} \doxyref{}{p.}{class_image_interface_af5fc491e3c7bb401a3591de26049bc7d}.
+
+
+
+在文件 {\bf Blockwise\-Image.\-hpp} 第  行定义.
+
+\index{Blockwise\-Image@{Blockwise\-Image}!get\-\_\-pixels@{get\-\_\-pixels}}
+\index{get\-\_\-pixels@{get\-\_\-pixels}!BlockwiseImage@{Blockwise\-Image}}
+\subsubsection[{get\-\_\-pixels}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T , unsigned memory\-\_\-usage$>$ bool {\bf Blockwise\-Image}$<$ T, memory\-\_\-usage $>$\-::get\-\_\-pixels (
+\begin{DoxyParamCaption}
+\item[{int}]{start\-\_\-row, }
+\item[{int}]{start\-\_\-col, }
+\item[{int}]{rows, }
+\item[{int}]{cols, }
+\item[{std\-::vector$<$ T $>$ \&}]{data}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [virtual]}}\label{class_blockwise_image_a91c1d0be2ef9ab54f1a5f9e706e13174}
+
+
+Get the range image data. 
+
+
+\begin{DoxyParams}{参数}
+{\em start\-\_\-row} & The left-\/corner point row \\
+\hline
+{\em start\-\_\-col} & The left-\/corner point col \\
+\hline
+{\em rows} & The row scope of the range, thus the rows get is [start\-\_\-row, start\-\_\-row + rows) \\
+\hline
+{\em cols} & The col scope of the range \\
+\hline
+{\em data} & [Out] Returns the image data vector \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{注解}
+the data doesn't need to allocate any memory 
+\end{DoxyNote}
+\begin{DoxyReturn}{返回}
+Whether get the data successfully 
+\end{DoxyReturn}
+
+
+实现了 {\bf Image\-Interface$<$ T $>$} \doxyref{}{p.}{class_image_interface_a2a2254be220b4a4bb6effed70d61c6df}.
+
+
+
+在文件 {\bf Blockwise\-Image.\-hpp} 第  行定义.
+
+\index{Blockwise\-Image@{Blockwise\-Image}!init@{init}}
+\index{init@{init}!BlockwiseImage@{Blockwise\-Image}}
+\subsubsection[{init}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T , unsigned memory\-\_\-usage$>$ bool {\bf Blockwise\-Image}$<$ T, memory\-\_\-usage $>$\-::init (
+\begin{DoxyParamCaption}
+\item[{int}]{rows, }
+\item[{int}]{cols}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [virtual]}}\label{class_blockwise_image_a9bbeb6df0a51caf818d100c3e869f45b}
+
+
+Initialize the image size, and allocate the memory for saving the image. 
+
+\begin{DoxyReturn}{返回}
+Whether initialize successfully 
+\end{DoxyReturn}
+
+
+实现了 {\bf Image\-Interface$<$ T $>$} \doxyref{}{p.}{class_image_interface_a6f59d1e81ab88e0ca2c5d4b6a2e98ae5}.
+
+
+
+在文件 {\bf Blockwise\-Image.\-hpp} 第  行定义.
+
+
+
+这是这个函数的调用关系图\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_blockwise_image_a9bbeb6df0a51caf818d100c3e869f45b_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{Blockwise\-Image@{Blockwise\-Image}!save\-\_\-mini\-\_\-image@{save\-\_\-mini\-\_\-image}}
+\index{save\-\_\-mini\-\_\-image@{save\-\_\-mini\-\_\-image}!BlockwiseImage@{Blockwise\-Image}}
+\subsubsection[{save\-\_\-mini\-\_\-image}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T , unsigned memory\-\_\-usage$>$ bool {\bf Blockwise\-Image}$<$ T, memory\-\_\-usage $>$\-::save\-\_\-mini\-\_\-image (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{file\-\_\-name}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [protected]}, {\ttfamily [virtual]}}\label{class_blockwise_image_a47ca8a383348f9cc527365977e9d721b}
+
+
+save the mini size image as a jpg file for observation 
+
+
+\begin{DoxyParams}{参数}
+{\em file\-\_\-name} & the bigimage file name ($\ast$.bigimage) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{注解}
+if not defined the S\-A\-V\-E\-\_\-\-M\-I\-N\-I\-\_\-\-I\-M\-A\-G\-E macro, this function will do nothing 
+\end{DoxyNote}
+
+
+被 {\bf Hierarchical\-Image$<$ T, memory\-\_\-usage $>$} \doxyref{}{p.}{class_hierarchical_image_ad4c49535e55585ed7726856d8c65ef6e} 重载.
+
+
+
+在文件 {\bf Blockwise\-Image.\-hpp} 第  行定义.
+
+\index{Blockwise\-Image@{Blockwise\-Image}!set\-\_\-minimal\-\_\-resolution@{set\-\_\-minimal\-\_\-resolution}}
+\index{set\-\_\-minimal\-\_\-resolution@{set\-\_\-minimal\-\_\-resolution}!BlockwiseImage@{Blockwise\-Image}}
+\subsubsection[{set\-\_\-minimal\-\_\-resolution}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T , unsigned memory\-\_\-usage$>$ void {\bf Blockwise\-Image}$<$ T, memory\-\_\-usage $>$\-::set\-\_\-minimal\-\_\-resolution (
+\begin{DoxyParamCaption}
+\item[{int}]{rows, }
+\item[{int}]{cols, }
+\item[{int}]{mini\-\_\-rows, }
+\item[{int}]{mini\-\_\-cols}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [protected]}}\label{class_blockwise_image_a24fcb54429ce4d5df42532115b17d3ec}
+
+
+\-: set the minimum image size according to the image size (rows, cols). 
+
+The minimum image size is set according to the principle \-: the mini image size$\ast$2$^\wedge$n = total image size
+
+
+\begin{DoxyParams}{参数}
+{\em rows} & the image rows \\
+\hline
+{\em cols} & the image cols \\
+\hline
+{\em mini\-\_\-rows} & the minimum rows of the image \\
+\hline
+{\em mini\-\_\-cols} & the minimum cols of the image \\
+\hline
+\end{DoxyParams}
+
+
+在文件 {\bf Blockwise\-Image.\-hpp} 第  行定义.
+
+
+
+这是这个函数的调用关系图\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_blockwise_image_a24fcb54429ce4d5df42532115b17d3ec_icgraph}
+\end{center}
+\end{figure}
+
+
+\index{Blockwise\-Image@{Blockwise\-Image}!set\-\_\-pixels@{set\-\_\-pixels}}
+\index{set\-\_\-pixels@{set\-\_\-pixels}!BlockwiseImage@{Blockwise\-Image}}
+\subsubsection[{set\-\_\-pixels}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T , unsigned memory\-\_\-usage$>$ bool {\bf Blockwise\-Image}$<$ T, memory\-\_\-usage $>$\-::set\-\_\-pixels (
+\begin{DoxyParamCaption}
+\item[{int}]{start\-\_\-row, }
+\item[{int}]{start\-\_\-col, }
+\item[{int}]{rows, }
+\item[{int}]{cols, }
+\item[{const T}]{clear\-\_\-value}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [virtual]}}\label{class_blockwise_image_ac4da5390aa20631c1f0e88b6a93cfead}
+
+
+set the range image data with a const value 
+
+
+\begin{DoxyParams}{参数}
+{\em start\-\_\-row} & The left-\/corner point row \\
+\hline
+{\em start\-\_\-col} & The left-\/corner point col \\
+\hline
+{\em rows} & The row scope of the range, thus the rows get is [start\-\_\-row, start\-\_\-row + rows) \\
+\hline
+{\em cols} & The col scope of the range \\
+\hline
+{\em clear\-\_\-value} & the value that with to fill the image range \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{返回}
+Whether set successfully 
+\end{DoxyReturn}
+
+
+实现了 {\bf Image\-Interface$<$ T $>$} \doxyref{}{p.}{class_image_interface_aa35f6a2c062df7a9796fc672b16cafc8}.
+
+
+
+在文件 {\bf Blockwise\-Image.\-hpp} 第  行定义.
+
+\index{Blockwise\-Image@{Blockwise\-Image}!write\-\_\-image@{write\-\_\-image}}
+\index{write\-\_\-image@{write\-\_\-image}!BlockwiseImage@{Blockwise\-Image}}
+\subsubsection[{write\-\_\-image}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T , unsigned memory\-\_\-usage$>$ bool {\bf Blockwise\-Image}$<$ T, memory\-\_\-usage $>$\-::write\-\_\-image (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{file\-\_\-name}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [virtual]}}\label{class_blockwise_image_a64f3e966d516c8b039bd9f4c8685055c}
+\begin{DoxyNote}{注解}
+file\-\_\-name must has the extension \char`\"{}.\-bigimage\char`\"{} 
+\end{DoxyNote}
+
+
+实现了 {\bf Image\-Interface$<$ T $>$} \doxyref{}{p.}{class_image_interface_ad5c2431a4b31bcb600ba996858efa620}.
+
+
+
+被 {\bf Hierarchical\-Image$<$ T, memory\-\_\-usage $>$} \doxyref{}{p.}{class_hierarchical_image_a6ade13ae295516b5a899498c6800451d} 重载.
+
+
+
+在文件 {\bf Blockwise\-Image.\-hpp} 第  行定义.
+
+
+
+\subsection{友元及相关函数文档}
+\index{Blockwise\-Image@{Blockwise\-Image}!get\-\_\-block\-\_\-wise\-\_\-image\-\_\-by\-\_\-meomory\-\_\-usage@{get\-\_\-block\-\_\-wise\-\_\-image\-\_\-by\-\_\-meomory\-\_\-usage}}
+\index{get\-\_\-block\-\_\-wise\-\_\-image\-\_\-by\-\_\-meomory\-\_\-usage@{get\-\_\-block\-\_\-wise\-\_\-image\-\_\-by\-\_\-meomory\-\_\-usage}!BlockwiseImage@{Blockwise\-Image}}
+\subsubsection[{get\-\_\-block\-\_\-wise\-\_\-image\-\_\-by\-\_\-meomory\-\_\-usage}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T $>$ boost\-::shared\-\_\-ptr$<$ {\bf Giant\-Image\-Interface}$<$ T $>$ $>$ get\-\_\-block\-\_\-wise\-\_\-image\-\_\-by\-\_\-meomory\-\_\-usage (
+\begin{DoxyParamCaption}
+\item[{unsigned}]{memory\-\_\-usage, }
+\item[{size\-\_\-t}]{rows, }
+\item[{size\-\_\-t}]{cols, }
+\item[{size\-\_\-t}]{mini\-\_\-rows, }
+\item[{size\-\_\-t}]{mini\-\_\-cols, }
+\item[{boost\-::shared\-\_\-ptr$<$ {\bf Index\-Method\-Interface} $>$}]{method = {\ttfamily boost\-:\-:shared\-\_\-ptr$<${\bf Index\-Method\-Interface}$>$()}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [related]}}\label{class_blockwise_image_a12ef92ad5f3db77d8a170a491675aeb6}
+
+
+return the block wise image by memroy\-\_\-usage, maximum support 4\-G. 
+
+
+\begin{DoxyParams}{参数}
+{\em memory\-\_\-usage} & the memory usage of the main memory \\
+\hline
+{\em method} & the index method shared\-\_\-ptr object \\
+\hline
+{\em rows} & the image total rows \\
+\hline
+{\em cols} & the image total cols \\
+\hline
+{\em mini\-\_\-rows} & the minimum size image rows \\
+\hline
+{\em mini\-\_\-cols} & the minimum size image cols \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{返回}
+the shared\-\_\-ptr of the \doxyref{Giant\-Image\-Interface}{p.}{class_giant_image_interface} object which indeed is a \doxyref{Blockwise\-Image}{p.}{class_blockwise_image} object 
+\end{DoxyReturn}
+
+
+在文件 {\bf Blockwise\-Image.\-h} 第  行定义.
+
+
+
+该类的文档由以下文件生成\-:\begin{DoxyCompactItemize}
+\item 
+D\-:/\-Out\-\_\-\-Of\-\_\-\-Core\-\_\-\-Git/src/Blockwise\-Image.\-h\item 
+D\-:/\-Out\-\_\-\-Of\-\_\-\-Core\-\_\-\-Git/src/Blockwise\-Image.\-hpp\end{DoxyCompactItemize}

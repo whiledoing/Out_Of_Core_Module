@@ -1,0 +1,196 @@
+\section{test\-Image\-Containter.\-cpp}
+This an example of how to use the image processing interface in the \doxyref{Blockwise\-Image}{p.}{class_blockwise_image} class.
+
+
+\begin{DoxyCodeInclude}
+\textcolor{preprocessor}{#include <iostream>}
+\textcolor{preprocessor}{#include <string>}
+
+\textcolor{preprocessor}{#include <opencv2/core/core.hpp>}
+\textcolor{preprocessor}{#include <opencv2/imgproc/imgproc.hpp>}
+\textcolor{preprocessor}{#include <opencv2/highgui/highgui.hpp>}
+
+\textcolor{preprocessor}{#include "../src/HierarchicalImage.hpp"}
+
+\textcolor{preprocessor}{#include <boost/assert.hpp>}
+\textcolor{preprocessor}{#include <boost/progress.hpp>}
+\textcolor{preprocessor}{#include <boost/timer.hpp>}
+
+\textcolor{keyword}{using namespace }std;
+
+\textcolor{keyword}{typedef} GiantImageInterface<Vec3b> BigImageType;
+\textcolor{keyword}{typedef} boost::shared\_ptr<BigImageType> BigImagePtr;
+\textcolor{keyword}{typedef} DiskBigImage<Vec3b> DiskImageType;
+\textcolor{keyword}{typedef} boost::shared\_ptr<DiskImageType> DiskImagePtr;
+\textcolor{keyword}{typedef} ZOrderIndex ZOrderIndexType;
+
+\textcolor{keyword}{static} BigImagePtr build\_enlarged\_image(\textcolor{keyword}{const} \textcolor{keywordtype}{char} *file\_name, \textcolor{keywordtype}{size\_t} 
+      enlarge\_number, \textcolor{keywordtype}{size\_t} memory\_usage);
+
+BigImagePtr build\_enlarged\_image(\textcolor{keyword}{const} \textcolor{keywordtype}{char} *file\_name, \textcolor{keywordtype}{size\_t} enlarge\_number, \textcolor{keywordtype}{
+      size\_t} memory\_usage)
+\{
+        cv::Mat original\_img = cv::imread(file\_name);
+        \textcolor{keywordflow}{if}(original\_img.empty()) \{
+                cerr << \textcolor{stringliteral}{"Load image error"} << endl;
+                \textcolor{keywordflow}{return} BigImagePtr();
+        \}
+
+        BOOST\_ASSERT\_MSG(original\_img.depth() == CV\_8U, \textcolor{stringliteral}{"image depth not
+       correct"});
+        BOOST\_ASSERT\_MSG(original\_img.channels() == 3, \textcolor{stringliteral}{"image channels not
+       correct"});
+
+        \textcolor{keywordtype}{size\_t} rows = original\_img.rows, cols = original\_img.cols;
+        \textcolor{keywordtype}{size\_t} large\_rows = rows * enlarge\_number, large\_cols = cols * 
+      enlarge\_number;
+
+        boost::shared\_ptr<IndexMethodInterface> index\_method = 
+      boost::make\_shared<ZOrderIndex>(large\_rows, large\_cols);
+        \textcolor{comment}{//init the config file}
+        \{
+                \textcolor{keywordtype}{size\_t} imageBytes = (double)(index\_method->get\_max\_index() * \textcolor{keyword}{
+      sizeof}(Vec3b)) / (1024*1024);
+                fstream fout(\textcolor{stringliteral}{"config.stxxl"}, ios::out | ios::trunc);
+                fout << \textcolor{stringliteral}{"disk=d:\(\backslash\)\(\backslash\)stxxl,"} << (imageBytes * 2) <<\textcolor{stringliteral}{",wincall"} << 
+      endl;
+                fout.close();
+        \}
+
+        \textcolor{comment}{//the container to store the enlarged image}
+        BigImagePtr p\_big\_image = get\_block\_wise\_image\_by\_meomory\_usage<Vec3b>(
+      memory\_usage, large\_rows, large\_cols, 1, 1, index\_method);
+        BigImageType &big\_image = *p\_big\_image;
+        big\_image.set\_file\_node\_size(1024*1024);
+
+        \textcolor{comment}{//time related}
+        boost::progress\_display pd(enlarge\_number*enlarge\_number);
+        boost::timer t;
+        t.restart();
+
+        \textcolor{comment}{//the ZOrder part}
+        \textcolor{keyword}{typedef} ZOrderIndexType::IndexType IndexType;
+        \textcolor{keywordflow}{for}(IndexType outI = 0; outI < enlarge\_number; ++outI) \{
+                \textcolor{keywordflow}{for}(IndexType outJ = 0; outJ < enlarge\_number; ++outJ) \{
+                        IndexType startI = outI * rows;
+                        IndexType startJ = outJ * cols;
+                        \textcolor{keywordflow}{for}(IndexType i = 0; i < rows; ++i) \{
+                                IndexType I = startI + i;
+                                \textcolor{keywordflow}{for}(IndexType j = 0; j < cols; ++j) \{
+                                        IndexType J = startJ + j;
+                                        big\_image(I, J) = *(Vec3b*)(
+      original\_img.data + i*original\_img.step[0] + j*original\_img.step[1]);
+                                \}
+                        \}
+                        ++pd;
+                \}
+        \}
+        cout << \textcolor{stringliteral}{"Build Enlarged Image Cost Time : "} << t.elapsed() << \textcolor{stringliteral}{" s "} << 
+      endl;
+
+        \textcolor{keywordflow}{return} p\_big\_image;
+\}
+
+\textcolor{comment}{/*}
+\textcolor{comment}{ * 1) read a picture}
+\textcolor{comment}{ * 2) enlarge it to get a big image (test the container ability)}
+\textcolor{comment}{ * 3) input the range information to get the image range data }
+\textcolor{comment}{ */}
+\textcolor{keywordtype}{bool} test\_big\_image\_containter(\textcolor{keywordtype}{int} argc, \textcolor{keywordtype}{char} **argv)
+\{
+        \textcolor{keywordflow}{if}(argc < 5) \{
+                cout << \textcolor{stringliteral}{"Read a image file first, just enlarge the image in
+       both hierarchical and vertical "} << endl
+                        << \textcolor{stringliteral}{"Para : enlarge number (the enlarge number of image
+       in both hierarchical and vertical)"} << endl
+                        << \textcolor{stringliteral}{"Para : memory usage (the maximum memory can be
+       used)"} << endl
+                        << \textcolor{stringliteral}{"Para : show image (whether show the enlarged image,
+       too large is forbidden)"} << endl;
+
+                cout << \textcolor{stringliteral}{"Usage : "} << \textcolor{stringliteral}{"[fileName] [enlarge number] [resRow]
+       [resCol] "}
+                        \textcolor{stringliteral}{"[memory usage(optional)] [show image(optional)]"} << 
+      endl;
+                \textcolor{keywordflow}{return} \textcolor{keyword}{false};
+        \}
+
+        \textcolor{keyword}{const} \textcolor{keywordtype}{char} *file\_name = argv[1];
+        \textcolor{keywordtype}{size\_t} enlarge\_number = atoi(argv[2]);
+        \textcolor{keyword}{const} \textcolor{keywordtype}{int} res\_row = atoi(argv[3]);
+        \textcolor{keyword}{const} \textcolor{keywordtype}{int} res\_col = atoi(argv[4]);
+        \textcolor{keywordtype}{size\_t} memory\_usage = (argc >= 6) ? (atoi(argv[5])) : 64;
+        \textcolor{keywordtype}{bool} bShowImg = (argc >= 7 && (string(argv[6]) == \textcolor{stringliteral}{"1"} || string(argv[6]
+      ) == \textcolor{stringliteral}{"true"})) ? \textcolor{keyword}{true} : \textcolor{keyword}{false};
+
+        BigImagePtr p\_big\_image = build\_enlarged\_image(file\_name, 
+      enlarge\_number, memory\_usage);
+        \textcolor{keywordflow}{if}(!p\_big\_image) \textcolor{keywordflow}{return} \textcolor{keyword}{false};
+        BigImageType &big\_image = *p\_big\_image;
+
+        \textcolor{keywordtype}{size\_t} large\_rows = big\_image.get\_image\_rows(), large\_cols = big\_image.
+      get\_image\_cols();
+        \textcolor{keywordflow}{if}(bShowImg)
+        \{
+                boost::timer t;
+
+                std::vector<Vec3b> data;
+                \textcolor{keywordflow}{try} \{
+
+            big\_image.get\_pixels(0, 0, big\_image.get\_image\_rows(), big\_image.
+      get\_image\_cols(), data);
+
+            cout << \textcolor{stringliteral}{"get the all data from zorder based container "} << t.
+      elapsed() << \textcolor{stringliteral}{" s "} << endl;
+
+            cv::Mat result\_image(large\_rows, large\_cols, CV\_8UC3, data.data());
+            cv::namedWindow(\textcolor{stringliteral}{"Enlarged Image"});
+            cv::imshow(\textcolor{stringliteral}{"Enlarged Image"}, result\_image);
+            cv::waitKey(0);
+
+                \} \textcolor{keywordflow}{catch} (std::exception &err) \{
+                        cerr << err.what() << endl;
+                        \textcolor{keywordflow}{return} \textcolor{keyword}{false};
+                \}
+        \}
+
+        cout << \textcolor{stringliteral}{"Large Image Size Is : ("} << large\_rows << \textcolor{stringliteral}{","} << large\_cols <<
+       \textcolor{stringliteral}{")"} << endl;
+
+        \textcolor{comment}{/* save the input para */}
+        std::string str\_array[4];
+        \textcolor{keywordflow}{while}(1) \{
+                cout << \textcolor{stringliteral}{"Input (quit to exit) : [start\_row] [start\_col] [rows]
+       [cols]"} << endl;
+
+                cin >> str\_array[0];
+                \textcolor{keywordflow}{if}(str\_array[0] == \textcolor{stringliteral}{"quit"})      \textcolor{keywordflow}{return} \textcolor{keyword}{true};
+
+                cin >> str\_array[1] >> str\_array[2] >> str\_array[3];
+
+                \textcolor{keywordtype}{int} start\_row = atoi(str\_array[0].c\_str());
+                \textcolor{keywordtype}{int} start\_col = atoi(str\_array[1].c\_str());
+                \textcolor{keywordtype}{int} rows = atoi(str\_array[2].c\_str());
+                \textcolor{keywordtype}{int} cols = atoi(str\_array[3].c\_str());
+
+                \textcolor{keywordflow}{try}\{
+                        std::vector<Vec3b> vec;
+                        \textcolor{keywordflow}{if}(!big\_image.get\_pixels(start\_row, start\_col, rows, 
+      cols, vec))
+                                \textcolor{keywordflow}{continue};
+
+                        cv::Mat result\_image(rows, cols, CV\_8UC3, vec.data());
+                        cv::namedWindow(\textcolor{stringliteral}{"RangeArea"});
+                        cv::imshow(\textcolor{stringliteral}{"RangeArea"}, result\_image);
+                        cv::waitKey(2000);
+
+                \} \textcolor{keywordflow}{catch}(std::exception &err) \{
+                        cout << err.what() << endl;
+                        \textcolor{keywordflow}{return} \textcolor{keyword}{false};
+                \}
+        \}
+
+        \textcolor{keywordflow}{return} \textcolor{keyword}{true};
+\}
+\end{DoxyCodeInclude}
+ 
