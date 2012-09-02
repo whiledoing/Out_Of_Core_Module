@@ -28,7 +28,7 @@ bool test_writing_blockwise(int argc, char **argv)
 
 	if(argc < 6) {
 		cout << "Usage : [file name] [res row] [res col] [write image file name] [enlarge number]"
-			" [optinal (show image)] " << endl;
+			" [optional (set file cell size)] [optinal (show image)] " << endl;
 		return false;
 	}
 
@@ -37,7 +37,8 @@ bool test_writing_blockwise(int argc, char **argv)
 	size_t mini_cols = atoi(argv[3]);
 	const char *write_image_name = argv[4];
 	size_t enlarge_number = atoi(argv[5]);
-	bool show_image = (argc >= 7) ? atoi(argv[6]) : false;
+	size_t file_size = (argc >= 7) ? atoi(argv[6]) : false;
+	bool show_image = (argc >= 8) ? atoi(argv[7]) : false;
 
 	cv::Mat original_img = cv::imread(file_name);
 	if(original_img.empty()) {
@@ -94,7 +95,7 @@ bool test_writing_blockwise(int argc, char **argv)
 	t.restart();
 
 	/* 6M per file */
-	big_image.set_file_node_size(6*1024*1024);
+	big_image.set_file_node_size(file_size*1024*1024);
 
 	if(!big_image.write_image(write_image_name)) return false;
 	cout << "Write Hierarchical Image Cost : " << t.elapsed() << " s " << endl;
