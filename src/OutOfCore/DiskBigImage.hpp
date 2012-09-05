@@ -372,7 +372,7 @@ template<typename T>
 bool DiskBigImage<T>::load_image_head_file(const char* file_name)
 {
 	using namespace std;
-	namespace bf = boost::filesystem3;
+	namespace bf = boost::filesystem;
 
 	/* first check file existence */
 	try {
@@ -516,7 +516,7 @@ bool DiskBigImage<T>::load_image_head_file(const char* file_name)
 template<typename T>
 inline void DiskBigImage<T>::set_image_data_path(const char * file_name) 
 {
-	namespace bf = boost::filesystem3;
+	namespace bf = boost::filesystem;
 
 	/* save the img_data_path */
 	bf::path file_path = file_name;

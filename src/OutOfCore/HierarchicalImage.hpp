@@ -50,7 +50,8 @@ template<typename T, size_t memory_usage>
 bool HierarchicalImage<T, memory_usage>::write_image(const char *file_name)
 {
 	using namespace std;
-	namespace bf = boost::filesystem3;
+	namespace bf = boost::filesystem;
+
 
 	try {
 		if(!write_image_head_file(file_name))	return false;
@@ -101,7 +102,7 @@ bool HierarchicalImage<T, memory_usage>::write_image(const char *file_name)
 
 template<typename T, size_t memory_usage>
 bool HierarchicalImage<T, memory_usage>::write_image_inner_loop(size_t start_level, size_t merge_number,
-	const boost::filesystem3::path &data_path, const int64 &file_number)
+	const boost::filesystem::path &data_path, const int64 &file_number)
 {
 	/*
 	*	fout_array : different ofstream for multiply ways writing into files
@@ -117,7 +118,7 @@ bool HierarchicalImage<T, memory_usage>::write_image_inner_loop(size_t start_lev
 
 	using boost::lexical_cast;
 	using namespace std;
-	namespace bf = boost::filesystem3;
+	namespace bf = boost::filesystem;
 
 	static const ContainerType &c_img_container = img_container;
 
@@ -280,7 +281,7 @@ bool HierarchicalImage<T, memory_usage>::save_mini_image(const char* file_name)
 
 	/* convert the RGB format to opencv BGR format */
 	cv::cvtColor(result_image, result_image, CV_RGB2BGR);
-	boost::filesystem3::path file_path(file_name);
+	boost::filesystem::path file_path(file_name);
 	std::string result_image_name = (file_path.parent_path() / (file_path.stem().generic_string() + ".jpg")).generic_string();
 	cv::imwrite(result_image_name, result_image);
 #endif

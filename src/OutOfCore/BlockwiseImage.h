@@ -10,14 +10,8 @@
 
 /* stxxl part */
 #include <stxxl.h>
-#ifdef NDEBUG
-#pragma comment(lib, "libstxxl_release.lib")
-#else
-#pragma comment(lib, "libstxxl_debug.lib")
-#endif
 
 /* filesystem part */
-#define BOOST_FILESYSTEM_VERSION 3
 #include <boost/filesystem.hpp>
 
 /**

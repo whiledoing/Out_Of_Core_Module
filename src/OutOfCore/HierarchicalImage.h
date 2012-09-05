@@ -72,7 +72,8 @@ protected:
 	/** 
 	 * @brief write the start_level image data in the write image inner loop
 	 */
-	bool write_image_inner_loop(size_t start_level, size_t merge_number, const boost::filesystem3::path &data_path, const int64 &file_number);
+	bool write_image_inner_loop(size_t start_level, size_t merge_number, 
+        const boost::filesystem::path &data_path, const int64 &file_number);
 
 protected:
 	/** the number for writing image data files in concurrently */
@@ -94,7 +95,7 @@ inline void HierarchicalImage<T, memory_usage>::set_mutliply_ways_writing_number
 template<typename T, size_t memory_usage>
 inline void HierarchicalImage<T, memory_usage>::set_image_data_path(const char * file_name) 
 {
-	namespace bf = boost::filesystem3;
+	namespace bf = boost::filesystem;
 
 	/* save the img_data_path */
 	bf::path file_path = file_name;

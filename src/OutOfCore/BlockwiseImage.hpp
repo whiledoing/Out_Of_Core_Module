@@ -179,7 +179,7 @@ T& BlockwiseImage<T, memory_usage>::get_pixel(int row, int col)
 template<typename T, unsigned memory_usage>
 bool BlockwiseImage<T, memory_usage>::write_image_head_file(const char* file_name)
 {
-	namespace bf = boost::filesystem3;
+	namespace bf = boost::filesystem;
 	using namespace std;
 
 	try {
@@ -226,7 +226,7 @@ template<typename T, unsigned memory_usage>
 bool BlockwiseImage<T, memory_usage>::write_image(const char* file_name)
 {
 	using namespace std;
-	namespace bf=boost::filesystem3;
+	namespace bf = boost::filesystem;
 
 	try {
 		if(!write_image_head_file(file_name))	return false;
@@ -355,7 +355,7 @@ bool BlockwiseImage<T, memory_usage>::save_mini_image(const char *file_name)
 		}
 	}
 
-    boost::filesystem3::path file_path = file_name;
+    boost::filesystem::path file_path = file_name;
     std::string mini_image_name = (file_path.parent_path() / (file_path.stem().generic_string() + ".jpg")).generic_string();
 
 	/* save the image into opencv format */
