@@ -43,7 +43,7 @@ source_group_by_dir(_all_files)
 
 # add all the files 
 add_executable(ReadingBigImage
-    ${_moc_files_sources
+    ${_moc_files_sources}
     ${_forms_headers}
     ${_all_files}
     )
@@ -51,8 +51,11 @@ add_executable(ReadingBigImage
 # add the ui files include directory
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
+# add qt support
+target_link_libraries(ReadingBigImage ${QT_LIBRARIES})
+
 # link the stxxl library
-target_link_libraries(ReadingBiImage 
-    debug "${_stxxl_library_dirs}/stxxl_debug.lib"
-    optimized "${_stxxl_library_dirs/stxxl_release.lib"
-    )
+add_stxxl_support(ReadingBigImage)
+
+# link the opencv part
+add_opencv_support(ReadingBigImage)
