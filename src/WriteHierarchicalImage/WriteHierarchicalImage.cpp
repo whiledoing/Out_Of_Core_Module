@@ -1,4 +1,4 @@
-#include "HierarchicalImage.hpp"
+#include "OutOfCore/HierarchicalImage.hpp"
 
 #include <boost/timer.hpp>
 #include <boost/progress.hpp>

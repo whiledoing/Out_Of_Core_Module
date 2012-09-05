@@ -54,7 +54,7 @@ macro(add_opencv_support target_name)
 endmacro(add_opencv_support)
 
 # add my OutOfCore part
-include_directories(${PROJECT_SOURCE_DIR}/src/OutOfCore)
+include_directories(${PROJECT_SOURCE_DIR}/include)
 
 # set the output path
 set(EXECUTABLE_OUTPUT_PATH "${PROJECT_BINARY_DIR}/bin")

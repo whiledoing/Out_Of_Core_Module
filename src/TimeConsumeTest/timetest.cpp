@@ -1,4 +1,4 @@
-#include "IndexMethod.hpp"
+#include "OutOfCore/IndexMethod.hpp"
 #include <boost/timer.hpp>
 #include <iostream>
 #include <vector>

@@ -1,7 +1,7 @@
 // WriteBlockWiseImage.cpp : Defines the entry point for the console application.
 //
 
-#include "BlockwiseImage.hpp"
+#include "OutOfCore/BlockwiseImage.hpp"
 
 #include <boost/timer.hpp>
 #include <boost/progress.hpp>

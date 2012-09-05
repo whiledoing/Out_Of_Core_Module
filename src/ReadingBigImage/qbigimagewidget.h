@@ -1,8 +1,8 @@
 #ifndef QBIGIMAGEWIDGET_H
 #define QBIGIMAGEWIDGET_H
 
-#include "BasicType.h"
-#include "DiskBigImageInterface.h"
+#include "OutOfCore/BasicType.h"
+#include "OutOfCore/DiskBigImageInterface.h"
 
 /* qt module */
 #include <QWidget>
