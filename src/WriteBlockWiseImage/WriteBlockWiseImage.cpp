@@ -1,7 +1,7 @@
 // WriteBlockWiseImage.cpp : Defines the entry point for the console application.
 //
 
-#include "../src/BlockwiseImage.hpp"
+#include "BlockwiseImage.hpp"
 
 #include <boost/timer.hpp>
 #include <boost/progress.hpp>
@@ -10,17 +10,6 @@
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
-
-#ifdef NDEBUG
-#pragma comment(lib, "opencv_highgui240.lib")
-#pragma comment(lib, "opencv_core240.lib")
-#pragma comment(lib, "opencv_imgproc240.lib")
-#else
-#pragma comment(lib, "opencv_highgui240d.lib")
-#pragma comment(lib, "opencv_core240d.lib")
-#pragma comment(lib, "opencv_imgproc240d.lib")
-#endif
-/*---------------------------------------------*/
 
 bool test_writing_blockwise(int argc, char **argv)
 {

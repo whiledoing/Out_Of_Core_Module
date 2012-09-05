@@ -5,7 +5,7 @@
 #include <boost/assert.hpp>
 #include <string>
 
-#include "../src/IndexMethod.hpp"
+#include "IndexMethod.hpp"
 
 using namespace std;
 

@@ -12,7 +12,7 @@
 
 /* out of core module */
 #include <boost/format.hpp>
-#include "../src/DiskBigImage.hpp"
+#include "DiskBigImage.hpp"
 
 QBigImageWidget::QBigImageWidget(QWidget *parent)
 	: m_parent(parent), QWidget(parent)

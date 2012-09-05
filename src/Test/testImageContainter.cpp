@@ -5,7 +5,7 @@
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/highgui/highgui.hpp>
 
-#include "../src/HierarchicalImage.hpp"
+#include "HierarchicalImage.hpp"
 
 #include <boost/assert.hpp>
 #include <boost/progress.hpp>
