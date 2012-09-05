@@ -16,6 +16,7 @@ class ReadingBigImage : public QMainWindow
 public:
 	ReadingBigImage(QWidget *parent = 0, Qt::WFlags flags = 0);
 	~ReadingBigImage();
+    void open_file_name(QString file_name);
 
 public slots:
 	void on_open_file_name();

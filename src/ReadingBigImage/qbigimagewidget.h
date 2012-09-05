@@ -29,7 +29,7 @@ public:
 	bool load_image(QString file_name) throw (const std::bad_alloc&);
 
 protected:
-	virtual void	paintEvent(QPaintEvent *event);
+	virtual void paintEvent(QPaintEvent *event);
 	virtual void resizeEvent(QResizeEvent *event);
 	virtual void mousePressEvent(QMouseEvent *event);
 	virtual void mouseReleaseEvent(QMouseEvent *event);
@@ -42,10 +42,12 @@ private:
 	/*
 	 *	@para : get the new show area size according to the widget size
 	 */
-	void get_show_size() 
+	void get_show_image_size() 
 	{
-		show_rows = height() - 2*margin;
-		show_cols = width() - 2*margin;
+		//show_rows = height() - 2*margin;
+		//show_cols = width() - 2*margin;
+		img_rows = height() - 2*margin;
+		img_cols = width() - 2*margin;
 	}
 
 	/*
@@ -126,9 +128,9 @@ private:
 	 */
 	void normalize_para() 
 	{
-		/* first get the image rows and cols as much as the show area size */
-		img_rows = show_rows; 
-		img_cols = show_cols;
+		///* first get the image rows and cols as much as the show area size */
+        //img_rows = show_rows; 
+        //img_cols = show_cols;
 
 		/* check the start position validation */
 		start_row = (start_row < 0) ? 0 : start_row;
@@ -171,6 +173,8 @@ private:
 		b_mouse_pressed = false;
 	}
 
+    void delta_copy_image_data(int delta_rows, int delta_cols);
+
 private:
 	/* save the big image object read from the image file in disk */
 	boost::shared_ptr<DiskBigImageInterface<Vec3b> > big_image;
@@ -191,8 +195,8 @@ private:
 	int start_col; 
 
 	/* the showing area size in the widget */
-	int show_rows;
-	int show_cols;
+	//int show_rows;
+	//int show_cols;
 
 	/* save the last time value */
 	int last_start_row;

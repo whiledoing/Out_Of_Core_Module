@@ -32,6 +32,9 @@ bool QBigImageWidget::load_image(QString file_name)
 
 		/* set the cache size is 32 */
 		big_image->set_file_cache_number(32);
+
+        get_show_image_size();
+
 	} catch (const std::bad_alloc &err){
 		init_para();
 		throw err;
@@ -58,13 +61,12 @@ void QBigImageWidget::paintEvent(QPaintEvent * event)
 
 void QBigImageWidget::resizeEvent(QResizeEvent *event)
 {
-	get_show_size();
-
 	if(img_data.size() <= 0) return;
+    get_show_image_size();
 
-	/* tells the img_rows and img_cols has been changed */
-	img_rows = show_rows;
-	img_cols = show_cols;
+	///* tells the img_rows and img_cols has been changed */
+	//img_rows = show_rows;
+	//img_cols = show_cols;
 
     if(!get_image_data()) return;
 }
@@ -96,20 +98,23 @@ void QBigImageWidget::mouseMoveEvent(QMouseEvent *event)
 
 	if(img_data.size() <= 0) return;
 	if(b_mouse_pressed) {
-		int deltaRows = last_point.y() - event->pos().y();
-		int deltaCols = last_point.x() - event->pos().x();
+		int delta_rows = last_point.y() - event->pos().y();
+		int delta_cols = last_point.x() - event->pos().x();
 
-		if(std::abs(deltaRows) < 20 && std::abs(deltaCols) < 20) return;
+        /* if the movement is too small, do nothing */
+		if(std::abs(delta_rows) < 20 && std::abs(delta_cols) < 20) return;
 
-		/* change the start position according to the mouse movement */
-		start_row += deltaRows;
-		start_col += deltaCols;
+        delta_copy_image_data(delta_rows, delta_cols);
 
-		if(!get_image_data()) {
-			b_mouse_pressed = false;
-            setCursor(QCursor(Qt::ArrowCursor));
-			return;
-		}
+        /* change the start position according to the mouse movement */
+  //      start_row += delta_rows;
+  //      start_col += delta_cols;
+
+  //      if(!get_image_data()) {
+  //          b_mouse_pressed = false;
+  //          setCursor(QCursor(Qt::ArrowCursor));
+  //          return;
+  //      }
 
 		this->repaint();
 
@@ -163,4 +168,66 @@ void QBigImageWidget::keyPressEvent(QKeyEvent *event)
 	*/
 
 	return QWidget::keyPressEvent(event);
+}
+
+void QBigImageWidget::delta_copy_image_data(int delta_rows, int delta_cols) 
+{
+    last_start_row = start_row;
+    last_start_col = start_col;
+
+    start_row += delta_rows;
+    start_col += delta_cols;
+
+    normalize_para();
+
+    delta_rows = start_row - last_start_row;
+    delta_cols = start_col - last_start_col;
+
+    /* first copy the image data from the original image data area into the new accordingly image data area */
+    int ori_row, ori_col;
+    int dst_row, dst_col;
+
+    int distance_rows = std::abs(delta_rows);
+    int distance_cols = std::abs(delta_cols);
+
+    if(delta_cols > 0) {
+        dst_col = distance_cols;
+        ori_col = 0;
+    } else {
+        dst_col = 0;
+        ori_col = distance_cols;
+    }
+
+    if(delta_rows > 0) {
+        dst_row = distance_rows;
+        ori_row = 0;
+    } else {
+        dst_row = 0;
+        ori_row = distance_rows;
+    }
+
+    /* now copy the ori area data into dst area data */
+    std::vector<Vec3b> ori_data = img_data;
+
+    Vec3b *ori_ptr = &ori_data[ori_row*img_cols + ori_col];
+    Vec3b *dst_ptr = &img_data[dst_row*img_cols + dst_col];
+
+    for(unsigned row = 0; row < img_rows - distance_rows; ++row) {
+        for(unsigned col = 0; col < img_cols - distance_cols; ++col) {
+            *dst_ptr = *ori_ptr;
+            ++dst_ptr;
+            ++ori_ptr;
+        }
+        
+        dst_ptr += distance_cols;
+        ori_ptr += distance_cols;
+    }
+
+    /* now get the delta image data */
+    if(distance_cols > 0) {
+
+    } else {
+
+    }
+
 }
