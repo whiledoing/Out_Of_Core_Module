@@ -1,8 +1,0 @@
-<map id="HierarchicalImage&lt; T, memory_usage &gt;" name="HierarchicalImage&lt; T, memory_usage &gt;">
-<area shape="rect" id="node2" href="$class_blockwise_image.html" title="Derived from GiantImageInterface, support the big image operation, and saves the whole image into dis..." alt="" coords="180,267,319,309"/>
-<area shape="rect" id="node4" href="$class_giant_image_interface.html" title="Derived form the ImageInterface, and defines the basic operations that restricted to the big image fi..." alt="" coords="165,181,333,208"/>
-<area shape="rect" id="node6" href="$class_image_interface.html" title="The Basic Image Interface contains of several basic image processing functions." alt="" coords="78,96,215,123"/>
-<area shape="rect" id="node8" href="$struct_size.html" title="Size" alt="" coords="27,5,75,32"/>
-<area shape="rect" id="node11" title="STL class." alt="" coords="363,275,443,301"/>
-<area shape="rect" id="node13" title="STL class." alt="" coords="358,174,484,215"/>
-</map>

@@ -1,4 +1,0 @@
-<map id="类继承关系图" name="类继承关系图">
-<area shape="rect" id="node1" href="$class_disk_big_image_interface.html" title="The interface for accessing the big image files in the disk that were saved by BlockwiseImage and Hie..." alt="" coords="6,5,189,32"/>
-<area shape="rect" id="node3" href="$class_disk_big_image.html" title="Derived from DiskBigImageInterface, support for the reading and writing of the big image that was sav..." alt="" coords="237,5,371,32"/>
-</map>

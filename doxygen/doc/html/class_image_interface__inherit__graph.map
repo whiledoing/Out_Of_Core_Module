@@ -1,5 +1,0 @@
-<map id="ImageInterface&lt; T &gt;" name="ImageInterface&lt; T &gt;">
-<area shape="rect" id="node3" href="$class_giant_image_interface.html" title="Derived form the ImageInterface, and defines the basic operations that restricted to the big image fi..." alt="" coords="5,80,173,107"/>
-<area shape="rect" id="node5" href="$class_blockwise_image.html" title="Derived from GiantImageInterface, support the big image operation, and saves the whole image into dis..." alt="" coords="16,155,163,181"/>
-<area shape="rect" id="node7" href="$class_hierarchical_image.html" title="Derived from BlockwiseImage, support the big image operation, can save the image data in a hierarchic..." alt="" coords="18,230,160,271"/>
-</map>

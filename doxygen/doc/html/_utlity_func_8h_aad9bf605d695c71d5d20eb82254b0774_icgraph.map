@@ -1,4 +1,0 @@
-<map id="get_least_order_number" name="get_least_order_number">
-<area shape="rect" id="node3" href="$class_blockwise_image.html#a24fcb54429ce4d5df42532115b17d3ec" title=": set the minimum image size according to the image size (rows, cols)." alt="" coords="217,5,359,46"/>
-<area shape="rect" id="node5" href="$class_blockwise_image.html#a47d9836eb6f1544d5557234f2616c757" title="get the blockwise image container according to the image size." alt="" coords="409,5,591,46"/>
-</map>
