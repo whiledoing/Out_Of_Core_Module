@@ -29,31 +29,28 @@
  * <b>1. boost</b>
  * 使用到了boost的下面相关子库：
  * data_time iostreams filesystem system thread
- * 需要编译好上面的静态库
-
+ * 需要编译好上面的静态库，放入到$(BOOST_ROOT)/stage/lib目录下，其中BOOST_ROOT为指定boost的所在
+ * 更目录的系统环境变量。
+ *
  * <b>2. stxxl</b>
  * 是一个提供了基于stl的容器接口，同时将容器数据存放在硬盘中的库。
  * Website : http://stxxl.sourceforge.net/ 
- * 安装说明：
- * （1）将/SharedLibrary/stxxl/include 设置为头文件包含的地址
- * （2）将/SharedLibrary/stxxl/lib 设置为lib包含的地址 
- * （3）在工程文件中设置下面的command line （前提配置好了boost, 在链接 stxxl的库的时候， 会自动去链接boost的相关库）
-
- * <b>Debug :</b>
- * C/C++ -- Command Line :
- * -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_SECURE_SCL=0 /Od /MDd /ZI -D_RTLDLL -DBOOST_LIB_DIAGNOSTIC -DSTXXL_BOOST_TIMESTAMP -DSTXXL_BOOST_CONFIG -DSTXXL_BOOST_FILESYSTEM -DSTXXL_BOOST_THREADS -DSTXXL_BOOST_RANDOM /EHsc /EHs /wd4820 /wd4217 /wd4668 /wd4619 /wd4625 /wd4626 /wd4355 /wd4996 -D_SCL_SECURE_NO_DEPRECATE /F 16777216 /nologo /DSTXXL_LIBNAME=\"stxxl_debug\" 
-
- * Linker -- Command Line :
- * /STACK:16777216 /NOLOGO /DEBUG 
-
- * <b>Release :</b>
- * C/C++ -- Command Line :
- * -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_SECURE_SCL=0 /O2 /Ob2 /MD /DNDEBUG -D_RTLDLL -DBOOST_LIB_DIAGNOSTIC -DSTXXL_BOOST_TIMESTAMP -DSTXXL_BOOST_CONFIG -DSTXXL_BOOST_FILESYSTEM -DSTXXL_BOOST_THREADS -DSTXXL_BOOST_RANDOM /EHsc /EHs /wd4820 /wd4217 /wd4668 /wd4619 /wd4625 /wd4626 /wd4355 /wd4996 -D_SCL_SECURE_NO_DEPRECATE /F 16777216 /nologo /DSTXXL_LIBNAME=\"stxxl_release\" 
-
- * Linker -- Command Line :
- * /STACK:16777216 /NOLOGO /OPT:REF 
-
- * （4）stxxl的配置文件，在代码运行的目录下面新建文件config.stxxl
+ *
+ * 使用vc10编译好的lib放在了OutOfCore/Library/stxxl/lib目录下面，如果不能直接本机进行链接，那么重新编译
+ *
+ * stxxl的原来工程使用nmake编译Makefile的方式，暂不知道如何直接集成到cmake中，必须用本机的nmake来编译
+ * stxxl的lib文件
+ *
+ * 编译方法：
+ * 将Library目录下的stxxl源码解压,使用命令：
+ * nmake library_msvc_release
+ * 编译好的libstxxl.lib文件在lib目录下，将其拷贝到OutOfCore/Library/stxxl/lib/Release目录下面
+ * nmake clean_msvc 
+ * 将编译的内容删除
+ * nmake library_msvc_debug
+ * 编译debug版本的库，同样将libstxxl.lib拷贝到OutOfCore/Library/stxxl/lib/Debug目录下面
+ *  
+ * stxxl的配置文件，在代码运行的目录下面新建文件config.stxxl
  * For example : #config.stxxl
  * disk=c:\stxxl,70000,wincall     
  * disk=d:\stxxl,70000,wincall
