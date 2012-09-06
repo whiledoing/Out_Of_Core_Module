@@ -41,9 +41,39 @@ void DockLabel::set_draw_rect_ratio(double start_row_ratio, double start_col_rat
 
 void DockLabel::mouseMoveEvent(QMouseEvent *event)
 {
-    QRect pixmap_rect(margin(), margin(), pixmap()->width(), pixmap()->height());
-    if(pixmap_rect.contains(event->pos()))
+    if(pos_in_pixmap(event->pos()))
         setCursor(Qt::PointingHandCursor);
     else
         setCursor(Qt::ArrowCursor);
+
+    return QLabel::mouseMoveEvent(event);
+}
+
+void DockLabel::mousePressEvent(QMouseEvent *event)
+{
+    if(!pos_in_pixmap(event->pos()))    return QLabel::mousePressEvent(event);
+
+    int pix_width = pixmap()->width();
+    int pix_height = pixmap()->height();
+    int pix_margin = this->margin();
+
+    double press_col_ratio = (double)(event->pos().x() - pix_margin) / pix_width;
+    double press_row_ratio = (double)(event->pos().y() - pix_margin) / pix_height;
+    double delta = 0.0001;
+
+    m_start_col_ratio = press_col_ratio - (m_cols_ratio/2);
+    if(m_start_col_ratio < delta)  
+        m_start_col_ratio = 0;
+    else if(m_start_col_ratio + m_cols_ratio > 1.0)
+        m_start_col_ratio = 1.0 - m_cols_ratio;
+    
+    m_start_row_ratio = press_row_ratio - (m_rows_ratio/2);
+    if(m_start_row_ratio < delta)  
+        m_start_row_ratio = 0;
+    else if(m_start_row_ratio + m_rows_ratio > 1.0)
+        m_start_row_ratio = 1.0 - m_rows_ratio;
+    
+    emit signal_change_rect_ratio(m_start_row_ratio, m_start_col_ratio);
+
+    this->repaint();
 }

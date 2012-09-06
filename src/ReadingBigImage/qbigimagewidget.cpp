@@ -33,7 +33,7 @@ bool QBigImageWidget::load_image(QString file_name)
         if(!big_image) return false;
 
         /* set the cache size is 32 */
-        big_image->set_file_cache_number(32);
+        big_image->set_file_cache_number(4);
 
         get_show_image_size();
 
@@ -322,4 +322,22 @@ int QBigImageWidget::get_image_cols() const
 {
     if(big_image)   return reinterpret_cast<DiskBigImage<Vec3b>*>(big_image.get())->get_image_cols();
     return 0;
+}
+
+void QBigImageWidget::set_rect_ration(double start_row_ratio, double start_col_ratio)
+{
+    start_row = start_row_ratio*img_current_rows;
+    start_col = start_col_ratio*img_current_cols;
+
+    if(!get_image_data()) {
+        init_para();
+        if(QMessageBox::Abort == QMessageBox::critical(this, 
+            "ReadingBigImage", 
+            QString::fromLocal8Bit("¶ÁÈ¡Í¼ÏñÊı¾İÊ§°Ü"), 
+            QMessageBox::Ok | QMessageBox::Abort, QMessageBox::Ok)) {
+                m_parent->close();
+        }
+    }
+
+    this->repaint();
 }

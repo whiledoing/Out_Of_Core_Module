@@ -37,6 +37,9 @@ public:
             (double)(img_rows)/img_current_rows, (double)(img_cols)/img_current_cols);
     }
 
+public slots:
+    void set_rect_ration(double start_row_ratio, double start_col_ratio);
+
 protected:
 	virtual void paintEvent(QPaintEvent *event);
 	virtual void resizeEvent(QResizeEvent *event);

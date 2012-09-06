@@ -100,6 +100,8 @@ void ReadingBigImage::open_file_name(QString file_name)
             m_dock_label->setMargin(10);
             connect(m_central_widget, SIGNAL(signal_rect_ratio(double,double,double,double)),
                 m_dock_label, SLOT(set_draw_rect_ratio(double,double,double,double)));
+            connect(m_dock_label, SIGNAL(signal_change_rect_ratio(double,double)),
+                m_central_widget, SLOT(set_rect_ration(double,double)));
 
             /* initializiation */
             m_central_widget->emit_rect_ratio_signal();
