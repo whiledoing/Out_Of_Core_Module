@@ -47,8 +47,6 @@ bool QBigImageWidget::load_image(QString file_name)
 
     if(!get_image_data()) return false;
 
-    emit_rect_ration_signal();
-
     this->repaint();
 
     setCursor(QCursor(Qt::OpenHandCursor));
@@ -119,7 +117,7 @@ void QBigImageWidget::mouseMoveEvent(QMouseEvent *event)
         //          return;
         //      }
 
-        emit_rect_ration_signal();
+        emit_rect_ratio_signal();
         this->repaint();
 
         /* save current position */
@@ -147,7 +145,7 @@ void QBigImageWidget::wheelEvent(QWheelEvent *event)
     /* now everything is ready, just get the new data */
     if(!get_image_data())	return; 
 
-    emit_rect_ration_signal();
+    emit_rect_ratio_signal();
 
     /* redraw the image*/
     this->repaint();

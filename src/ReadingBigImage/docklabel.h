@@ -3,6 +3,7 @@
 
 #include <QtGui/QLabel>
 #include <QtGui/QPaintEvent>
+#include <QtGui/QMouseEvent>
 
 class DockLabel : public QLabel
 {
@@ -17,6 +18,7 @@ public slots:
 
 protected:
     void paintEvent(QPaintEvent *event);
+    void mouseMoveEvent(QMouseEvent *event);
 
 private:
     double m_start_row_ratio;

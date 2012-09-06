@@ -30,6 +30,12 @@ public:
 	bool load_image(QString file_name) throw (const std::bad_alloc&);
     int get_image_rows() const;
     int get_image_cols() const;
+    
+    void emit_rect_ratio_signal()
+    {
+        emit signal_rect_ratio((double)(start_row)/img_current_rows, (double)(start_col)/img_current_cols,
+            (double)(img_rows)/img_current_rows, (double)(img_cols)/img_current_cols);
+    }
 
 protected:
 	virtual void paintEvent(QPaintEvent *event);
@@ -45,12 +51,6 @@ signals:
         double rows_ratio, double cols_ratio);
 
 private:
-
-    void emit_rect_ration_signal()
-    {
-        emit signal_rect_ratio((double)(start_row)/img_current_rows, (double)(start_col)/img_current_cols,
-            (double)(img_rows)/img_current_rows, (double)(img_cols)/img_current_cols);
-    }
 
 	/*
 	 *	@para : get the new image size that can't be shown according to the widget size

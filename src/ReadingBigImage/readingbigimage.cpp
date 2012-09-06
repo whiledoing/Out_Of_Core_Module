@@ -95,11 +95,14 @@ void ReadingBigImage::open_file_name(QString file_name)
                 QMessageBox::information(this, tr("Information"), QString::fromLocal8Bit("不存在缩略图，以黑色图片作为缩略图进行显示"), QMessageBox::Ok);
 
             /* now read the small image into the dock widget */
-            int small_part_size = 120;
+            int small_part_size = 160;
             m_dock_label = new DockLabel(m_dock_widget);
             m_dock_label->setMargin(10);
             connect(m_central_widget, SIGNAL(signal_rect_ratio(double,double,double,double)),
                 m_dock_label, SLOT(set_draw_rect_ratio(double,double,double,double)));
+
+            /* initializiation */
+            m_central_widget->emit_rect_ratio_signal();
 
             /* if not exist the small image, just show a black image to present the image */
             QPixmap *pixmap = NULL;
