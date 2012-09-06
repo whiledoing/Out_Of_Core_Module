@@ -26,7 +26,7 @@ bool test_writing_blockwise(int argc, char **argv)
 	size_t mini_cols = atoi(argv[3]);
 	const char *write_image_name = argv[4];
 	size_t enlarge_number = atoi(argv[5]);
-	size_t file_size = (argc >= 7) ? atoi(argv[6]) : false;
+	size_t file_size = (argc >= 7) ? atoi(argv[6]) : 6;
 	bool show_image = (argc >= 8) ? atoi(argv[7]) : false;
 
 	cv::Mat original_img = cv::imread(file_name);

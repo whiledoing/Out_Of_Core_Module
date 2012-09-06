@@ -24,7 +24,7 @@ bool test_writing_hierarchical(int argc, char ** argv)
 	const char *write_image_name = argv[4];
 	size_t merge_number = atoi(argv[5]);
 	size_t enlarge_number = atoi(argv[6]);
-	int64 file_size = (argc >= 8) ? atoi(argv[7]) : false;
+	int64 file_size = (argc >= 8) ? atoi(argv[7]) : 6;
 	bool show_image = (argc >= 9) ? atoi(argv[8]) : false;
 
 	cv::Mat original_img = cv::imread(file_name);

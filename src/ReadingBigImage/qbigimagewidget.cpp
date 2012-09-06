@@ -14,6 +14,7 @@
 #include <boost/format.hpp>
 #include "OutOfCore/DiskBigImage.hpp"
 
+#include <boost/timer.hpp>
 QBigImageWidget::QBigImageWidget(QWidget *parent)
     : m_parent(parent), QWidget(parent)
 {
@@ -99,9 +100,11 @@ void QBigImageWidget::mouseMoveEvent(QMouseEvent *event)
         int delta_cols = last_point.x() - event->pos().x();
 
         /* if the movement is too small, do nothing */
-        if(std::abs(delta_rows) < 20 && std::abs(delta_cols) < 20) return;
+        if(std::abs(delta_rows) < 10 && std::abs(delta_cols) < 10) return;
 
+        boost::timer t;
         delta_copy_image_data(delta_rows, delta_cols);
+        std::cout << "elapsed time is : " << t.elapsed() << "s" << std::endl;
 
         /* change the start position according to the mouse movement */
         //      start_row += delta_rows;
@@ -135,6 +138,7 @@ void QBigImageWidget::wheelEvent(QWheelEvent *event)
     /* if wheel down, thus scale small the image, then the level should increases */
     int num_step = event->delta() / 120;
     set_current_image_level(img_current_level - num_step);
+    get_show_image_size();
 
     /* now everything is ready, just get the new data */
     if(!get_image_data())	return; 
@@ -179,7 +183,7 @@ void QBigImageWidget::delta_copy_image_data(int delta_rows, int delta_cols)
 
     delta_rows = start_row - last_start_row;
     delta_cols = start_col - last_start_col;
-    
+
     if(delta_rows == 0 && delta_cols == 0)   return;
 
     /* first copy the image data from the original image data area into the new accordingly image data area */
@@ -239,9 +243,9 @@ void QBigImageWidget::delta_copy_image_data(int delta_rows, int delta_cols)
             area_rows = distance_rows;
             area_cols = img_cols - distance_cols;
             if(delta_rows < 0) {
-              area_start_row = 0;
-              area_start_col = distance_cols;
-              copy_area_image_data(area_start_row, area_start_col, area_rows, area_cols);
+                area_start_row = 0;
+                area_start_col = distance_cols;
+                copy_area_image_data(area_start_row, area_start_col, area_rows, area_cols);
             } else {
                 area_start_row = img_rows - distance_rows;
                 area_start_col = distance_cols;
@@ -270,7 +274,7 @@ void QBigImageWidget::delta_copy_image_data(int delta_rows, int delta_cols)
 
 bool QBigImageWidget::copy_area_image_data(int area_start_row, int area_start_col, 
                                            int area_rows, int area_cols) 
-                                         
+
 {
     if(area_rows == 0 || area_cols == 0) return true;
 
