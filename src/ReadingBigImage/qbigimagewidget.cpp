@@ -313,3 +313,15 @@ bool QBigImageWidget::copy_area_image_data(int area_start_row, int area_start_co
 
     return true;
 }
+
+int QBigImageWidget::get_image_rows() const 
+{
+    if(big_image)   return reinterpret_cast<DiskBigImage<Vec3b>*>(big_image.get())->get_image_rows();
+    return 0;
+}
+
+int QBigImageWidget::get_image_cols() const 
+{
+    if(big_image)   return reinterpret_cast<DiskBigImage<Vec3b>*>(big_image.get())->get_image_cols();
+    return 0;
+}

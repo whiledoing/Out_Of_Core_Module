@@ -31,6 +31,7 @@ ReadingBigImage::ReadingBigImage(QWidget *parent, Qt::WFlags flags)
     setWindowTitle(m_windowname);
 
     m_dock_widget = new QDockWidget(QString::fromLocal8Bit("ËõÂÔÍ¼"), this);
+    m_dock_widget->setVisible(false);
 }
 
 ReadingBigImage::~ReadingBigImage()
@@ -88,10 +89,10 @@ void ReadingBigImage::open_file_name(QString file_name)
 
             QString small_image_path = QFileInfo(file_name).dir().absolutePath() + "/" + QFileInfo(file_name).baseName() + ".jpg";
             std::cout << small_image_path.toStdString() << std::endl;
-            if(!QFile::exists(small_image_path)) {
-                QMessageBox::information(this, tr("Information"), QString::fromLocal8Bit("²»´æÔÚËõÂÔÍ¼"), QMessageBox::Ok);
-                return;
-            }
+
+            bool b_exist_small_image = QFile::exists(small_image_path);
+            if(!b_exist_small_image) 
+                QMessageBox::information(this, tr("Information"), QString::fromLocal8Bit("²»´æÔÚËõÂÔÍ¼£¬ÒÔºÚÉ«Í¼Æ¬×÷ÎªËõÂÔÍ¼½øÐÐÏÔÊ¾"), QMessageBox::Ok);
 
             /* now read the small image into the dock widget */
             int small_part_size = 120;
@@ -100,18 +101,28 @@ void ReadingBigImage::open_file_name(QString file_name)
             connect(m_central_widget, SIGNAL(signal_rect_ratio(double,double,double,double)),
                 m_dock_label, SLOT(set_draw_rect_ratio(double,double,double,double)));
 
-            QPixmap pixmap(small_image_path);
-            if(pixmap.width() > pixmap.height()) {
-                m_dock_label->setPixmap(pixmap.scaledToHeight(small_part_size));
+            /* if not exist the small image, just show a black image to present the image */
+            QPixmap *pixmap = NULL;
+            if(!b_exist_small_image) {
+                pixmap = new QPixmap(m_central_widget->get_image_cols(), m_central_widget->get_image_rows());
+                pixmap->fill(Qt::black);
+            } else {
+                pixmap = new QPixmap(small_image_path);
+            }
+                
+            m_dock_widget->setVisible(true);
+            if(pixmap->width() > pixmap->height()) {
+                m_dock_label->setPixmap(pixmap->scaledToHeight(small_part_size));
                 m_dock_widget->setWidget(m_dock_label);
                 m_dock_widget->setAllowedAreas(Qt::TopDockWidgetArea | Qt::BottomDockWidgetArea);
                 addDockWidget(Qt::TopDockWidgetArea, m_dock_widget);
             } else {
-                m_dock_label->setPixmap(pixmap.scaledToWidth(small_part_size));
+                m_dock_label->setPixmap(pixmap->scaledToWidth(small_part_size));
                 m_dock_widget->setWidget(m_dock_label);
                 m_dock_widget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
                 addDockWidget(Qt::LeftDockWidgetArea, m_dock_widget);
             }
+            delete pixmap;
 
             /* exists the bad_alloc exception */
         } catch (std::bad_alloc &err) {

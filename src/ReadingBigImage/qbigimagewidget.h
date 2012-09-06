@@ -28,6 +28,8 @@ class QBigImageWidget : public QWidget
 public:
 	QBigImageWidget(QWidget *parent);
 	bool load_image(QString file_name) throw (const std::bad_alloc&);
+    int get_image_rows() const;
+    int get_image_cols() const;
 
 protected:
 	virtual void paintEvent(QPaintEvent *event);
