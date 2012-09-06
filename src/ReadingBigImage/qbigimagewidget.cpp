@@ -18,6 +18,7 @@
 QBigImageWidget::QBigImageWidget(QWidget *parent)
     : m_parent(parent), QWidget(parent)
 {
+    setMinimumSize(800, 600);
     margin = 10;
     init_para();
     setFocusPolicy(Qt::StrongFocus);
@@ -45,6 +46,8 @@ bool QBigImageWidget::load_image(QString file_name)
     set_current_image_level(big_image->get_max_image_level());
 
     if(!get_image_data()) return false;
+
+    emit_rect_ration_signal();
 
     this->repaint();
 
@@ -116,6 +119,7 @@ void QBigImageWidget::mouseMoveEvent(QMouseEvent *event)
         //          return;
         //      }
 
+        emit_rect_ration_signal();
         this->repaint();
 
         /* save current position */
@@ -142,6 +146,8 @@ void QBigImageWidget::wheelEvent(QWheelEvent *event)
 
     /* now everything is ready, just get the new data */
     if(!get_image_data())	return; 
+
+    emit_rect_ration_signal();
 
     /* redraw the image*/
     this->repaint();

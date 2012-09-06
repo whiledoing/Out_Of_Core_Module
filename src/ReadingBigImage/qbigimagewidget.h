@@ -38,7 +38,17 @@ protected:
 	virtual void wheelEvent(QWheelEvent *event);
 	virtual void keyPressEvent(QKeyEvent * event);
 
+signals:
+    void signal_rect_ratio(double start_row_ratio, double start_col_ratio,
+        double rows_ratio, double cols_ratio);
+
 private:
+
+    void emit_rect_ration_signal()
+    {
+        emit signal_rect_ratio((double)(start_row)/img_current_rows, (double)(start_col)/img_current_cols,
+            (double)(img_rows)/img_current_rows, (double)(img_cols)/img_current_cols);
+    }
 
 	/*
 	 *	@para : get the new image size that can't be shown according to the widget size
