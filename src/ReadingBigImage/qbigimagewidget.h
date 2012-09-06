@@ -1,6 +1,7 @@
 #ifndef QBIGIMAGEWIDGET_H
 #define QBIGIMAGEWIDGET_H
 
+/* outofcore module */
 #include "OutOfCore/BasicType.h"
 #include "OutOfCore/DiskBigImageInterface.h"
 
@@ -40,12 +41,10 @@ protected:
 private:
 
 	/*
-	 *	@para : get the new show area size according to the widget size
+	 *	@para : get the new image size that can't be shown according to the widget size
 	 */
 	void get_show_image_size() 
 	{
-		//show_rows = height() - 2*margin;
-		//show_cols = width() - 2*margin;
 		img_rows = height() - 2*margin;
 		img_cols = width() - 2*margin;
 	}
@@ -128,10 +127,6 @@ private:
 	 */
 	void normalize_para() 
 	{
-		///* first get the image rows and cols as much as the show area size */
-        //img_rows = show_rows; 
-        //img_cols = show_cols;
-
 		/* check the start position validation */
 		start_row = (start_row < 0) ? 0 : start_row;
 		start_col = (start_col < 0) ? 0 : start_col;
@@ -153,7 +148,7 @@ private:
 	}
 
 	/*
-	 *	@para : initialize the parameter
+	 *	@brief : initialize the parameter
 	 */
 	void init_para() 
 	{
@@ -173,7 +168,15 @@ private:
 		b_mouse_pressed = false;
 	}
 
+    /*
+         *  @brief : delte copy the image data in mouse moving event
+         */
     void delta_copy_image_data(int delta_rows, int delta_cols);
+
+    /*
+         *  @brief : copy the retangle image area data into the shwo image data
+         */
+    bool copy_area_image_data(int area_start_row, int area_start_col, int area_rows, int area_cols);
 
 private:
 	/* save the big image object read from the image file in disk */
@@ -193,10 +196,6 @@ private:
 	/* the start position of the total image when painting in the widget */
 	int start_row;
 	int start_col; 
-
-	/* the showing area size in the widget */
-	//int show_rows;
-	//int show_cols;
 
 	/* save the last time value */
 	int last_start_row;
