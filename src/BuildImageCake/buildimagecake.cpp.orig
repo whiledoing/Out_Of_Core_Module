@@ -1,0 +1,140 @@
+#include "OutOfCore/HierarchicalImage.hpp"
+
+#include <boost/timer.hpp>
+#include <boost/progress.hpp>
+#include <boost/lexical_cast.hpp>
+
+/* opencv part */
+#include <opencv2/core/core.hpp>
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
+
+bool test_writing_hierarchical(int argc, char ** argv)
+{
+	using namespace std;
+
+	if(argc < 7) {
+        cout << "Usage : [image containter rows] [image containter cols] [image dir] [number of files] [mini rows] [mini cols]" << endl;
+		return false;
+	}
+    
+    int large_rows = atoi(argv[1]);
+    int large_cols = atoi(argv[2]);
+    const char *file_dir = argv[3];
+    int number_of_images = atoi(argv[4]);
+    int mini_rows = atoi(argv[5]);
+    int mini_cols = atoi(argv[6]);
+
+	boost::shared_ptr<IndexMethodInterface> index_method = 
+        boost::make_shared<ZOrderIndex>(large_rows, large_cols);
+
+    //init the config file
+	{
+		size_t imageBytes = (double)(index_method->get_max_index() * sizeof(Vec3b)) / (1024*1024);
+		fstream fout("config.stxxl", ios::out | ios::trunc);
+		fout << "disk=d:\\stxxl," << (imageBytes * 1.2) <<",wincall" << endl;
+		fout.close();
+	}
+
+
+	HierarchicalImage<Vec3b, 512> big_image(large_rows, large_cols, mini_rows, mini_cols);
+	big_image.set_mutliply_ways_writing_number(big_image.get_max_image_level()+1);
+	cout << "mini_rows " << big_image.get_minimal_image_rows() << endl;
+	cout << "mini_cols " << big_image.get_minimal_image_cols() << endl;
+	cout << "max_level " << big_image.get_max_image_level() << endl;
+
+	//time related
+	boost::progress_display pd(enlarge_number*enlarge_number);
+	boost::timer t;
+	t.restart();
+
+    int current_file_number = 0;
+    std::string current_file_name = std::string(file_dir) + boost::lexical_cast<std::string>(current_file_number++);
+    cv::Mat img_data = cv::imread(current_file_name);
+    if(img_data.empty()) {
+		cerr << "Load image error" << endl;
+		return false;
+    }
+	cv::cvtColor(img_data, img_data, CV_BGR2RGB);
+
+    int img_rows = img_data.rows;
+    int img_cols = img_data.cols;
+
+    int current_min_row = 0;
+    for(int start_row = 0; start_row + img_rows < large_rows; start_row += current_min_row) {
+        for(int start_col = 0; start_col + img_cols < large_cols; start_col += img_cols) {
+            
+            /* copy the image file into the (start_rows, start_cols) pos in the big containter */
+            for(int row = 0, big_row = start_row; row < img_rows; ++row, ++big_row) {
+                for(int col = 0, big_col = start_col; col < img_cols; ++col, ++big_col) {
+                    big_image(big_row, big_col) = img_data.at<Vec3b>(row, col);
+
+                    /* get a new image */
+                    current_file_name = std::string(file_dir) + boost::lexical_cast<std::string>(current_file_number++);
+                    img_data = cv::imread(current_file_name);
+                        if(img_data.empty()) {
+		cerr << "Load image error" << endl;
+		return false;
+    }
+	cv::cvtColor(img_data, img_data, CV_BGR2RGB);
+                }
+            }
+
+        }
+    }
+
+	//the ZOrder part
+	typedef ZOrderIndex::IndexType IndexType;
+	for(IndexType outI = 0; outI < enlarge_number; ++outI) {
+		for(IndexType outJ = 0; outJ < enlarge_number; ++outJ) {
+			IndexType startI = outI * rows;
+			IndexType startJ = outJ * cols;
+			for(IndexType i = 0; i < rows; ++i) {
+				IndexType I = startI + i;
+				for(IndexType j = 0; j < cols; ++j) {
+					IndexType J = startJ + j;
+					big_image(I, J) = *(Vec3b*)(original_img.data + i*original_img.step[0] + j*original_img.step[1]);
+				}
+			}
+			++pd;
+		}
+	}
+	cout << "Build Enlarged Image Cost Time : " << t.elapsed() << " s " << endl;
+
+	t.restart();
+
+	/* 6M per file */
+	big_image.set_file_node_size(file_size*1024*1024);
+
+	if(!big_image.write_image(write_image_name)) return false;
+	cout << "Write Hierarchical Image Cost : " << t.elapsed() << " s " << endl;
+
+	if(show_image) {
+		const HierarchicalImage<Vec3b, 512> &c_big_image = big_image;
+		std::vector<Vec3b> vec(large_rows*large_cols);
+		for(IndexType i = 0; i < big_image.get_image_rows(); ++i) {
+			for(IndexType j = 0; j < big_image.get_image_cols(); ++j) {
+				vec[i*large_cols  + j] = c_big_image(i,j);
+			}
+		}
+
+		cv::Mat result_image(large_rows, large_cols, CV_8UC3, vec.data());
+		cv::cvtColor(result_image, result_image, CV_RGB2BGR);
+		cv::namedWindow("hierarchical image");
+		cv::imshow("hierarchical image", result_image);
+		cv::waitKey(0);
+	}
+
+	return true;
+}
+
+int main(int argc, char **argv)
+{
+	test_writing_hierarchical(argc, argv);
+	return 0;
+}
+
+int main(int argc, char const* argv[])
+{
+    return 0;
+}
